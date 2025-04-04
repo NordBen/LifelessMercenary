@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 631e4df2b0edd43e8aa20da6246fa4d8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 280621
+  packageName: Medieval Fantasy Town Village Environment - Demo Scenes
+  packageVersion: 4.2.12
+  assetPath: Assets/_Demo Scenes/Demo Scripts/PCMToggle.cs
+  uploadId: 652776

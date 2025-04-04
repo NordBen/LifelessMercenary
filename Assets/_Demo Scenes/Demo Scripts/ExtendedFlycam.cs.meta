@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7876360a823af4440bc3ff58e9e32d53
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 280621
+  packageName: Medieval Fantasy Town Village Environment - Demo Scenes
+  packageVersion: 4.2.12
+  assetPath: Assets/_Demo Scenes/Demo Scripts/ExtendedFlycam.cs
+  uploadId: 652776

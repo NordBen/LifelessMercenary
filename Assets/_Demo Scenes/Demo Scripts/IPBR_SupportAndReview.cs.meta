@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1a974d000847a4d0192eb619fdc10138
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 280621
+  packageName: Medieval Fantasy Town Village Environment - Demo Scenes
+  packageVersion: 4.2.12
+  assetPath: Assets/_Demo Scenes/Demo Scripts/IPBR_SupportAndReview.cs
+  uploadId: 652776
