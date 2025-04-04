@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 1900033758136252958}
   - component: {fileID: 4856875469441158348}
   - component: {fileID: 5091657531345113663}
+  - component: {fileID: 6862815374319669974}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -177,7 +178,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeModifiers: []
-  attributeinits: []
+  attributeinits:
+  - name: Vitality
+    value: 1
+    bind: 0
+    bindTo: 
+  - name: Health
+    value: 100
+    bind: 0
+    bindTo: 
+  - name: MaxHealth
+    value: 25
+    bind: 1
+    bindTo: Vitality
 --- !u!114 &4856875469441158348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c2f7a6bd14b5d84d9136acf91311246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: []
 --- !u!114 &5091657531345113663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,6 +217,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsEquipped: []
+--- !u!114 &6862815374319669974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4198504986866366195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c47f12511be640438047c3b8b04fe7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4823174510881676975
 GameObject:
   m_ObjectHideFlags: 0
