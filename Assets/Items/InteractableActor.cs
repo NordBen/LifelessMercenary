@@ -7,7 +7,7 @@ public class InteractableActor : MonoBehaviour
 
     void Awake()
     {
-        this.GetComponent<MeshFilter>().mesh = item.mesh;
+        //this.GetComponent<MeshFilter>().mesh = item.mesh;
     }
 
     private void OnTriggerEnter(Collider other)

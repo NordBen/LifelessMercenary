@@ -5,7 +5,7 @@ public enum EEquipSlot
 {
     None,
     Head,
-    Toros,
+    Torso,
     Leggs,
     Boots,
     Amulet,

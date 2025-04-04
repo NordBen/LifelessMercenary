@@ -8,10 +8,25 @@ public class EquipmentManager : MonoBehaviour
     public static event Action<IEquipable> OnEquip;
     public List<Item> itemsEquipped;
 
+    [SerializeField] Transform head, torso, leggs, boots, amulet, weapon;
+    private Dictionary<EEquipSlot, Transform> slotPlacement;
+
     private void Awake()
     {
         equipment = new();
+        equipment.Add(EEquipSlot.Head, null);
+        equipment.Add(EEquipSlot.Torso, null);
+        equipment.Add(EEquipSlot.Leggs, null);
+        equipment.Add(EEquipSlot.Boots, null);
+        equipment.Add(EEquipSlot.Amulet, null);
         equipment.Add(EEquipSlot.Weapon, null);
+        slotPlacement = new();
+        slotPlacement[EEquipSlot.Head] = head;
+        slotPlacement[EEquipSlot.Torso] = torso;
+        slotPlacement[EEquipSlot.Leggs] = leggs;
+        slotPlacement[EEquipSlot.Boots] = boots;
+        slotPlacement[EEquipSlot.Amulet] = amulet;
+        slotPlacement[EEquipSlot.Weapon] = weapon;
     }
 
     private void OnEnable()
@@ -51,7 +66,17 @@ public class EquipmentManager : MonoBehaviour
 
         equipment[slot] = itemToEquip;
         itemsEquipped.Add(itemToEquip as Weapon);
-        OnEquip?.Invoke(itemToEquip);
+        //OnEquip?.Invoke(itemToEquip);
+
+        GameObject newEquipment = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        newEquipment.GetComponent<BoxCollider>().isTrigger = true;
+        AttachEquipment(newEquipment.transform, itemToEquip.GetSlot());
+    }
+
+    private void AttachEquipment(Transform equipmentToAttach, EEquipSlot slotToPlace)
+    {
+        equipmentToAttach.parent = slotPlacement[slotToPlace];
+        equipmentToAttach.localPosition = Vector3.zero;// new Vector3(0f, 0f, 0f);
     }
 
     public void Unequip(IEquipable itemToUnequip)
