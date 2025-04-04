@@ -69,7 +69,7 @@ public class CombatManager : MonoBehaviour
 
             Invoke("ResetCombo", 1.5f);
         }
-
+        /*
         Collider[] hitEnemies = Physics.OverlapBox(weapon.transform.position, new Vector3(0.1f, 0.18205f, 1.4517f), Quaternion.identity, LayerMask.NameToLayer("Combat"), QueryTriggerInteraction.Ignore);
 
         foreach (Collider enemy in hitEnemies)
@@ -77,7 +77,7 @@ public class CombatManager : MonoBehaviour
             ICombat damageable = enemy.GetComponent<ICombat>();
             damageable?.TakeDamage(Random.Range(weaponItem.damage * 0.85f, weaponItem.damage * 1.15f));
             Debug.Log($"Hit: {enemy.gameObject.name}");
-        }
+        }*/
 
         comboTimer = 1.0f;
         /*
@@ -97,6 +97,8 @@ public class CombatManager : MonoBehaviour
             combatAnimations = new(weaponItem.animations);
             weaponBox = weapon.GetComponent<BoxCollider>();
         }
+        else
+            return;
     }
 
     private void ResetCombo()

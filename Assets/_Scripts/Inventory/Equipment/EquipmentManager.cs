@@ -100,7 +100,16 @@ public class EquipmentManager : MonoBehaviour
     private void AttachEquipment(Transform equipmentToAttach, EEquipSlot slotToPlace)
     {
         equipmentToAttach.parent = slotPlacement[slotToPlace];
-        equipmentToAttach.localPosition = Vector3.zero;// new Vector3(0f, 0f, 0f);
+        equipmentToAttach.localRotation = Quaternion.Euler(Vector3.zero);
+
+        if (slotToPlace != EEquipSlot.Head)
+        {
+            equipmentToAttach.localPosition = Vector3.zero;// new Vector3(0f, 0f, 0f);
+        }
+        else
+        {
+            equipmentToAttach.localPosition = new Vector3(0f, -1.635f, 0.041f);
+        }
     }
 
     public void Unequip(IEquipable itemToUnequip)

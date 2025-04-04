@@ -18,6 +18,9 @@ public class WeaponObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.transform == this.transform.root) return;
+
+        Debug.Log($"Hit: {other.gameObject}");
         ICombat target = other.GetComponent<ICombat>();
         if (target != null)
         {

@@ -19,9 +19,9 @@ MonoBehaviour:
   sellValue: 25
   damage: 5
   animations:
-  - {fileID: 7400000, guid: 680507bb2be9a914eaddf1dc04797a96, type: 2}
-  - {fileID: 7400000, guid: d7dfa182fdd49a241806356dc796545c, type: 2}
-  - {fileID: 7400000, guid: 9a83dc7165b0e0646abbc5b1fc60e0b9, type: 2}
+  - {fileID: -203655887218126122, guid: f9944689985ed47b5b64b6015893d0bb, type: 3}
+  - {fileID: -203655887218126122, guid: 83dfe8b412ae94227bbbd48badfde754, type: 3}
+  - {fileID: -203655887218126122, guid: 2e111b2a5e29f4b7f8c97f6e55ab253a, type: 3}
   slot: 6
   weaponType: 0
   attackSpeed: 1.5
