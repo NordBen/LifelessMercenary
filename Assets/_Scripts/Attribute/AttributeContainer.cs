@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttributeContainer : MonoBehaviour
+public class AttributeContainer : MonoBehaviour, ICombat
 {
     public Dictionary<string, Attribute> attributes;
     Dictionary<Attribute, List<Attribute>> bindedAttributes;
@@ -59,6 +59,11 @@ public class AttributeContainer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             ApplyNewMod(Random.Range(1, 81), "Health", 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            TakeDamage(10);
         }
     }
 
@@ -122,6 +127,11 @@ public class AttributeContainer : MonoBehaviour
     {
         ApplyBuff(attribute, new AttributeModifier(value, attribute, EModifierType.Add, EModifierDuration.Instant, dur));
         Debug.Log("applied new modifier");
+    }
+
+    public void TakeDamage(float incomingDamage) 
+    {
+        attributes["Health"].SetBaseValue(attributes["Health"].BaseValue() - incomingDamage);
     }
 }
 

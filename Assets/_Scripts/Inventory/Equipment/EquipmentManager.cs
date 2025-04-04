@@ -11,6 +11,8 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] Transform head, torso, leggs, boots, amulet, weapon;
     private Dictionary<EEquipSlot, Transform> slotPlacement;
 
+    [SerializeField] GameObject weaponPrefab, armorPrefab;
+
     private void Awake()
     {
         equipment = new();
@@ -52,6 +54,11 @@ public class EquipmentManager : MonoBehaviour
         OnEquip?.Invoke(inItem);
     }
 
+    public static T ConvertTo<T>(object value)
+    {
+        return (T)Convert.ChangeType(value, typeof(T));
+    }
+
     public void Equip(IEquipable itemToEquip)
     {
         EEquipSlot slot = itemToEquip.GetSlot();
@@ -65,11 +72,22 @@ public class EquipmentManager : MonoBehaviour
         }
 
         equipment[slot] = itemToEquip;
-        itemsEquipped.Add(itemToEquip as Weapon);
-        //OnEquip?.Invoke(itemToEquip);
+        switch (itemToEquip.GetSlot())
+        {
+            case EEquipSlot.Weapon:
+                itemsEquipped.Add(itemToEquip as Weapon);
+                break;
+            case EEquipSlot.Head:
+            case EEquipSlot.Torso:
+            case EEquipSlot.Leggs:
+            case EEquipSlot.Boots:
+                itemsEquipped.Add(itemToEquip as Armor);
+                break;
+            default:
+                break;
+        }
 
-        GameObject newEquipment = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        newEquipment.GetComponent<BoxCollider>().isTrigger = true;
+        GameObject newEquipment = itemToEquip.GetSlot() == EEquipSlot.Weapon ? weaponPrefab : armorPrefab;
         AttachEquipment(newEquipment.transform, itemToEquip.GetSlot());
     }
 
