@@ -17,6 +17,6 @@ public class Armor : Item, IEquipable
 
     public void Equip()
     {
-        GameObject.Find("Player").GetComponent<EquipmentManager>().Equip(this);
+        GameManager.instance.player.GetComponent<EquipmentManager>().Equip(this);
     }
 }
