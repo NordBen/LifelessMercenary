@@ -5,7 +5,7 @@ using UnityEngine;
 public class EquipmentManager : MonoBehaviour
 {
     private Dictionary<EEquipSlot, IEquipable> equipment;
-    public static event Action<IEquipable> OnEquip;
+    public event Action<IEquipable> OnEquip;
     public List<Item> itemsEquipped;
 
     [SerializeField] Transform head, torso, leggs, boots, amulet, weapon;
@@ -87,7 +87,13 @@ public class EquipmentManager : MonoBehaviour
                 break;
         }
 
-        GameObject newEquipment = itemToEquip.GetSlot() == EEquipSlot.Weapon ? weaponPrefab : armorPrefab;
+        GameObject newEquipment = Instantiate(itemToEquip.GetSlot() == EEquipSlot.Weapon ? weaponPrefab : armorPrefab);
+        if (itemToEquip.GetSlot() == EEquipSlot.Weapon) 
+            newEquipment.GetComponent<WeaponObject>().SetWeaponData(itemsEquipped[0] as Weapon);
+        GameManager.instance.player.GetCombatManager().weapon = newEquipment;
+
+        OnEquip?.Invoke(itemToEquip);
+
         AttachEquipment(newEquipment.transform, itemToEquip.GetSlot());
     }
 

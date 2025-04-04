@@ -5,6 +5,17 @@ public class WeaponObject : MonoBehaviour
     public Weapon weaponData;
     public Transform hitPoint;
 
+    private void Start()
+    {
+        weaponData = GameManager.instance.player.GetCombatManager().weaponItem;
+        
+    }
+
+    public void SetWeaponData(Weapon newData)
+    {
+        this.GetComponent<MeshFilter>().mesh = newData.mesh;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         ICombat target = other.GetComponent<ICombat>();

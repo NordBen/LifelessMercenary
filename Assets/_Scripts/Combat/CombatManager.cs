@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    [SerializeField] private Weapon weaponItem;
-    [SerializeField] private GameObject weapon;
+    [SerializeField] public Weapon weaponItem;
+    [SerializeField] public GameObject weapon;
     [SerializeField] private BoxCollider weaponBox;
 
     public GameObject hitFX;
@@ -20,8 +20,8 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
-        EquipmentManager.OnEquip += OnWeaponChanged;
-        animator = GameManager.instance.player.GetAnimator();
+        GameManager.instance.player.GetEquipmentManager().OnEquip += OnWeaponChanged;
+        //animator = GameManager.instance.player.GetAnimator();
 
         animOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = animOverrideController;
@@ -29,7 +29,7 @@ public class CombatManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EquipmentManager.OnEquip -= OnWeaponChanged;
+        GameManager.instance.player.GetEquipmentManager().OnEquip -= OnWeaponChanged;
     }
 
     private void Update()
@@ -61,7 +61,7 @@ public class CombatManager : MonoBehaviour
 
         if (comboIndex <= combatAnimations.Count && !isAttacking)
         {
-            animOverrideController["DS_onehand_attack_A"] = combatAnimations[comboIndex];
+            animOverrideController["TestAnim1"] = combatAnimations[comboIndex];
 
             animator.Play("Attack", 0, 0);
             isAttacking = true;
@@ -90,11 +90,12 @@ public class CombatManager : MonoBehaviour
 
     void OnWeaponChanged(IEquipable newWeapon)
     {
-        if (newWeapon is Weapon)
+        if (newWeapon.GetSlot() == EEquipSlot.Weapon)
         {
             weaponItem = newWeapon as Weapon;
             combatAnimations.Clear();
             combatAnimations = new(weaponItem.animations);
+            weaponBox = weapon.GetComponent<BoxCollider>();
         }
     }
 

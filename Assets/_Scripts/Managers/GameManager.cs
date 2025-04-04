@@ -1,15 +1,27 @@
+using System;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public Player player;
 
+    public event Action<int> OnDeathEnergyChanged;
+    [SerializeField] private int deathEnergyMax = 5;
+    [SerializeField] private int currentDeathEnergy = 5;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -21,5 +33,36 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void DecreaseDeathEnergy(int amount)
+    {
+        currentDeathEnergy -= amount;
+        OnDeathEnergyChanged?.Invoke(currentDeathEnergy);
+        Debug.Log($"de: {currentDeathEnergy} / {deathEnergyMax}");
+    }
+
+    public int GetDeEnergt()
+    {
+        return currentDeathEnergy;
+    }
+
+    public void KillPlayer()
+    {
+        GameObject.Find("SceneDude").GetComponent<PlayableDirector>().Play();
+        DecreaseDeathEnergy(1);
+
+        Debug.Log($"dur to die: {(float)GameObject.Find("SceneDude").GetComponent<PlayableDirector>().playableAsset.duration}");
+        Invoke("Death", (float)GameObject.Find("SceneDude").GetComponent<PlayableDirector>().playableAsset.duration);
+    }
+
+    public void Death()
+    {
+        SceneManager.LoadScene("DeathScene");
+    }
+
+    public void ResetLoop()
+    {
+        SceneManager.LoadScene(0);//"TheLevelScene");
     }
 }
