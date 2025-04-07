@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 3705273532144896648}
   - component: {fileID: 2869168529871053082}
   - component: {fileID: 7062207883989775717}
+  - component: {fileID: 5820153689564461308}
   - component: {fileID: 2485951883961325581}
   - component: {fileID: 4874400175026360522}
   - component: {fileID: 6543282629534930748}
@@ -255,6 +256,18 @@ MonoBehaviour:
   turningSpeed: 10
   gravity: 9.81
   jumpHeight: 2
+--- !u!114 &5820153689564461308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2530026124307226699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a446d9cb7ed2145cc9c754a1a988a64c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2485951883961325581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,6 +320,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsEquipped: []
+  head: {fileID: 0}
+  torso: {fileID: 0}
+  leggs: {fileID: 0}
+  boots: {fileID: 0}
+  amulet: {fileID: 0}
+  weapon: {fileID: 0}
+  weaponPrefab: {fileID: 0}
+  armorPrefab: {fileID: 0}
 --- !u!114 &3238761070647329537
 MonoBehaviour:
   m_ObjectHideFlags: 0

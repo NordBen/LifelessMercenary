@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Refrences")]
-    private CharacterController characterController;
+    public CharacterController characterController;
     [SerializeField] private Transform mainCamera;
 
     [Header("Movement Settings")]
