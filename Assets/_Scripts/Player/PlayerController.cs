@@ -2,12 +2,24 @@ using System.Xml.Serialization;
 using Unity.Mathematics;
 using UnityEditor.Search;
 using UnityEngine;
+using System.Collections;
+
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Refrences")]
     public CharacterController characterController;
     [SerializeField] private Transform mainCamera;
+
+    [Header("Dodge settings")]
+    [SerializeField] private float dodgeSpeed = 10f;
+    [SerializeField] private float dodgeDuration = 0.2f;
+    [SerializeField] private float dodgeCooldown = 1f;
+    
+    private float lastDodgeTime = -Mathf.Infinity;
+    private bool isDodging = false;
+    private Vector3 dodgeDirection;
+
 
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 5f;
@@ -31,8 +43,30 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.O) && !isDodging && Time.time >= lastDodgeTime + dodgeCooldown)
+        {
+            StartCoroutine(Dodge());
+        }
+
         InputManagement();
         Movement();
+    }
+
+    private IEnumerator Dodge()
+    {
+        isDodging = true;
+        lastDodgeTime = Time.time;
+
+        float startTime = Time.time;
+        dodgeDirection = -transform.forward;
+
+        while (Time.time < startTime + dodgeDuration)
+        {
+            characterController.Move(dodgeDirection * dodgeSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        isDodging = false;
     }
 
     private void Movement()
