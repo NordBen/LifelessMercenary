@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O) && !isDodging && Time.time >= lastDodgeTime + dodgeCooldown)
+        if (Input.GetKeyDown(KeyCode.C) && !isDodging && Time.time >= lastDodgeTime + dodgeCooldown)
         {
             StartCoroutine(Dodge());
         }
