@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/TheLevelScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/DeathScene.unity
+    path: Assets/Scenes/LoadingScreen.unity
     guid: bdd3aed1ac8b5cc47b3a9549ba8b22df
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
