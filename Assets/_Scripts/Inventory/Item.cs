@@ -1,15 +1,6 @@
 using UnityEngine;
 
 [System.Serializable]
-public enum EItemType
-{
-    Basic,
-    Weapon,
-    Armor,
-    Quest
-}
-
-[System.Serializable]
 [CreateAssetMenu(fileName = "Item", menuName = "Item/Item")]
 public abstract class Item : ScriptableObject, IInteractable
 {
@@ -17,6 +8,7 @@ public abstract class Item : ScriptableObject, IInteractable
     public Sprite icon;
     public Mesh mesh;
     public EItemType type;
+    public EItemGrade grade;
     public float sellValue;
 
     public virtual void Use()

@@ -67,7 +67,7 @@ public class CombatManager : MonoBehaviour
             isAttacking = true;
             comboIndex = (comboIndex + 1) % combatAnimations.Count;
 
-            Invoke("ResetCombo", 1.5f);
+            Invoke("ResetCombo", 1f);
         }
         /*
         Collider[] hitEnemies = Physics.OverlapBox(weapon.transform.position, new Vector3(0.1f, 0.18205f, 1.4517f), Quaternion.identity, LayerMask.NameToLayer("Combat"), QueryTriggerInteraction.Ignore);

@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class AttributeText : MonoBehaviour
 {
-    [SerializeField] string bindedAttribute;
-    [SerializeField] Attribute refAttri;
-    [SerializeField] float value;
-    [SerializeField] TextMeshProUGUI attributeText;
+    [SerializeField] protected string bindedAttribute;
+    [SerializeField] protected Attribute refAttri;
+    [SerializeField] protected float value;
+    [SerializeField] protected TextMeshProUGUI attributeText;
 
-    private void Start()
+    protected void Start()
     {
         refAttri = GameManager.instance.player.GetComponent<AttributeContainer>().attributes[bindedAttribute];
 
@@ -16,9 +16,11 @@ public class AttributeText : MonoBehaviour
         {
             refAttri.OnValueChanged += UpdateValue;
         }
+
+        UpdateValue(refAttri.CurrentValue(), refAttri.BaseValue());
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         if (refAttri != null)
         {
@@ -26,13 +28,13 @@ public class AttributeText : MonoBehaviour
         }
     }
 
-    void UpdateValue(float newValue, float oldValue)
+    private void UpdateValue(float newValue, float oldValue)
     {
         this.value = newValue;
         UpdateUI();
     }
 
-    void UpdateUI()
+    private void UpdateUI()
     {
         attributeText.text = value.ToString();
     }

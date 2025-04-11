@@ -4,7 +4,7 @@ using UnityEngine;
 public class AttributeContainer : MonoBehaviour, ICombat
 {
     public Dictionary<string, Attribute> attributes;
-    Dictionary<Attribute, List<Attribute>> bindedAttributes;
+    [SerializeField] private List<Attribute> bindedAttributes;
     public List<AttributeModifier> activeModifiers;
     public List<AttributeToInit> attributeinits;
 
@@ -19,6 +19,8 @@ public class AttributeContainer : MonoBehaviour, ICombat
             attributes.Add(attri.name, new Attribute(attri.value));
         }
 
+        SearchForAttribute("Max");
+        /*
         foreach (var attri in attributeinits)
         {
             if (attri.bind)
@@ -31,8 +33,8 @@ public class AttributeContainer : MonoBehaviour, ICombat
 
                 bindedAttributes[primary].Add(binding);
             }
-        }
-
+        }*/
+        /*
         foreach (var pair in bindedAttributes)
         {
             float primaryValue = pair.Key.CurrentValue();
@@ -41,6 +43,27 @@ public class AttributeContainer : MonoBehaviour, ICombat
 
             foreach (var dependentAttribute in pair.Value)
                 dependentAttribute.AddToModifiedValue(newValue);
+        }*/
+    }
+
+    private void SearchForAttribute(string keyword)
+    {
+        foreach (var entry in attributes.Keys)
+        {
+            if (entry.StartsWith(keyword))
+            {
+                string withoutPrefix = entry.Substring(keyword.Length);
+
+                foreach (var equivilant in attributes.Keys)
+                {
+                    if (equivilant == withoutPrefix)
+                    {
+                        bindedAttributes.Add(attributes[equivilant]);
+                        Debug.Log($"{equivilant}");
+                    }
+                    //break;
+                }
+            }
         }
     }
 
@@ -106,7 +129,7 @@ public class AttributeContainer : MonoBehaviour, ICombat
             heldAttributes += $"{pair.Key} - {pair.Value.BaseValue()}/{pair.Value.CurrentValue()},";
         }
         Debug.Log(heldAttributes);
-
+        /*
         string bindedAttributesString = "Binded Attributes: ";
         foreach (var pair in bindedAttributes)
         {
@@ -120,10 +143,10 @@ public class AttributeContainer : MonoBehaviour, ICombat
 
             bindedAttributesString += $"{primaryAttribute} - {dependentAttribute}\n";
         }
-        Debug.Log(bindedAttributesString);
+        Debug.Log(bindedAttributesString);*/
     }
 
-    void ApplyNewMod(float value, string attribute, float dur)
+    public void ApplyNewMod(float value, string attribute, float dur)
     {
         ApplyBuff(attribute, new AttributeModifier(value, attribute, EModifierType.Add, EModifierDuration.Instant, dur));
         Debug.Log("applied new modifier");
@@ -131,7 +154,16 @@ public class AttributeContainer : MonoBehaviour, ICombat
 
     public void TakeDamage(float incomingDamage) 
     {
-        attributes["Health"].SetBaseValue(attributes["Health"].BaseValue() - incomingDamage);
+        attributes["Health"].SetBaseValue(Mathf.Max(0, attributes["Health"].BaseValue() - incomingDamage));
+
+        if (attributes["Health"].CurrentValue() == 0)
+            Die();
+    }
+
+    public void Die()
+    {
+        if (this.transform.root.name == "Player")
+            GameManager.instance.player.GetComponent<LevelUpSystem>().CallOnLevelUp();
     }
 }
 

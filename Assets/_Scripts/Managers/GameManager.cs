@@ -35,9 +35,9 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void DecreaseDeathEnergy(int amount)
+    public void ModifyDeathEnergy(int amount)
     {
-        currentDeathEnergy -= amount;
+        currentDeathEnergy += amount;
         OnDeathEnergyChanged?.Invoke(currentDeathEnergy);
         Debug.Log($"de: {currentDeathEnergy} / {deathEnergyMax}");
     }
@@ -47,10 +47,15 @@ public class GameManager : MonoBehaviour
         return currentDeathEnergy;
     }
 
+    public int GetMaxDeEnerg()
+    {
+        return deathEnergyMax;
+    }
+
     public void KillPlayer()
     {
         GameObject.Find("SceneDude").GetComponent<PlayableDirector>().Play();
-        DecreaseDeathEnergy(1);
+        ModifyDeathEnergy(-1);
 
         Debug.Log($"dur to die: {(float)GameObject.Find("SceneDude").GetComponent<PlayableDirector>().playableAsset.duration}");
         Invoke("Death", (float)GameObject.Find("SceneDude").GetComponent<PlayableDirector>().playableAsset.duration);

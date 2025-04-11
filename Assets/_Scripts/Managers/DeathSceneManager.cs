@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DeathSceneManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class DeathSceneManager : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI deathText;
     [SerializeField] TextMeshProUGUI deText;
+    [SerializeField] Slider deathSlider;
 
     void Start()
     {
@@ -33,6 +35,8 @@ public class DeathSceneManager : MonoBehaviour
 
     private void UpdateDEText(int newValue)
     {
-        deText.text = newValue.ToString();
+        deText.text = $"{newValue} / {GameManager.instance.GetMaxDeEnerg()}";
+        deathSlider.value = (float)newValue / GameManager.instance.GetMaxDeEnerg();
+        Debug.Log($"{(float)newValue / GameManager.instance.GetMaxDeEnerg()}");
     }
 }
