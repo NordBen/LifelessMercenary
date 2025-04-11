@@ -69,17 +69,17 @@ public class AttributeContainer : MonoBehaviour, ICombat
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.U))
         {
             PrintAllAttributes();
         }
 
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             ApplyNewMod(Random.Range(1, 81), "Health", Random.Range(3, 11));
         }
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.J))
         {
             ApplyNewMod(Random.Range(1, 81), "Health", 0);
         }
