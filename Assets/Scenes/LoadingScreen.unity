@@ -623,7 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc560b39290f4ea4294b52c8a163c648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTime: 3
+  targetTime: 5
   elapsedTime: 0
   deathText: {fileID: 1819867620}
   deText: {fileID: 321527864}

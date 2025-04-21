@@ -95,8 +95,6 @@ public class EquipmentManager : MonoBehaviour
         OnEquip?.Invoke(itemToEquip);
 
         AttachEquipment(newEquipment.transform, itemToEquip.GetSlot());
-
-        //TempPlayerAttributes.instance.UpdateStats();
     }
 
     private void AttachEquipment(Transform equipmentToAttach, EEquipSlot slotToPlace)

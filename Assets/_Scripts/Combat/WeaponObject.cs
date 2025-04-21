@@ -4,15 +4,11 @@ public class WeaponObject : MonoBehaviour
 {
     public Weapon weaponData;
     public Transform hitPoint;
-    private BoxCollider weaponBox;
-    private Transform owner;
-    [SerializeField] private LayerMask collisionLayer = 999;
 
     private void Start()
     {
-        owner = this.transform.root;
-        weaponData = owner.GetComponent<CombatManager>().weaponItem;
-        weaponBox = GetComponent<BoxCollider>();
+        weaponData = GameManager.instance.player.GetCombatManager().weaponItem;
+        
     }
 
     public void SetWeaponData(Weapon newData)
@@ -22,25 +18,23 @@ public class WeaponObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((collisionLayer.value & (1 << other.gameObject.layer)) == 0) return;
-        if (other.gameObject.transform == owner || other.CompareTag(owner.gameObject.tag)) return;
+        if (other.gameObject.transform == this.transform.root) return;
 
         Debug.Log($"Hit: {other.gameObject}");
         ICombat target = other.GetComponent<ICombat>();
         if (target != null)
         {
-            float finalDamage = weaponData.damage;
-            if (owner.tag == "Player")
-                finalDamage += TempPlayerAttributes.instance.GetFloatAttribute(TempPlayerStats.damage);
-            else
-                finalDamage += 10;
-
-            target.TakeDamage(finalDamage, 5, this.transform.root.transform.forward);
+            target.TakeDamage(weaponData.damage);
+            SpawnHitVFX(other, other.ClosestPoint(transform.position));
         }
     }
 
-    public void ToggleHitDetection()
+    private void SpawnHitVFX(Collider other, Vector3 hitLocation)
     {
-        weaponBox.enabled = !weaponBox.enabled;
+        if (GameManager.instance.player.GetCombatManager().hitFX != null)// weaponData.hitVFX != null)
+        {
+            //Vector3 hitNormal = other.ClosestPoint(hitPoint.position);
+            Instantiate(GameManager.instance.player.GetCombatManager().hitFX, hitLocation, Quaternion.identity);
+        }
     }
 }

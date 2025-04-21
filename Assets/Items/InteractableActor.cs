@@ -4,22 +4,17 @@ using UnityEngine;
 public class InteractableActor : MonoBehaviour
 {
     [SerializeField] Item item;
-    [SerializeField] public bool pressToInteract = false;
 
     void Awake()
     {
-        this.GetComponent<MeshFilter>().mesh = item.mesh;
+        //this.GetComponent<MeshFilter>().mesh = item.mesh;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (pressToInteract) return;
-        else
+        if (other.gameObject.CompareTag("Player"))
         {
-            if (other.gameObject.CompareTag("Player"))
-            {
-                Interact();
-            }
+            Interact();
         }
     }
 

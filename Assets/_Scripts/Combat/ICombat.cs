@@ -2,6 +2,6 @@ using UnityEngine;
 
 public interface ICombat
 {
-    void TakeDamage(float incomingDamage, float knockbackForce, Vector3 knockbackDirection);
+    void TakeDamage(float incomingDamage);
     void Die();
 }
