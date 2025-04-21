@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: bf5a8ba457568c947aecd19a411327ee
+timeCreated: 1508305831
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118703
+  packageName: Tent_CR_MAX_550
+  packageVersion: 1.0
+  assetPath: Assets/Tent_CR_MAX_550/Model/BG_effect/Prefab/water_fall.prefab
+  uploadId: 246042

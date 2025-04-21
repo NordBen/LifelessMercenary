@@ -1,10 +1,11 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DeathSceneManager : MonoBehaviour
 {
-    [SerializeField] protected float targetTime = 5;
+    [SerializeField] protected float targetTime = 3;
     [SerializeField] private float elapsedTime = 0;
 
     [SerializeField] TextMeshProUGUI deathText;
@@ -28,7 +29,7 @@ public class DeathSceneManager : MonoBehaviour
         if (elapsedTime >= targetTime)
         {
             elapsedTime = 0;
-            GameManager.instance.ResetLoop();
+            SceneManager.LoadScene("DeathScene");
         }
         elapsedTime += Time.deltaTime;
     }

@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: b2058a9f6952ed8489c182d7808721d7
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118703
+  packageName: Tent_CR_MAX_550
+  packageVersion: 1.0
+  assetPath: Assets/Free_Rocks/Standard Assets/Effects/ToonShading/Shaders/Toony-BasicOutline.shader
+  uploadId: 246042
