@@ -5,11 +5,14 @@ public class WeaponObject : MonoBehaviour
     public Weapon weaponData;
     public BoxCollider weaponBox;
     public Transform hitPoint;
+    private Transform owner;
+    [SerializeField] private LayerMask collisionLayer = 999;
 
     private void Start()
     {
-        weaponData = GameManager.instance.player.GetCombatManager().weaponItem;
-        this.weaponBox = GetComponent<BoxCollider>();
+        owner = this.transform.root;
+        weaponData = owner.GetComponent<CombatManager>().weaponItem;
+        weaponBox = GetComponent<BoxCollider>();
     }
 
     public void SetWeaponData(Weapon newData)
@@ -19,20 +22,36 @@ public class WeaponObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.transform == this.transform.root) return;
+        if ((collisionLayer.value & (1 << other.gameObject.layer)) == 0)
+        {
+            Debug.Log($"collisionlayer val: {collisionLayer.value} and other layer {other.gameObject.layer}");
+            return;
+        }
+        if (other.gameObject.transform == owner || other.CompareTag(owner.gameObject.tag))
+        {
+            Debug.Log($"hit trans: {other.gameObject.transform} own = {owner}. comparing tags - other: {other.tag} : {owner.gameObject.tag}");
+            return;
+        }
 
         Debug.Log($"Hit: {other.gameObject}");
         ICombat target = other.GetComponent<ICombat>();
         if (target != null)
         {
-            target.TakeDamage(weaponData.damage, 0, Vector3.zero);
+            Debug.Log("Helhit");
+            float finalDamage = weaponData.damage;
+            if (owner.tag == "Player")
+                finalDamage += TempPlayerAttributes.instance.GetFloatAttribute(TempPlayerStats.damage);
+            else
+                finalDamage += 10;
+
+            target.TakeDamage(finalDamage, 5, this.transform.root.transform.forward);
             SpawnHitVFX(other, other.ClosestPoint(transform.position));
         }
     }
 
-    public void ToggleHitBox()
+    public void ToggleHitDetection()
     {
-        this.weaponBox.enabled = !this.weaponBox.enabled;
+        weaponBox.enabled = !weaponBox.enabled;
     }
 
     private void SpawnHitVFX(Collider other, Vector3 hitLocation)

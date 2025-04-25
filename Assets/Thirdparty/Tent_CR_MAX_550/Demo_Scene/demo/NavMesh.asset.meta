@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 32270cdb57a91904bab6122ad7257d65
+timeCreated: 1526302221
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118703
+  packageName: Tent_CR_MAX_550
+  packageVersion: 1.0
+  assetPath: Assets/Tent_CR_MAX_550/Demo_Scene/demo/NavMesh.asset
+  uploadId: 246042

@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ICombat
 {
     [Header("Refrences")]
     public CharacterController characterController;
@@ -20,7 +20,12 @@ public class PlayerController : MonoBehaviour
     private bool isDodging = false;
     private Vector3 dodgeDirection;
 
+    public InteractableActor currentInteractable;
+    bool isDead;
+    int level = 1;
+    TempPlayerAttributes tempPlayerAttributes;
 
+    /*
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float sprintSpeed = 10f;
@@ -34,11 +39,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Input")]
     private float moveInput;
-    private float turnInput;
+    private float turnInput;*/
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        tempPlayerAttributes = GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>();
     }
 
     private void Update()
@@ -47,9 +53,19 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(Dodge());
         }
-
+        /*
         InputManagement();
-        Movement();
+        Movement();*/
+
+        CheckForInteractable();
+        if (currentInteractable != null)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.Log("Call Interact");
+                CallInteract();
+            }
+        }
     }
 
     private IEnumerator Dodge()
@@ -69,6 +85,62 @@ public class PlayerController : MonoBehaviour
         isDodging = false;
     }
 
+    private void CheckForInteractable()
+    {
+        Vector3 center = new Vector3(Screen.width * .5f, Screen.height * .5f, 0);
+        Ray ray = mainCamera.gameObject.GetComponent<Camera>().ScreenPointToRay(center);
+        if (Physics.Raycast(ray, out RaycastHit hit, 100))
+        {
+            if (hit.collider.TryGetComponent<InteractableActor>(out InteractableActor hitActor))
+            {
+                currentInteractable = hitActor;
+            }
+            else
+                currentInteractable = null;
+        }
+    }
+
+    private void CallInteract()
+    {
+        if (currentInteractable.pressToInteract)
+        {
+            currentInteractable.Interact();
+        }
+        else
+            Debug.Log("touch object instead");
+    }
+
+    public int Level()
+    {
+        return tempPlayerAttributes.level;
+    }
+
+    public void TakeDamage(float incomingDamage, float knockback, Vector3 knockbackDirection)
+    {
+        if (isDead) return;
+        tempPlayerAttributes.ModifyHealth(-incomingDamage);
+        Debug.Log("Player takes damage" + tempPlayerAttributes.GetFloatAttribute(TempPlayerStats.health));
+
+        if (tempPlayerAttributes.GetFloatAttribute(TempPlayerStats.health) == 0)
+            Die();
+    }
+
+    public void Die()
+    {
+        isDead = true;
+        Debug.Log($"{this.gameObject.name} Died");
+        if (this.transform.root.name == "Player")
+        {
+            GameManager.instance.KillPlayer();
+            TempPlayerAttributes.instance.LevelUp(3);
+        }
+    }
+
+    public bool IsDead()
+    {
+        return this.isDead;
+    }
+    /*
     private void Movement()
     {
         GroundMovement();
@@ -135,5 +207,5 @@ public class PlayerController : MonoBehaviour
         // Get the input from our keyboard
         moveInput = Input.GetAxis("Horizontal");
         turnInput = Input.GetAxis("Vertical");
-    }
+    }*/
 }

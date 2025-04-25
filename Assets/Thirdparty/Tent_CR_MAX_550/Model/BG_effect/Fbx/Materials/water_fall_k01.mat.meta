@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e40a22e0ed17cee409b21a3ac5b19f9a
+timeCreated: 1508307119
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 118703
+  packageName: Tent_CR_MAX_550
+  packageVersion: 1.0
+  assetPath: Assets/Tent_CR_MAX_550/Model/BG_effect/Fbx/Materials/water_fall_k01.mat
+  uploadId: 246042

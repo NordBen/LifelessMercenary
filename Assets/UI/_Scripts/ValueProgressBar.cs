@@ -36,9 +36,12 @@ public class ValueProgressBar : UIValueTextElement
     private void UpdateProgressBar(float newValue)
     {
         UpdateTextWithValue((int)newValue);
+        //Debug.Log("value: " + this._value);
 
-        if (this._otherValue !> 0)
+        if (this._otherValue <= 0)
             this._otherValue = (int)owner.GetMaxHP();
+        //Debug.Log("other: " + this._otherValue);
+        //Debug.Log("max: " + (int)owner.GetMaxHP() + "max float: " + owner.GetMaxHP());
 
         StartCoroutine(SmoothTransitionSlider());
     }

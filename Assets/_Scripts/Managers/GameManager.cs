@@ -1,3 +1,4 @@
+using StarterAssets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,14 +29,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if (player == null && GameObject.Find("Player"))
+            player = GameObject.Find("Player").GetComponent<Player>();
+        TempPlayerAttributes.instance.SetPlayerController(GameObject.Find("Player").GetComponent<ThirdPersonController>());
+        TempPlayerAttributes.instance.UpdateStats();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+    }
+
     void Start()
     {
-        
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        SceneManager_sceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
     void Update()
     {
-        
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("MainMenu"))
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                ResetLoop();
+            }
+        }
     }
 
     public void ModifyDeathEnergy(int amount)
@@ -71,21 +92,30 @@ public class GameManager : MonoBehaviour
 
     public void ResetLoop()
     {
-        SceneManager.LoadScene(0);//"TheLevelScene");
+        SceneManager.LoadScene("TheLevelScene");
     }
 
     public void AddEnemy(NPCController enemy)
     {
-        enemies.Add(enemy);
+        if (!enemies.Contains(enemy))
+        {
+            enemies.Add(enemy);
+        }
     }
 
     public void RemoveEnemy(NPCController enemy)
     {
-        enemies.Remove(enemy);
+        if (enemies.Contains(enemy))
+        {
+            enemies.Remove(enemy);
+        }
     }
 
     public NPCController GetRandomEnemy()
     {
-        return enemies[UnityEngine.Random.Range(0, enemies.Count)];
+        if (enemies.Count == 0) return null;
+        NPCController randomNPC = enemies[UnityEngine.Random.Range(0, enemies.Count)];
+        Debug.Log($"the chosen NPC: {randomNPC.gameObject.name}");
+        return randomNPC;
     }
 }

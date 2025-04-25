@@ -83,7 +83,7 @@ public class BaseCharacter : MonoBehaviour, ICombat
 
     public void PerformAttack()
     {
-        weapon.ToggleHitBox();
+        weapon.ToggleHitDetection();
     }
     #endregion
 
