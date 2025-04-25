@@ -454,6 +454,7 @@ MonoBehaviour:
   isAttacking: 0
   comboTimer: 0
   animOverrideController: {fileID: 0}
+  isBlocking: 0
 --- !u!114 &273136080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1760,6 +1761,7 @@ MonoBehaviour:
   isAttacking: 0
   comboTimer: 0
   animOverrideController: {fileID: 0}
+  isBlocking: 0
 --- !u!1 &805936504
 GameObject:
   m_ObjectHideFlags: 0
@@ -2217,6 +2219,7 @@ MonoBehaviour:
   isAttacking: 0
   comboTimer: 0
   animOverrideController: {fileID: 0}
+  isBlocking: 0
 --- !u!1001 &920853659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2487,6 +2490,7 @@ MonoBehaviour:
   isAttacking: 0
   comboTimer: 0
   animOverrideController: {fileID: 0}
+  isBlocking: 0
 --- !u!1 &938358046
 GameObject:
   m_ObjectHideFlags: 0
@@ -3014,6 +3018,7 @@ MonoBehaviour:
   isAttacking: 0
   comboTimer: 0
   animOverrideController: {fileID: 0}
+  isBlocking: 0
 --- !u!1 &1204071481
 GameObject:
   m_ObjectHideFlags: 0
@@ -3330,6 +3335,7 @@ MonoBehaviour:
   isAttacking: 0
   comboTimer: 0
   animOverrideController: {fileID: 0}
+  isBlocking: 0
 --- !u!1 &1523567038
 GameObject:
   m_ObjectHideFlags: 0
@@ -3621,6 +3627,7 @@ MonoBehaviour:
   isAttacking: 0
   comboTimer: 0
   animOverrideController: {fileID: 0}
+  isBlocking: 0
 --- !u!1001 &1600284503
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3885,6 +3892,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6982812146204527121, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 38af475e142dd0444ba55d98ae9807a5, type: 2}
     - target: {fileID: 6986324543679806377, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: m_Layer
       value: 0

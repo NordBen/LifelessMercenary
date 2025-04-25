@@ -62,7 +62,6 @@ public class PlayerController : MonoBehaviour, ICombat
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                Debug.Log("Call Interact");
                 CallInteract();
             }
         }
@@ -118,6 +117,8 @@ public class PlayerController : MonoBehaviour, ICombat
     public void TakeDamage(float incomingDamage, float knockback, Vector3 knockbackDirection)
     {
         if (isDead) return;
+
+        if (GameManager.instance.player.GetCombatManager().isBlocking) return;
         tempPlayerAttributes.ModifyHealth(-incomingDamage);
         Debug.Log("Player takes damage" + tempPlayerAttributes.GetFloatAttribute(TempPlayerStats.health));
 

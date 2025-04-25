@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
+    private static readonly int bIsBlocking = Animator.StringToHash("bIsBlocking");
+
     [SerializeField] public Weapon weaponItem;
     [SerializeField] public GameObject weapon;
 
@@ -16,6 +18,8 @@ public class CombatManager : MonoBehaviour
     [SerializeField] float comboTimer;
 
     [SerializeField] private AnimatorOverrideController animOverrideController;
+
+    public bool isBlocking = false;
 
     void Start()
     {
@@ -37,6 +41,19 @@ public class CombatManager : MonoBehaviour
             if (transform.tag == "Player")
                 PerformAttack();
         }
+
+        if (Input.GetKey(KeyCode.X))
+        {
+            Debug.Log("Blocking");
+            PerformBlock();
+        }
+        else
+        {
+            this.isBlocking = false;
+            animator.SetBool(bIsBlocking, this.isBlocking);
+        }  
+
+        Debug.Log(this.isBlocking);
     }
 
     private void PerformHitDetectionMelee(Collider other)
@@ -65,6 +82,22 @@ public class CombatManager : MonoBehaviour
             Invoke("ResetCombo", 1f);
         }
         comboTimer = 1.0f;
+    }
+
+    private void PerformBlock()
+    {
+        if (TryParry())
+        {
+            //TODO parry instead of block
+        }
+
+        this.isBlocking = true;
+        animator.SetBool(bIsBlocking, this.isBlocking);
+    }
+
+    private bool TryParry()
+    {
+        return UnityEngine.Random.Range(0, 2) > 0;
     }
 
     void OnWeaponChanged(IEquipable newWeapon)
