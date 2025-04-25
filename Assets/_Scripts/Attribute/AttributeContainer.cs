@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttributeContainer : MonoBehaviour, ICombat
+public class AttributeContainer : MonoBehaviour
 {
     public Dictionary<string, Attribute> attributes;
     [SerializeField] private List<Attribute> bindedAttributes;

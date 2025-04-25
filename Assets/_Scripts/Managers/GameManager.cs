@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -7,6 +8,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public Player player;
+
+    public List<NPCController> enemies;
 
     public event Action<int> OnDeathEnergyChanged;
     [SerializeField] private int deathEnergyMax = 5;
@@ -69,5 +72,20 @@ public class GameManager : MonoBehaviour
     public void ResetLoop()
     {
         SceneManager.LoadScene(0);//"TheLevelScene");
+    }
+
+    public void AddEnemy(NPCController enemy)
+    {
+        enemies.Add(enemy);
+    }
+
+    public void RemoveEnemy(NPCController enemy)
+    {
+        enemies.Remove(enemy);
+    }
+
+    public NPCController GetRandomEnemy()
+    {
+        return enemies[UnityEngine.Random.Range(0, enemies.Count)];
     }
 }
