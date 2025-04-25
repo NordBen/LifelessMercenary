@@ -280,6 +280,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 536407021}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &322006282
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 322006284}
+  - component: {fileID: 322006283}
+  m_Layer: 5
+  m_Name: TestingUIDocument
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &322006283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322006282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 567fbe5e1a7bb5641b4cf59cbf643a90, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 9f1028446835ac04f8afe569e638642b, type: 3}
+  m_SortingOrder: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+--- !u!4 &322006284
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322006282}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &341435992
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,6 +453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: f7a3127ea9303dd48a389c5998954b33, type: 2}
+  pressToInteract: 0
 --- !u!1 &408485680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,6 +1265,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 864650828}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1094384284
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1094384286}
+  - component: {fileID: 1094384285}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1094384285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094384284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f314176f64f19534684b92506d61c77e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _document: {fileID: 322006283}
+  _styleSheet: {fileID: 7433441132597879392, guid: 151b7ebd19b878447a7bf7bf4efb8078, type: 3}
+--- !u!4 &1094384286
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094384284}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1130513017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,6 +1649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: b88ea97a47fd9fc4b8389947dc9ff949, type: 2}
+  pressToInteract: 0
 --- !u!135 &1505111141
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2418,13 +2517,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponItem: {fileID: 0}
   weapon: {fileID: 0}
-  weaponBox: {fileID: 0}
   hitFX: {fileID: 0}
   combatAnimations: []
   animator: {fileID: 269596370}
   comboIndex: 0
   isAttacking: 0
   comboTimer: 0
+  animOverrideController: {fileID: 0}
+  isBlocking: 0
 --- !u!4 &2085784018 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3705273532144896648, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
@@ -2522,3 +2622,5 @@ SceneRoots:
   - {fileID: 1490141722}
   - {fileID: 1636428474}
   - {fileID: 898038137}
+  - {fileID: 322006284}
+  - {fileID: 1094384286}

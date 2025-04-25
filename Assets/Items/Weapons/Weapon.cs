@@ -16,20 +16,21 @@ public enum EWeaponType
 public class Weapon : Item, IEquipable
 {
     public float damage;
+    public float attackSpeed = 1.5f;
+
     public List<AnimationClip> animations;
     public EEquipSlot slot = EEquipSlot.Weapon;
     public EWeaponType weaponType;
-    public float attackSpeed = 1.5f;
 
     public EEquipSlot GetSlot() => slot;
-
+    /*
     public override void Interact()
     {
         Equip();
-    }
+    }*/
 
     public void Equip()
     {
-        GameManager.instance.player.GetEquipmentManager().Equip(this);//.GetComponent<EquipmentManager>().Equip(this);
+        GameManager.instance.player.GetEquipmentManager().TryEquip(this);//.GetComponent<EquipmentManager>().Equip(this);
     }
 }

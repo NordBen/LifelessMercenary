@@ -15,6 +15,11 @@ MonoBehaviour:
   itemName: Example Helmet
   icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   mesh: {fileID: 0}
+  type: 3
+  grade: 0
+  bIsStackable: 0
+  quantity: 0
+  maxQuantity: 0
   sellValue: 31
   defence: 2
   slot: 1

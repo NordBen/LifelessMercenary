@@ -1,12 +1,16 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using StarterAssets;
+using Unity.VisualScripting;
 
 public class EquipmentManager : MonoBehaviour
 {
     private Dictionary<EEquipSlot, IEquipable> equipment;
     public event Action<IEquipable> OnEquip;
-    public List<Item> itemsEquipped;
+    public Item[] itemsEquipped;
+
+    [SerializeField] private GameObject equipmentScreen;
 
     [SerializeField] Transform head, torso, leggs, boots, amulet, weapon;
     private Dictionary<EEquipSlot, Transform> slotPlacement;
@@ -29,6 +33,7 @@ public class EquipmentManager : MonoBehaviour
         slotPlacement[EEquipSlot.Boots] = boots;
         slotPlacement[EEquipSlot.Amulet] = amulet;
         slotPlacement[EEquipSlot.Weapon] = weapon;
+        itemsEquipped = new Item[equipment.Count];
     }
 
     private void OnEnable()
@@ -47,9 +52,25 @@ public class EquipmentManager : MonoBehaviour
         {
             DisplayAllItems();
         }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            ToggleEquipmentMenu();
+        }
     }
 
-    public void EquipItem(IEquipable inItem)
+    private void ToggleEquipmentMenu()
+    {
+        //GameManager.instance.ToggleQuickbar();
+        equipmentScreen.SetActive(!equipmentScreen.activeSelf);
+        Debug.Log(equipmentScreen.activeSelf);
+        Cursor.lockState = equipmentScreen.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = equipmentScreen.activeSelf;
+        GetComponent<StarterAssetsInputs>().cursorLocked = !equipmentScreen.activeSelf;
+        GetComponent<StarterAssetsInputs>().cursorInputForLook = !equipmentScreen.activeSelf;
+    }
+
+    public void TryEquip(IEquipable inItem)
     {
         OnEquip?.Invoke(inItem);
     }
@@ -59,42 +80,44 @@ public class EquipmentManager : MonoBehaviour
         return (T)Convert.ChangeType(value, typeof(T));
     }
 
-    public void Equip(IEquipable itemToEquip)
+    private void Equip(IEquipable itemToEquip)
     {
         EEquipSlot slot = itemToEquip.GetSlot();
 
-        if (equipment[slot] == itemToEquip)
-            return;
-
         if (equipment.ContainsKey(slot) && equipment[slot] != null)
         {
+            if (equipment[slot] == itemToEquip)
+            {
+                Unequip(equipment[slot]);
+                return;
+            }
+
             Unequip(equipment[slot]);
         }
 
+        GameObject physicalEquipment = null;
         equipment[slot] = itemToEquip;
         switch (itemToEquip.GetSlot())
         {
             case EEquipSlot.Weapon:
-                itemsEquipped.Add(itemToEquip as Weapon);
+                itemsEquipped[SlotIndex(slot)] = itemToEquip as Weapon;
+                physicalEquipment = Instantiate(weaponPrefab);
+                physicalEquipment.GetComponent<WeaponObject>().SetWeaponData(itemToEquip as Weapon);
+                GameManager.instance.player.GetCombatManager().weapon = physicalEquipment.GetComponent<WeaponObject>();
                 break;
             case EEquipSlot.Head:
             case EEquipSlot.Torso:
             case EEquipSlot.Leggs:
             case EEquipSlot.Boots:
-                itemsEquipped.Add(itemToEquip as Armor);
+                itemsEquipped[SlotIndex(slot)] = itemToEquip as Armor;
+                physicalEquipment = Instantiate(armorPrefab);
                 break;
             default:
                 break;
         }
 
-        GameObject newEquipment = Instantiate(itemToEquip.GetSlot() == EEquipSlot.Weapon ? weaponPrefab : armorPrefab);
-        if (itemToEquip.GetSlot() == EEquipSlot.Weapon) 
-            newEquipment.GetComponent<WeaponObject>().SetWeaponData(itemsEquipped[0] as Weapon);
-        GameManager.instance.player.GetCombatManager().weapon = newEquipment;
-
-        OnEquip?.Invoke(itemToEquip);
-
-        AttachEquipment(newEquipment.transform, itemToEquip.GetSlot());
+        if (physicalEquipment != null)
+            AttachEquipment(physicalEquipment.transform, itemToEquip.GetSlot());
     }
 
     private void AttachEquipment(Transform equipmentToAttach, EEquipSlot slotToPlace)
@@ -112,14 +135,31 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-    public void Unequip(IEquipable itemToUnequip)
+    private int SlotIndex(EEquipSlot slot)
+    {
+        int index = slot switch
+        { EEquipSlot.Weapon => 0,
+          EEquipSlot.Head => 1,
+          EEquipSlot.Torso => 2,
+          EEquipSlot.Leggs => 3,
+          EEquipSlot.Boots => 4,
+          EEquipSlot.Amulet => 5,
+          _ => -1 };
+        return index;
+    }
+
+    private void Unequip(IEquipable itemToUnequip)
     {
         EEquipSlot slot = itemToUnequip.GetSlot();
 
         if (equipment.ContainsKey(slot) && equipment[slot] == itemToUnequip)
         {
-            equipment.Remove(slot);
-            OnEquip?.Invoke(itemToUnequip);
+            if (equipment[slot] != null)
+            {
+                Destroy(slotPlacement[slot].GetChild(0).gameObject);
+            }
+            equipment[slot] = null;
+            itemsEquipped[SlotIndex(slot)] = null;
         }
     }
 

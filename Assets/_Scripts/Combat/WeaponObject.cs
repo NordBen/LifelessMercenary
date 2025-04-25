@@ -11,12 +11,16 @@ public class WeaponObject : MonoBehaviour
     private void Start()
     {
         owner = this.transform.root;
-        weaponData = owner.GetComponent<CombatManager>().weaponItem;
         weaponBox = GetComponent<BoxCollider>();
+        if (weaponData == null)
+            weaponData = owner.GetComponent<CombatManager>().weaponItem;
     }
 
     public void SetWeaponData(Weapon newData)
     {
+        Debug.Log($"incoming weapondata: {newData}");
+        this.weaponData = newData;
+        Debug.Log($"weapon's data: {this.weaponData}");
         this.GetComponent<MeshFilter>().mesh = newData.mesh;
     }
 

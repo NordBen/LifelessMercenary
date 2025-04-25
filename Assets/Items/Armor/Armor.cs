@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,14 +8,14 @@ public class Armor : Item, IEquipable
     public EEquipSlot slot = EEquipSlot.Head;
 
     public EEquipSlot GetSlot() => slot;
-
+    /*
     public override void Interact()
     {
         Equip();
-    }
+    }*/
 
     public void Equip()
     {
-        GameManager.instance.player.GetEquipmentManager().Equip(this);//.GetComponent<EquipmentManager>().Equip(this);
+        GameManager.instance.player.GetEquipmentManager().TryEquip(this);//.GetComponent<EquipmentManager>().Equip(this);
     }
 }

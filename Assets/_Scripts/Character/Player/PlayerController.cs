@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using UnityEditor.Search;
 using UnityEngine;
 using System.Collections;
+using StarterAssets;
 
 
 public class PlayerController : MonoBehaviour, ICombat
@@ -64,6 +65,11 @@ public class PlayerController : MonoBehaviour, ICombat
             {
                 CallInteract();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            //GetComponent<InventoryManager>().ToggleInventory();
         }
     }
 

@@ -1,12 +1,13 @@
+using StarterAssets;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    private static readonly int bIsBlocking = Animator.StringToHash("bIsBlocking");
+    //private static readonly int bIsBlocking = Animator.StringToHash("bIsBlocking");
 
     [SerializeField] public Weapon weaponItem;
-    [SerializeField] public GameObject weapon;
+    [SerializeField] public WeaponObject weapon;
 
     public GameObject hitFX;
 
@@ -24,14 +25,22 @@ public class CombatManager : MonoBehaviour
     void Start()
     {
         GameManager.instance.player.GetEquipmentManager().OnEquip += OnWeaponChanged;
+        GameManager.instance.player.GetEquipmentManager().OnEquip += TestAddit;
 
         animOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = animOverrideController;
     }
 
+    private void OnEnable()
+    {
+        GameManager.instance.player.GetEquipmentManager().OnEquip += OnWeaponChanged;
+        GameManager.instance.player.GetEquipmentManager().OnEquip += TestAddit;
+    }
+
     private void OnDisable()
     {
         GameManager.instance.player.GetEquipmentManager().OnEquip -= OnWeaponChanged;
+        GameManager.instance.player.GetEquipmentManager().OnEquip -= TestAddit;
     }
 
     private void Update()
@@ -50,15 +59,14 @@ public class CombatManager : MonoBehaviour
         else
         {
             this.isBlocking = false;
-            animator.SetBool(bIsBlocking, this.isBlocking);
-        }  
-
-        Debug.Log(this.isBlocking);
+            //animator.SetBool(bIsBlocking, this.isBlocking);
+        }
+        //Debug.Log(this.isBlocking);
     }
 
     private void PerformHitDetectionMelee(Collider other)
     {
-        weapon.GetComponent<WeaponObject>().ToggleHitDetection();
+        weapon.ToggleHitDetection();
     }
 
     private void PerformAttack()
@@ -92,7 +100,7 @@ public class CombatManager : MonoBehaviour
         }
 
         this.isBlocking = true;
-        animator.SetBool(bIsBlocking, this.isBlocking);
+        //animator.SetBool(bIsBlocking, this.isBlocking);
     }
 
     private bool TryParry()
@@ -100,16 +108,23 @@ public class CombatManager : MonoBehaviour
         return UnityEngine.Random.Range(0, 2) > 0;
     }
 
+    void TestAddit(IEquipable newWeapon)
+    {
+        Debug.Log($"Called Equip and listened from Combat Manager for {newWeapon} with slot {newWeapon.GetSlot()}");
+    }
+
     void OnWeaponChanged(IEquipable newWeapon)
     {
-        if (newWeapon.GetSlot() == EEquipSlot.Weapon)
+        if (newWeapon.GetSlot() != EEquipSlot.Weapon)
         {
-            weaponItem = newWeapon as Weapon;
-            combatAnimations.Clear();
-            combatAnimations = new(weaponItem.animations);
+            return;
         }
         else
-            return;
+        {
+            /*weaponItem = weapon.weaponData;
+            combatAnimations.Clear();
+            combatAnimations = new(weaponItem.animations);*/
+        }    
     }
 
     private void ResetCombo()

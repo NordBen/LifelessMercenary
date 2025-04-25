@@ -16,6 +16,7 @@ public enum EEquipSlot
 [System.Serializable]
 public enum EItemType
 {
+    All,
     Basic,
     Weapon,
     Armor,

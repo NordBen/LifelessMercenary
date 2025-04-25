@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int deathEnergyMax = 5;
     [SerializeField] private int currentDeathEnergy = 5;
 
+    [SerializeField] private int daysSurvived;
+
+    [SerializeField] GameObject quickBar;
+
     private void Awake()
     {
         if (instance == null)
@@ -35,6 +39,11 @@ public class GameManager : MonoBehaviour
             player = GameObject.Find("Player").GetComponent<Player>();
         TempPlayerAttributes.instance.SetPlayerController(GameObject.Find("Player").GetComponent<ThirdPersonController>());
         TempPlayerAttributes.instance.UpdateStats();
+    }
+
+    public void ToggleQuickbar()
+    {
+        quickBar.SetActive(!quickBar.activeSelf);
     }
 
     private void OnDestroy()
