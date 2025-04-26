@@ -5,7 +5,7 @@ public class TestingUIToolkit : MonoBehaviour
 {
     [SerializeField] private UIDocument _document;
     [SerializeField] private StyleSheet _styleSheet;
-
+/*
     private void Start()
     {
         Generate();
@@ -41,7 +41,7 @@ public class TestingUIToolkit : MonoBehaviour
 
         var testSlider = Create<Slider>();
         root.Add(testSlider);
-    }
+    }*/
 
     VisualElement Create(params string[] classNames)
     {

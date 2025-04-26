@@ -1,0 +1,90 @@
+.container {
+	flex-grow: 1;
+	width: auto;
+	height: auto;
+	max-width: none;
+	max-height: none;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	
+	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+	color: rgb(255, 197, 0);
+}
+
+.inventory {
+	width: 350px;
+	background-image: url('/assets/GUI_Parts/Gui_parts/big_background.png');
+}
+
+.inventoryHeader {
+	position: absolute;
+	top: -32px;
+	left: -27px;
+	width: 350px;
+	height: 70px;
+	justify-content: center;
+	align-items: center;
+	-unity-slice-scale: 0.5;
+}
+
+Label {
+	font-size: 26px;
+}
+
+.inventoryFrame {
+	position: absolute;
+	top: -10px;
+	left: -17px;
+	width: 326px;
+	height: 520px;
+	-unity-slice-scale: 0.5;
+}
+
+.slotsContainer {
+	flex-grow: 1;
+	padding-top: 30px;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-items: flex-start;
+	flex-shrink: 0;
+}
+
+.slot {
+	width: 70px;
+	height: 70px;
+	margin: 5px;
+}
+
+.slotFrame {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-width: 0;
+	-unity-slice-scale: 0.8;
+}
+
+.slotIcon {
+	padding: 4px;
+	flex-shrink: 0;
+	flex-grow: 1;
+}
+
+.btn {
+	width: 60px;
+	height: 60px;
+	margin: 5px;
+	background-color: blue;
+}
+
+.btn:hover {
+	background-color: red;
+	width: 65px;
+	height: 65px;
+}
+
+.btn:active {
+	background-color: green;
+}
