@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BaseCharacter : MonoBehaviour, ICombat
+public abstract class BaseCharacter : MonoBehaviour, ICombat
 {
     [Header("Movement")]
     [Tooltip("Walk speed")]
@@ -53,10 +53,7 @@ public class BaseCharacter : MonoBehaviour, ICombat
     }
 
     #region ICombatInterface
-    public int Level()
-    {
-        return this.level;
-    }
+    public int GetLevel() => this.level;
 
     public virtual void TakeDamage(float incomingDamage, float knockbackForce, Vector3 knockbackDirection)
     {
@@ -76,10 +73,7 @@ public class BaseCharacter : MonoBehaviour, ICombat
         isDead = true;
     }
 
-    public bool IsDead()
-    {
-        return this.isDead;
-    }
+    public bool IsDead() => this.isDead;
 
     public void PerformAttack()
     {
@@ -87,10 +81,7 @@ public class BaseCharacter : MonoBehaviour, ICombat
     }
     #endregion
 
-    public float GetMaxHP()
-    {
-        return this.maxHP;
-    }
+    public float GetMaxHP() => this.maxHP;
 
     protected void ChangeHP(float incomingValue)
     {
@@ -98,10 +89,7 @@ public class BaseCharacter : MonoBehaviour, ICombat
         OnHPChanged?.Invoke(this.hp);
     }
 
-    public int GetMaxHealingItems()
-    {
-        return this.maxHealables;
-    }
+    public int GetMaxHealingItems() => this.maxHealables;
 
     protected virtual void Heal()
     {

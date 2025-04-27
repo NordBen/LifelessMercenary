@@ -115,10 +115,7 @@ public class PlayerController : MonoBehaviour, ICombat
             Debug.Log("touch object instead");
     }
 
-    public int Level()
-    {
-        return tempPlayerAttributes.level;
-    }
+    public int GetLevel() => tempPlayerAttributes.level;
 
     public void TakeDamage(float incomingDamage, float knockback, Vector3 knockbackDirection)
     {
@@ -143,10 +140,7 @@ public class PlayerController : MonoBehaviour, ICombat
         }
     }
 
-    public bool IsDead()
-    {
-        return this.isDead;
-    }
+    public bool IsDead() => this.isDead;
     /*
     private void Movement()
     {

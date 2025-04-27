@@ -33,10 +33,10 @@ public class CurveValueStrategy : IAttributeValueStrategy
 public class AttributeBasedValueStrategy : IAttributeValueStrategy
 {
     public GameplayAttribute sourceAttribute;
-    public float Coefficient;
+    public float _coefficient;
     
     public float CalculateValue(GameplayAttribute attribute, GameplayEffect effect)
     {
-        return sourceAttribute.CurrentValue() * Coefficient;
+        return sourceAttribute.CurrentValue() * _coefficient;
     }
 }

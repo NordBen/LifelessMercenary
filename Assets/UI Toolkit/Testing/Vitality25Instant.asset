@@ -16,13 +16,12 @@ MonoBehaviour:
   durationType: 0
   duration: 10
   period: 0
-  modifierType: 0
-  modValue: 0
+  modifierType: 4
   targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
-  requiredTags: []
   valueStrategy:
     rid: 1421873645163381126
   stackingType: 0
+  _disposed: 0
   _elapsedTime: 0
   _periodElapsedTime: 0
   references:
@@ -32,4 +31,4 @@ MonoBehaviour:
       type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
       data:
         sourceAttribute: {fileID: 11400000, guid: 644ff5280a0d50f40ae6aebe8bc52a87, type: 2}
-        Coefficient: 25
+        _coefficient: 25

@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using UnityEngine;
 using StarterAssets;
-using Unity.VisualScripting;
 
 public class EquipmentManager : MonoBehaviour
 {
     private Dictionary<EEquipSlot, IEquipable> equipment;
+    private Dictionary<IEquipable, List<GameplayEffect>> equippedEffects;
+    [SerializeField] private List<GameplayEffect> equippedEffectsList;
     public event Action<IEquipable> OnEquip;
     public Item[] itemsEquipped;
 
@@ -48,10 +50,6 @@ public class EquipmentManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            DisplayAllItems();
-        }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
@@ -118,6 +116,8 @@ public class EquipmentManager : MonoBehaviour
 
         if (physicalEquipment != null)
             AttachEquipment(physicalEquipment.transform, itemToEquip.GetSlot());
+        
+        OnEquipItem(itemToEquip);
     }
 
     private void AttachEquipment(Transform equipmentToAttach, EEquipSlot slotToPlace)
@@ -161,6 +161,8 @@ public class EquipmentManager : MonoBehaviour
             equipment[slot] = null;
             itemsEquipped[SlotIndex(slot)] = null;
         }
+        
+        OnUnequipItem(itemToUnequip);
     }
 
     public IEquipable GetEquippedItem(EEquipSlot inSlot)
@@ -168,13 +170,39 @@ public class EquipmentManager : MonoBehaviour
         return equipment.ContainsKey(inSlot) ? equipment[inSlot] : null;
     }
 
-    void DisplayAllItems()
-    {
-        string heldEquipment = "Held Equipment: ";
-        foreach (var pair in equipment)
+    public void OnEquipItem(IEquipable item)
+    {/*
+        if (itemsEquipped[SlotIndex(item.GetSlot())] != null)
         {
-            //heldEquipment += $"{pair.Key} - {pair.Value}/{pair.Value.Damage}, ";
+            OnUnequipItem(item);
+        }*/
+        
+        var effects = itemsEquipped[SlotIndex(item.GetSlot())].CreateItemEffects();
+        //equippedEffects[item] = effects;
+        foreach (var effect in effects)
+        {
+            effect.Source = item;
+            equippedEffectsList.Add(effect);
+            GetComponent<GameplayAttributeComponent>().ApplyEffect(effect, true);
         }
-        Debug.Log(heldEquipment);
+    }
+
+    public void OnUnequipItem(IEquipable item)
+    {/*
+        if (equippedEffects.TryGetValue(item, out var effects))
+        {
+        }*/
+        /*
+        var item = itemsEquipped[slot];
+        if (item == null) return;*/
+
+        // Remove effects associated with this item
+        var effectsToRemove = equippedEffectsList.Where(effect => effect.Source == item).ToList();
+        foreach (var effect in effectsToRemove)
+        {
+            equippedEffectsList.Remove(effect);
+            GetComponent<GameplayAttributeComponent>().RemoveEffect(effect);
+        }
+        //equippedItems[slot] = null;
     }
 }

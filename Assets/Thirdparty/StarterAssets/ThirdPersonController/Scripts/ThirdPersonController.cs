@@ -180,9 +180,14 @@ namespace StarterAssets
             // set sphere position, with offset
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
+            
+            bool wasGrounded = Grounded;
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
+            Debug.Log($"Grounded Check - Was: {wasGrounded}, Now: {Grounded}");
+            Debug.DrawLine(spherePosition, spherePosition + Vector3.down * GroundedRadius, Grounded ? Color.green : Color.red);
+        
             // update animator if using character
             if (_hasAnimator)
             {
@@ -283,6 +288,7 @@ namespace StarterAssets
         {
             if (Grounded)
             {
+                Debug.Log("Grounded state");
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
@@ -346,6 +352,7 @@ namespace StarterAssets
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
+            //Debug.Log($"Jump state - Velocity.y: {_verticalVelocity}");
         }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)

@@ -15,12 +15,20 @@ MonoBehaviour:
   itemName: Example Sword 2
   icon: {fileID: 21300000, guid: f15a65a81539d524bad5db16f0656fa0, type: 3}
   mesh: {fileID: 4300000, guid: f17d599eb702cad4d80dd001c5ab44ef, type: 3}
+  material: {fileID: 2100000, guid: 66625a9bfecce3849b30a9d8d1cb567b, type: 2}
   type: 2
   grade: 0
   bIsStackable: 0
   quantity: 0
   maxQuantity: 0
   sellValue: 25
+  equipmentEffects:
+  - effectName: HealthOfOX
+    targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
+    value: 25
+  - effectName: HealthOfOXMORE
+    targetAttribute: {fileID: 11400000, guid: cf6ab014a89a66d46b3d1100091d9d5f, type: 2}
+    value: 117
   damage: 5
   attackSpeed: 1.5
   animations:

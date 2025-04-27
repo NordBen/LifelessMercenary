@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
+using Object = System.Object;
 
 public enum EModifierOperationType
 {
@@ -28,14 +29,13 @@ public enum EEffectStackingType
 
 [Serializable]
 [CreateAssetMenu(fileName = "New Gameplay Effect", menuName = "Gameplay/Effect")]
-public class GameplayEffect : ScriptableObject
+public class GameplayEffect : ScriptableObject, IDisposable
 {
     public string effectName;
     public EEffectDurationType durationType;
     public float duration;
     public float period;
     public EModifierOperationType modifierType;
-    public float modValue;
     [SerializeField] public GameplayAttribute targetAttribute;
     //public List<GameplayTag> requiredTags = new List<GameplayTag>();
     
@@ -43,10 +43,60 @@ public class GameplayEffect : ScriptableObject
     
     public EEffectStackingType stackingType;
     private int maxStacks = 1;
+    
+    [SerializeField] private Object source;
+    public Object Source
+    {
+        get => source;
+        set => source = value;
+    }
+    
+    private float modValue = 0;
+    private GameplayAttributeComponent _owner;
+    
+    public bool _disposed;
 
     public float _elapsedTime;
     public float _periodElapsedTime;
+    
+    public GameplayEffect(string inEffectName, EEffectDurationType inDurationType, float inDuration, float inPeriod = 0,
+        EModifierOperationType inModifierType = EModifierOperationType.Add,
+        GameplayAttribute inTargetAttribute = null, IAttributeValueStrategy inValueStrategy = null)
+    {
+        this.effectName = inEffectName;
+        this.durationType = inDurationType;
+        this.duration = inDuration;
+        this.period = inPeriod;
+        this.modifierType = inModifierType;
+        this.targetAttribute = inTargetAttribute;
+        this.valueStrategy = inValueStrategy;
+    }
+    
+    public void Initialize(
+        string inEffectName,
+        EEffectDurationType inDurationType,
+        float inDuration,
+        float inPeriod,
+        EModifierOperationType inModifierType,
+        GameplayAttribute inTargetAttribute,
+        IAttributeValueStrategy inValueStrategy,
+        EEffectStackingType inStackingType,
+        GameplayAttributeComponent inOwner,
+        object inSource = null)
+    {
+        effectName = inEffectName;
+        durationType = inDurationType;
+        duration = inDuration;
+        period = inPeriod;
+        modifierType = inModifierType;
+        targetAttribute = inTargetAttribute;
+        valueStrategy = inValueStrategy;
+        stackingType = inStackingType;
+        source = inSource;
+        _owner = inOwner;
+    }
 
+    
     public IEnumerator ApplyEffect(GameplayAttributeComponent target)
     {
         if (!ValidateTags(target)) yield break;
@@ -88,7 +138,6 @@ public class GameplayEffect : ScriptableObject
             Debug.Log($"Duration/Infinite effect: adding modification with value {modValue}");
             targetAttribute.AddModification(this, modValue);
         }
-
     }
 
     private bool ValidateTags(GameplayAttributeComponent target)
@@ -112,6 +161,28 @@ public class GameplayEffect : ScriptableObject
             EModifierOperationType.Override => modValue,
             _ => currentValue
         };
+    }
+
+    public void Dispose()
+    {
+        if (!_disposed)
+        {/*
+            if (targetAttribute != null)
+            {
+                targetAttribute.RemoveModification(this);
+            }*/
+            if (_owner != null)
+            {
+                _owner.RemoveEffect(this);
+            }
+
+            _disposed = true;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Dispose();
     }
 }
 
@@ -150,8 +221,98 @@ public class GameplayEffectEditor : Editor
         {
 //            EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStacks"));
         }
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("requiredTags"));
+        //EditorGUILayout.PropertyField(serializedObject.FindProperty("requiredTags"));
         
         serializedObject.ApplyModifiedProperties();
+    }
+}
+
+public static class GameplayEffectFactory
+{
+    public static GameplayEffect CreateEffect(string inEffectName, EEffectDurationType inDurationType, 
+        float inDuration, float inPeriod = 0, EModifierOperationType inModifierType = EModifierOperationType.Add,
+        GameplayAttribute inTargetAttribute = null, IAttributeValueStrategy inValueStrategy = null, object inSource = null, GameplayAttributeComponent inOwner = null)
+    {
+        var effect = ScriptableObject.CreateInstance<GameplayEffect>();
+        effect.Initialize(
+            inEffectName,
+            inDurationType,
+            inDuration,
+            inPeriod,
+            inModifierType,
+            inTargetAttribute,
+            inValueStrategy,
+            EEffectStackingType.None,
+            inOwner,
+            inSource
+        );
+        return effect;
+    }
+    
+    public static GameplayEffect CreateEffect(string inEffectName, EEffectDurationType inDurationType,
+        float inPeriod = 0, EModifierOperationType inModifierType = EModifierOperationType.Add,
+        GameplayAttribute inTargetAttribute = null, IAttributeValueStrategy inValueStrategy = null)
+    {
+        var effect = ScriptableObject.CreateInstance<GameplayEffect>();
+        effect.Initialize(
+            inEffectName,
+            inDurationType,
+            0,
+            inPeriod,
+            inModifierType,
+            inTargetAttribute,
+            inValueStrategy,
+            EEffectStackingType.None,
+            null
+        );
+        return effect;
+    }
+    
+    public static GameplayEffect CreateDamageEffect(float damageAmount, GameplayAttribute targetHealthAttribute)
+    {
+        var effect = ScriptableObject.CreateInstance<GameplayEffect>();
+        var valueStrategy = new ConstantValueStrategy { value = -damageAmount };
+        
+        effect.Initialize(
+            "Damage Effect",
+            EEffectDurationType.Instant,
+            0,
+            0,
+            EModifierOperationType.Add,
+            targetHealthAttribute,
+            valueStrategy,
+            EEffectStackingType.None,
+            null
+        );
+        
+        return effect;
+    }
+
+    public static GameplayEffect CreateEquipmentEffect(
+        string effectName,
+        GameplayAttribute targetAttribute,
+        GameplayAttribute sourceAttribute,
+        float coefficient)
+    {
+        var effect = ScriptableObject.CreateInstance<GameplayEffect>();
+        var valueStrategy = new AttributeBasedValueStrategy
+        {
+            sourceAttribute = sourceAttribute,
+            _coefficient = coefficient
+        };
+        
+        effect.Initialize(
+            effectName,
+            EEffectDurationType.Infinite,
+            0,
+            0,
+            EModifierOperationType.Add,
+            targetAttribute,
+            valueStrategy,
+            EEffectStackingType.None,
+            null
+        );
+        
+        return effect;
     }
 }

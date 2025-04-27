@@ -17,19 +17,16 @@ MonoBehaviour:
   duration: 15
   period: 0
   modifierType: 0
-  modValue: 0
   targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
-  requiredTags: []
   valueStrategy:
-    rid: 1421873651801391234
+    rid: 1421873673556721759
   stackingType: 0
   _elapsedTime: 0
   _periodElapsedTime: 0
   references:
     version: 2
     RefIds:
-    - rid: 1421873651801391234
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
+    - rid: 1421873673556721759
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
       data:
-        sourceAttribute: {fileID: 0}
-        Coefficient: 0
+        value: 10

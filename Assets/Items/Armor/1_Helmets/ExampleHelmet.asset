@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Example Helmet
   icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  mesh: {fileID: 0}
+  mesh: {fileID: -1942376176107530577, guid: c4c7a77c16e9042e4b606f55a871f372, type: 3}
+  material: {fileID: 1106563633393636324, guid: c4c7a77c16e9042e4b606f55a871f372, type: 3}
   type: 3
   grade: 0
   bIsStackable: 0

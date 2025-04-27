@@ -13,7 +13,7 @@ public class UIValueTextElement : ExtendedUIElement
     private void Start()
     {
         labelText = GetComponent<TMP_Text>();
-        UpdateTextWithValue(this.owner.Level(), this.owner.Level()); // initiates the UIText to Max allowed healing items of owning character
+        UpdateTextWithValue(this.owner.GetLevel(), this.owner.GetLevel()); // initiates the UIText to Max allowed healing items of owning character
     }
 
     private void OnEnable()

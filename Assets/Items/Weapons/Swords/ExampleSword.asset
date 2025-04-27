@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Example Sword
   icon: {fileID: 21300000, guid: 4e8feda8d54959049962dfdc295d76b9, type: 3}
   mesh: {fileID: 4300008, guid: f17d599eb702cad4d80dd001c5ab44ef, type: 3}
+  material: {fileID: 2100000, guid: 66625a9bfecce3849b30a9d8d1cb567b, type: 2}
   type: 2
   grade: 0
   bIsStackable: 0
