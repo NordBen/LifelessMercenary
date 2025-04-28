@@ -36,7 +36,6 @@ namespace StarterAssets
 
 		public void OnJump(InputValue value)
 		{
-			Debug.Log($"Jump input received: {value.isPressed}");
 			JumpInput(value.isPressed);
 		}
 
@@ -77,5 +76,4 @@ namespace StarterAssets
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
         }
 	}
-	
 }

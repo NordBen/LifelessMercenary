@@ -1,12 +1,12 @@
 using UnityEngine;
 
 public class NPCController : BaseCharacter
-{
+{/*
     private static readonly int IsIdle = Animator.StringToHash("isIdle");
     private static readonly int IsWalking = Animator.StringToHash("isWalking");
     private static readonly int IsChasing = Animator.StringToHash("isChasing");
     private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
-    private static readonly int IsSkill = Animator.StringToHash("isSkill");
+    private static readonly int IsSkill = Animator.StringToHash("isSkill");*/
 
     // Constants
     private const float AccuracyWp = 0.5f; // Accuracy for the NPC to reach the waypoint
@@ -213,21 +213,21 @@ public class NPCController : BaseCharacter
     void ChangeAnimState(EState newState)
     {
         _currentState = newState;
-        _animator.SetBool(IsIdle, false);
+        /*_animator.SetBool(IsIdle, false);
         _animator.SetBool(IsWalking, false);
         _animator.SetBool(IsChasing, false);
-        _animator.SetBool(IsAttacking, false);
+        _animator.SetBool(IsAttacking, false);*/
 
         switch (_currentState)
         {
             case EState.Patrol:
-                _animator.SetBool(IsWalking, true);
+                //_animator.SetBool(IsWalking, true);
                 break;
             case EState.Chase:
-                _animator.SetBool(IsChasing, true);
+                //_animator.SetBool(IsChasing, true);
                 break;
             case EState.Attack:
-                _animator.SetBool(IsAttacking, true);
+                //_animator.SetBool(IsAttacking, true);
                 break;
             case EState.Dead:
                 _animator.SetTrigger("tDead");

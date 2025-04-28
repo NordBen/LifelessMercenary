@@ -185,7 +185,7 @@ namespace StarterAssets
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
-            Debug.Log($"Grounded Check - Was: {wasGrounded}, Now: {Grounded}");
+            //Debug.Log($"Grounded Check - Was: {wasGrounded}, Now: {Grounded}");
             Debug.DrawLine(spherePosition, spherePosition + Vector3.down * GroundedRadius, Grounded ? Color.green : Color.red);
         
             // update animator if using character
@@ -288,7 +288,6 @@ namespace StarterAssets
         {
             if (Grounded)
             {
-                Debug.Log("Grounded state");
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
