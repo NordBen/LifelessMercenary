@@ -15,9 +15,9 @@ public class UIEquipSlot : MonoBehaviour
 
     private void Start()
     {
-        _button = transform.GetChild(0).GetComponent<Button>();
-        _slotIcon = transform.GetChild(1).GetComponent<Image>();
-        _equippedIcon = transform.GetChild(3).GetComponent<Image>();
+        _button = transform.GetChild(0).GetChild(0).GetComponent<Button>();
+        _slotIcon = transform.GetChild(0).GetChild(1).GetComponent<Image>();
+        _equippedIcon = transform.GetChild(0).GetChild(3).GetComponent<Image>();
         _button.interactable = isInteractable;
         _button.onClick.AddListener(() => OnClick());
         _slotIcon.sprite = slotIcon;
@@ -26,12 +26,17 @@ public class UIEquipSlot : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.instance.player.GetEquipmentManager().OnEquip += UpdateEquipmentSlot;
+        Invoke("SubscribeToOnEquip", .5f);
     }
 
     private void OnDisable()
     {
         GameManager.instance.player.GetEquipmentManager().OnEquip -= UpdateEquipmentSlot;
+    }
+
+    private void SubscribeToOnEquip()
+    {
+        GameManager.instance.player.GetEquipmentManager().OnEquip += UpdateEquipmentSlot; 
     }
 
     public void UpdateEquipmentSlot(IEquipable newItem)

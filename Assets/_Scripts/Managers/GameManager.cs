@@ -16,9 +16,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int deathEnergyMax = 5;
     [SerializeField] private int currentDeathEnergy = 5;
 
-    [SerializeField] private int daysSurvived;
-
-    [SerializeField] GameObject quickBar;
+    public event Action<int> OnDaySurvived;
+    [SerializeField] private int daysSurvived = 1;
 
     private void Awake()
     {
@@ -31,6 +30,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (player == null && GameObject.Find("Player"))
+            player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -39,11 +40,6 @@ public class GameManager : MonoBehaviour
             player = GameObject.Find("Player").GetComponent<Player>();
         TempPlayerAttributes.instance.SetPlayerController(GameObject.Find("Player").GetComponent<ThirdPersonController>());
         TempPlayerAttributes.instance.UpdateStats();
-    }
-
-    public void ToggleQuickbar()
-    {
-        quickBar.SetActive(!quickBar.activeSelf);
     }
 
     private void OnDestroy()
@@ -66,7 +62,21 @@ public class GameManager : MonoBehaviour
                 ResetLoop();
             }
         }
+        
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            SurviveDay(1);
+        }
     }
+
+    public void SurviveDay(int days)
+    {
+        this.daysSurvived += days;
+        OnDaySurvived?.Invoke(daysSurvived);
+        Debug.Log($"days survived: {daysSurvived}");
+    }
+    
+    public int GetSurvivedDays() => daysSurvived;
 
     public void ModifyDeathEnergy(int amount)
     {

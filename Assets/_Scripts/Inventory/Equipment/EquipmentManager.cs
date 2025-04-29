@@ -19,6 +19,8 @@ public class EquipmentManager : MonoBehaviour
 
     [SerializeField] GameObject weaponPrefab, armorPrefab;
 
+    [SerializeField] private Transform _quickbar;
+
     private void Awake()
     {
         equipment = new();
@@ -54,6 +56,17 @@ public class EquipmentManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             ToggleEquipmentMenu();
+            ToggleEquipbar();
+        }
+    }
+
+    private void ToggleEquipbar()
+    {
+        foreach (Transform barSlot in _quickbar)
+        {
+            var child = barSlot.GetChild(0);
+            GameObject visuals = child.gameObject;
+            visuals.SetActive(!visuals.activeSelf);
         }
     }
 
@@ -100,8 +113,29 @@ public class EquipmentManager : MonoBehaviour
             case EEquipSlot.Weapon:
                 itemsEquipped[SlotIndex(slot)] = itemToEquip as Weapon;
                 physicalEquipment = Instantiate(weaponPrefab);
-                physicalEquipment.GetComponent<WeaponObject>().SetWeaponData(itemToEquip as Weapon);
-                GameManager.instance.player.GetCombatManager().weapon = physicalEquipment.GetComponent<WeaponObject>();
+                if (physicalEquipment != null)
+                {
+                    var weaponObject = physicalEquipment.GetComponent<WeaponObject>();
+                    if (weaponObject != null)
+                    {
+                        weaponObject.SetWeaponData(itemToEquip as Weapon);
+                        var combatManager = GameManager.instance?.player?.GetCombatManager();
+                        if (combatManager != null)
+                        {
+                            combatManager.weapon = weaponObject;
+                        }
+                        else
+                        {
+                            Debug.LogError("Combat Manager not found!");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("WeaponObject component not found on instantiated weapon!");
+                    }
+                } /*
+            physicalEquipment.GetComponent<WeaponObject>().SetWeaponData(itemToEquip as Weapon);
+            GameManager.instance.player.GetCombatManager().weapon = physicalEquipment.GetComponent<WeaponObject>();*/
                 break;
             case EEquipSlot.Head:
             case EEquipSlot.Torso:

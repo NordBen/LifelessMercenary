@@ -120,8 +120,17 @@ public class PlayerController : MonoBehaviour, ICombat
     public void TakeDamage(float incomingDamage, float knockback, Vector3 knockbackDirection)
     {
         if (isDead) return;
+        if (GetComponent<CombatManager>().SuccessfullParry())
+        {
+            Debug.Log("Parried successful");
+            return;
+        }
 
-        if (GameManager.instance.player.GetCombatManager().isBlocking) return;
+        if (GameManager.instance.player.GetCombatManager().isBlocking)
+        {
+            incomingDamage *= 0.1f;
+        }
+
         tempPlayerAttributes.ModifyHealth(-incomingDamage);
         Debug.Log("Player takes damage" + tempPlayerAttributes.GetFloatAttribute(TempPlayerStats.health));
 

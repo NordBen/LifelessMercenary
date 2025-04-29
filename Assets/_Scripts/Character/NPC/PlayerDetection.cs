@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerDetector : MonoBehaviour
 {
@@ -7,9 +8,22 @@ public class PlayerDetector : MonoBehaviour
     [SerializeField] private float innerDetectionRange = 5f;
     [SerializeField] private float detectionCooldown = 1f;
     [SerializeField] private float attackRange = 2f;
+    private Transform _player;
     //[SerializeField] private LayerMask detectionMask;
-    
-    public Transform Player { get; private set; }
+
+    public Transform Player
+    {
+        get
+        {
+            if (_player == null)
+            {
+                _player = GameObject.FindGameObjectWithTag("Player").transform;
+            }
+            return _player;
+        }
+        private set => _player = value;
+
+    }
     CountdownTimer detectionTimer;
 
     private IDetectionStrategy detectionStrategy;

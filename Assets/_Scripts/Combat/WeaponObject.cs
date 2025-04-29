@@ -18,9 +18,9 @@ public class WeaponObject : MonoBehaviour
 
     public void SetWeaponData(Weapon newData)
     {
-        Debug.Log($"incoming weapondata: {newData}");
+        //Debug.Log($"incoming weapondata: {newData}");
         this.weaponData = newData;
-        Debug.Log($"weapon's data: {this.weaponData}");
+        //Debug.Log($"weapon's data: {this.weaponData}");
         this.GetComponent<MeshFilter>().mesh = newData.mesh;
     }
 
@@ -49,7 +49,7 @@ public class WeaponObject : MonoBehaviour
                 finalDamage += 10;
 
             target.TakeDamage(finalDamage, 5, this.transform.root.transform.forward);
-            SpawnHitVFX(other, other.ClosestPoint(transform.position));
+            //SpawnHitVFX(other, other.ClosestPoint(transform.position));
         }
     }
 

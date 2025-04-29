@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -8,16 +9,18 @@ public class TempPlayerHealthBar : MonoBehaviour
     public Slider healthSlider, staminaSlider;
     public TextMeshProUGUI healthPercentText, staminaPercentText;
 
-    private void Awake()
+    private void Start()
     {
         TempPlayerAttributes.instance.OnHealthChanged += UpdateHealthBar;
         TempPlayerAttributes.instance.OnStaminaChanged += UpdateStaminaBar;
-    }
-
-    private void Start()
-    {
+        
         UpdateHealthBar(TempPlayerAttributes.instance.GetFloatAttribute(TempPlayerStats.health));
         UpdateStaminaBar(TempPlayerAttributes.instance.GetFloatAttribute(TempPlayerStats.stamina));
+    }
+
+    private void OnEnable()
+    {
+        
     }
 
     private void OnDisable()

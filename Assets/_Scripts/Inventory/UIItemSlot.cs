@@ -44,5 +44,6 @@ public class UIItemSlot : MonoBehaviour
     protected virtual void OnClick()
     {
         GameManager.instance.player.GetEquipmentManager().TryEquip((IEquipable)referenceItem);
+        GameManager.instance.player.GetInventoryManager().ToggleInventory();
     }
 }

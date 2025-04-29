@@ -58,7 +58,8 @@ public abstract class BaseCharacter : MonoBehaviour, ICombat
     public virtual void TakeDamage(float incomingDamage, float knockbackForce, Vector3 knockbackDirection)
     {
         if (this.isDead) return;
-
+        if (GetComponent<CombatManager>().SuccessfullParry()) return;
+        
         ChangeHP(-(int)UnityEngine.Random.Range(incomingDamage * 0.9f, incomingDamage * 1.1f));
 
         // applies knockback by using rigid body/unity physics
@@ -74,11 +75,6 @@ public abstract class BaseCharacter : MonoBehaviour, ICombat
     }
 
     public bool IsDead() => this.isDead;
-
-    public void PerformAttack()
-    {
-        weapon.ToggleHitDetection();
-    }
     #endregion
 
     public float GetMaxHP() => this.maxHP;

@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = System.Random;
+
+public enum AIStateTesting
+{
+    Wander, Chase, Attack, FollowPath
+}
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(PlayerDetector))]
@@ -11,13 +15,17 @@ public class AITesting : MonoBehaviour
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Animator animator;
     [SerializeField] private PlayerDetector playerDetector;
-
+    
+    [SerializeField] private AIStateTesting currentState = AIStateTesting.Wander;
     [SerializeField] private float wanderRadius = 10f;
 
     [SerializeField] float timeBetweenAttacks = 1f;
     private CountdownTimer attackTimer;
     
+    [SerializeField] private bool followPath = false;
+    
     private AITestStateMachine stateMachine;
+    [SerializeField] private EnemyBaseState _currentState;
 
     private void OnValidate()
     {
@@ -32,13 +40,19 @@ public class AITesting : MonoBehaviour
         var wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);
         var chaseState = new EnemyChaseState(this, animator, agent, playerDetector.Player);
         var attackState = new EnemyAttackState(this, animator, agent, playerDetector.Player);
+        var pathState = new EnemyFollowPathState(this, animator, agent, GetComponent<SplinePathComponent>());
         
         At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer()));
         At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer()));
         At(chaseState, attackState, new FuncPredicate(() => playerDetector.InAttackingDistance()));
         At(attackState, chaseState, new FuncPredicate(() => !playerDetector.InAttackingDistance()));
+        Any(pathState, new FuncPredicate(() => followPath));
         
         stateMachine.SetState(wanderState);
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        agent.autoTraverseOffMeshLink = true;
+        Debug.Log($"PlayerDetector: {playerDetector}");
+        Debug.Log($"Player: {playerDetector.Player}");
     }
 
     private void Update()
@@ -77,6 +91,45 @@ public abstract class EnemyBaseState : IState
     protected static readonly int DeathHash = Animator.StringToHash("tDead");
     protected static readonly int HitHash = Animator.StringToHash("tHit");
     protected static readonly int SkillHash = Animator.StringToHash("isSkill");
+
+    protected enum AnimationState
+    {
+        Idle,
+        Walk,
+        Chase,
+        Attack,
+        Death,
+        Hit,
+        Skill
+    }
+    
+    protected void PlayAnimation(AnimationState state)
+    {
+        if (animator == null) return;
+        
+        animator.SetBool(IdleHash, false);
+        animator.SetBool(WalkHash, false);
+        animator.SetBool(ChaseHash, false);
+        animator.SetBool(AttackHash, false);
+
+        switch (state)
+        {
+            case AnimationState.Idle:
+                animator.SetBool(IdleHash, true);
+                break;
+            case AnimationState.Walk:
+                animator.SetBool(WalkHash, true);
+                break;
+            case AnimationState.Chase:
+                animator.SetBool(ChaseHash, true);
+                break;
+            case AnimationState.Attack:
+                animator.SetBool(AttackHash, true);
+                break;
+            default:
+                break;
+        }
+    }
     
     protected const float crossFadeDuration = 0.1f;
 
@@ -86,22 +139,13 @@ public abstract class EnemyBaseState : IState
         this.animator = animator;
     }
 
-    public virtual void OnEnter()
-    {
-    }
+    public virtual void OnEnter() { }
 
-    public virtual void Update()
-    {
-    }
+    public virtual void Update() { }
 
-    public virtual void FixedUpdate()
-    {
-    }
+    public virtual void FixedUpdate() { }
 
-    public virtual void OnExit()
-    {
-        
-    }
+    public virtual void OnExit() { }
 }
 
 public interface IState
@@ -155,6 +199,10 @@ public class AITestStateMachine
 
     public void Update()
     {
+        var transition = GetTransition();
+        if (transition != null)
+            ChangeState(transition.To);
+        
         current.State?.Update();
     }
 
@@ -255,7 +303,7 @@ public class EnemyWanderState : EnemyBaseState
     public override void OnEnter()
     {
         Debug.Log("Wandering");
-        //animator.CrossFade(WalkHash, crossFadeDuration);
+        animator.CrossFade(WalkHash, crossFadeDuration);
     }
 
     override public void Update()
@@ -296,10 +344,10 @@ public class EnemyChaseState : EnemyBaseState
     public override void OnEnter()
     {
         Debug.Log("Chasing");
-        //animator.CrossFade(ChaseHash, crossFadeDuration);
+        animator.CrossFade(ChaseHash, crossFadeDuration);
     }
 
-    override public void Update()
+    public override void Update()
     {
         agent.SetDestination(target.position);
     }
@@ -323,8 +371,8 @@ public class EnemyAttackState : EnemyBaseState
 
     override public void OnEnter()
     {
-        Debug.Log("Attacking");
-        //animator.CrossFade(AttackHash, crossFadeDuration);
+        Debug.Log($"Attacking {player}");
+        animator.CrossFade(AttackHash, crossFadeDuration);
     }
 
     public override void Update()
@@ -336,5 +384,80 @@ public class EnemyAttackState : EnemyBaseState
     override public void OnExit()
     {
         Debug.Log("Attacking ended");
+    }
+}
+
+[System.Serializable]
+public class AIActionWeight
+{
+    public float baseWeight;
+    public float currentWeight;
+    public float healthThreshold;
+    public float distanceThreshold;
+}
+/*
+public class AIActionSelector
+{
+    [SerializeField] private AIActionWeight healWeight;
+    [SerializeField] private AIActionWeight attackWeight;
+    [SerializeField] private AIActionWeight blockWeight;
+    [SerializeField] private AIActionWeight skillWeight;
+
+    public AIAction SelectAction(float currentHealth, float maxHealth, float distanceToPlayer)
+    {
+        UpdateWeights(currentHealth/maxHealth, distanceToPlayer);
+        
+        // Return action with highest weight
+        float maxWeight = Mathf.Max(healWeight.currentWeight, 
+            attackWeight.currentWeight,
+            blockWeight.currentWeight,
+            skillWeight.currentWeight);
+
+        if (maxWeight == healWeight.currentWeight) return AIAction.Heal;
+        if (maxWeight == attackWeight.currentWeight) return AIAction.Attack;
+        // etc...
+        
+        return AIAction.None;
+    }
+
+    private void UpdateWeights(float healthPercent, float distance)
+    {
+        // Update weights based on situation
+        healWeight.currentWeight = healWeight.baseWeight;
+        if (healthPercent < healWeight.healthThreshold)
+            healWeight.currentWeight *= 2f;
+        
+        // Similar logic for other weights
+    }
+}*/
+
+public class EnemyFleeState : EnemyBaseState
+{
+    private readonly NavMeshAgent agent;
+    private readonly Transform target;
+    private readonly float fleeDistance = 15f;
+
+    public EnemyFleeState(AITesting enemy, Animator animator, NavMeshAgent agent, Transform target, float fleeDistance) : base(enemy, animator)
+    {
+        this.agent = agent;
+        this.target = target;
+        this.fleeDistance = fleeDistance;
+    }
+
+    public override void OnEnter()
+    {
+        PlayAnimation(AnimationState.Walk);
+    }
+
+    public override void Update()
+    {
+        Vector3 directionToPlayer = enemy.transform.position - target.position;
+        Vector3 fleePosition = enemy.transform.position + directionToPlayer.normalized * fleeDistance;
+        
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(fleePosition, out hit, fleeDistance, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
     }
 }

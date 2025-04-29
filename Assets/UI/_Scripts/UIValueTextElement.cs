@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class UIValueTextElement : ExtendedUIElement
 {
