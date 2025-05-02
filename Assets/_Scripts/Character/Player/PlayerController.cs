@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour, ICombat
     int level = 1;
     TempPlayerAttributes tempPlayerAttributes;
 
-    /*
+    
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float sprintSpeed = 10f;
@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour, ICombat
 
     [Header("Input")]
     private float moveInput;
-    private float turnInput;*/
+    private float turnInput;
 
     void Start()
     {
@@ -54,9 +54,9 @@ public class PlayerController : MonoBehaviour, ICombat
         {
             StartCoroutine(Dodge());
         }
-        /*
+        
         InputManagement();
-        Movement();*/
+        Movement();
 
         CheckForInteractable();
         if (currentInteractable != null)
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour, ICombat
     }
 
     public bool IsDead() => this.isDead;
-    /*
+    
     private void Movement()
     {
         GroundMovement();
@@ -217,5 +217,5 @@ public class PlayerController : MonoBehaviour, ICombat
         // Get the input from our keyboard
         moveInput = Input.GetAxis("Horizontal");
         turnInput = Input.GetAxis("Vertical");
-    }*/
+    }
 }
