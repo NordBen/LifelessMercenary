@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -74,7 +73,7 @@ public class MovementController : MonoBehaviour
     public void SetMovementDirection(Vector3 direction, float speed)
     {
         Vector3 targetVelocity = direction * speed;
-        targetVelocity.y = _rb.velocity.y;
+        targetVelocity.y = _rb.linearVelocity.y;
 
         float accelerationRate = direction.magnitude > 0.1f ? acceleration : deceleration;
         
@@ -89,7 +88,7 @@ public class MovementController : MonoBehaviour
 
     private void ApplyVelocity()
     {
-        _rb.velocity = _velocity;
+        _rb.linearVelocity = _velocity;
     }
 
     public void Move(Vector2 input, float speed = 1f)
@@ -106,7 +105,7 @@ public class MovementController : MonoBehaviour
         _moveDirection = (_forward * input.x + _right * input.y);
         _moveDirection.Normalize();
 
-        if (_rb.velocity.magnitude < maxVelocity * speed)
+        if (_rb.linearVelocity.magnitude < maxVelocity * speed)
         {
             _rb.AddForce(_moveDirection * moveSpeed * speed, ForceMode.Force);
         }
@@ -134,13 +133,13 @@ public class MovementController : MonoBehaviour
     
     private void HandleFalling()
     {
-        if (_rb.velocity.y < 0)
+        if (_rb.linearVelocity.y < 0)
         {
-            _rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+            _rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
         }
-        else if (_rb.velocity.y > 0)
+        else if (_rb.linearVelocity.y > 0)
         {
-            _rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
+            _rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
         }
     }
 
