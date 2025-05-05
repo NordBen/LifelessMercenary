@@ -24,12 +24,16 @@ public class EquipmentManager : MonoBehaviour
     private void Awake()
     {
         equipment = new();
+        foreach (EEquipSlot slotType in Enum.GetValues(typeof(EEquipSlot)))
+        {
+            equipment.Add(slotType, null);
+        }/*
         equipment.Add(EEquipSlot.Head, null);
         equipment.Add(EEquipSlot.Torso, null);
         equipment.Add(EEquipSlot.Leggs, null);
         equipment.Add(EEquipSlot.Boots, null);
         equipment.Add(EEquipSlot.Amulet, null);
-        equipment.Add(EEquipSlot.Weapon, null);
+        equipment.Add(EEquipSlot.Weapon, null);*/
         slotPlacement = new();
         slotPlacement[EEquipSlot.Head] = head;
         slotPlacement[EEquipSlot.Torso] = torso;
@@ -102,7 +106,6 @@ public class EquipmentManager : MonoBehaviour
                 Unequip(equipment[slot]);
                 return;
             }
-
             Unequip(equipment[slot]);
         }
 
@@ -133,9 +136,7 @@ public class EquipmentManager : MonoBehaviour
                     {
                         Debug.LogError("WeaponObject component not found on instantiated weapon!");
                     }
-                } /*
-            physicalEquipment.GetComponent<WeaponObject>().SetWeaponData(itemToEquip as Weapon);
-            GameManager.instance.player.GetCombatManager().weapon = physicalEquipment.GetComponent<WeaponObject>();*/
+                }
                 break;
             case EEquipSlot.Head:
             case EEquipSlot.Torso:
@@ -184,8 +185,10 @@ public class EquipmentManager : MonoBehaviour
 
     private void Unequip(IEquipable itemToUnequip)
     {
+        Debug.Log("Unequipping: " + itemToUnequip);
         EEquipSlot slot = itemToUnequip.GetSlot();
 
+        OnUnequipItem(itemToUnequip);
         if (equipment.ContainsKey(slot) && equipment[slot] == itemToUnequip)
         {
             if (equipment[slot] != null)
@@ -195,8 +198,6 @@ public class EquipmentManager : MonoBehaviour
             equipment[slot] = null;
             itemsEquipped[SlotIndex(slot)] = null;
         }
-        
-        OnUnequipItem(itemToUnequip);
     }
 
     public IEquipable GetEquippedItem(EEquipSlot inSlot)
@@ -215,9 +216,14 @@ public class EquipmentManager : MonoBehaviour
         //equippedEffects[item] = effects;
         foreach (var effect in effects)
         {
-            effect.Source = item;
+            Debug.Log("Before everyting - found effect with source " + effect.Source + "for item: " + item);
+            //effect.Source = item;
+            Debug.Log($"Original effect ID: {effect.GetHashCode()}, Source: {effect.Source}, Item: {item}");
             equippedEffectsList.Add(effect);
+            Debug.Log("After adding to List - found effect with source " + effect.Source + "for item: " + item);
             GetComponent<GameplayAttributeComponent>().ApplyEffect(effect, true);
+            Debug.Log($"After apply effect ID: {effect.GetHashCode()}, Source: {effect.Source}, Item: {item}");
+            Debug.Log("After ApplyEffect - Added effect: " + effect.ToString() + "with source: " + effect.Source + "for item: " + item);
         }
     }
 
@@ -232,8 +238,10 @@ public class EquipmentManager : MonoBehaviour
 
         // Remove effects associated with this item
         var effectsToRemove = equippedEffectsList.Where(effect => effect.Source == item).ToList();
+        Debug.Log("Effects to remove: " + effectsToRemove.Count);
         foreach (var effect in effectsToRemove)
         {
+            Debug.Log("Removing effect: " + effect.ToString() + "with source: " + effect.Source + "for item: " + item);
             equippedEffectsList.Remove(effect);
             GetComponent<GameplayAttributeComponent>().RemoveEffect(effect);
         }

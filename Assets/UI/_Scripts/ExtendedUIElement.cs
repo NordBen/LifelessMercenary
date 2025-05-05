@@ -4,7 +4,9 @@ public class ExtendedUIElement : MonoBehaviour
 {
     [Header("Reference")]
     [SerializeField] protected BaseCharacter owner;
-    [SerializeField] private bool followTarget; // bool for if the health bar should follow an object in world space or is static on the HUD
+    [SerializeField] protected GameObject _followTarget;
+    [SerializeField] private bool followTarget;
+    [SerializeField] private bool dirtyFollow;
     [SerializeField] private Vector3 targetOffset;
 
     private void Update()
@@ -13,7 +15,10 @@ public class ExtendedUIElement : MonoBehaviour
         if (this.followTarget)
         {
             transform.rotation = Camera.main.transform.rotation;
-            transform.position = owner.transform.position + targetOffset;
+            if (!dirtyFollow)
+                transform.position = owner.transform.position + targetOffset;
+            else
+                transform.position = _followTarget.transform.position + targetOffset;
         }
     }
 }

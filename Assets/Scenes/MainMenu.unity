@@ -487,6 +487,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5323678871351351032, guid: 868605ad19540434a86d3e0ced6b1b92, type: 3}
+      propertyPath: sceneDude
+      value: 
+      objectReference: {fileID: 155883393558233698, guid: c7ff6ed5154536947a6af291dbb080f8, type: 3}
+    - target: {fileID: 5323678871351351032, guid: 868605ad19540434a86d3e0ced6b1b92, type: 3}
       propertyPath: daysSurvived
       value: 1
       objectReference: {fileID: 0}

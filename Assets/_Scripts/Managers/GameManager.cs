@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     public List<NPCController> enemies;
 
+    public GameObject sceneDude;
+    
     public event Action<int> OnDeathEnergyChanged;
     [SerializeField] private int deathEnergyMax = 5;
     [SerializeField] private int currentDeathEnergy = 5;
@@ -97,7 +99,10 @@ public class GameManager : MonoBehaviour
 
     public void KillPlayer()
     {
-        GameObject.Find("SceneDude").GetComponent<PlayableDirector>().Play();
+        //player.GetAnimator().SetTrigger("tDead");
+        //GameObject.Find("SceneDude").GetComponent<PlayableDirector>().Play();
+        GameObject.Find("SceneDude").GetComponent<TempCutscenePosition>().PlayDirector();
+        
         ModifyDeathEnergy(-1);
 
         Debug.Log($"dur to die: {(float)GameObject.Find("SceneDude").GetComponent<PlayableDirector>().playableAsset.duration}");

@@ -109,9 +109,10 @@ public class GameplayAttributeComponent : MonoBehaviour
         else
         {
             instancedEffect = Instantiate(effect);
+            instancedEffect.Source = effect.Source;
         }
         
-        instancedEffect.Initialize(instancedEffect.effectName, effect.durationType, effect.duration, effect.period, effect.modifierType, effect.targetAttribute, effect.valueStrategy, effect.stackingType, this);
+        instancedEffect.Initialize(instancedEffect.effectName, effect.durationType, effect.duration, effect.period, effect.modifierType, effect.targetAttribute, effect.valueStrategy, effect.stackingType, this, effect.Source);
         Debug.Log($"[{Time.frameCount}] Adding to _activeEffects: {instancedEffect.effectName}");
         _activeEffects.Add(instancedEffect);
 

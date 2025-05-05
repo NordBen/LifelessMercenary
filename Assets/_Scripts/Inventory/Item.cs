@@ -38,7 +38,7 @@ public abstract class Item : ScriptableObject, IInteractable
         foreach (var effectData in equipmentEffects)
         {
             var effectStrategy = new ConstantValueStrategy() { value = effectData.value};
-            effects.Add(GameplayEffectFactory.CreateEffect(
+            var effect = GameplayEffectFactory.CreateEffect(
                 effectData.effectName,
                 EEffectDurationType.Infinite,
                 0,
@@ -46,7 +46,20 @@ public abstract class Item : ScriptableObject, IInteractable
                 EModifierOperationType.Add,
                 effectData.targetAttribute,
                 effectStrategy
-            ));
+            );/*
+            effects.Add(GameplayEffectFactory.CreateEffect(
+                effectData.effectName,
+                EEffectDurationType.Infinite,
+                0,
+                0,
+                EModifierOperationType.Add,
+                effectData.targetAttribute,
+                effectStrategy,
+                this
+            ));*/
+
+            effect.Source = this;
+            effects.Add(effect);
         }
         return effects;
     }

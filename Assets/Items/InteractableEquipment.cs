@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class InteractableEquipment : InteractableActor
@@ -13,5 +12,17 @@ public class InteractableEquipment : InteractableActor
     protected override void HandleInteract()
     {
         item.Interact();
+
+        if (item is IEquipable equipableItem)
+        {
+            var slotType = equipableItem.GetSlot();
+            
+            var equipmentManager = GameManager.instance.player.GetEquipmentManager();
+
+            if (equipmentManager.GetEquippedItem(slotType) == null)
+            {
+                equipmentManager.TryEquip(equipableItem);
+            }
+        }
     }
 }
