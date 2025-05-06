@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ public class EffectStrategyDrawer : PropertyDrawer
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         EditorGUI.BeginProperty(position, label, property);
-        
+
         var strategyType = property.managedReferenceValue?.GetType();
         if (strategyType == typeof(AttributeBasedValueStrategy))
         {
@@ -24,10 +23,11 @@ public class EffectStrategyDrawer : PropertyDrawer
             EditorGUILayout.PropertyField(property.FindPropertyRelative("curve"));
             EditorGUILayout.PropertyField(property.FindPropertyRelative("timeScale"));
         }
-        
+
         EditorGUI.EndProperty();
     }
 }
+
 /*
 [CustomPropertyDrawer(typeof(IAttributeValueStrategy))]
 public class ValueStrategyDrawer : PropertyDrawer

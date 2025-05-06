@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 using Object = System.Object;
 
@@ -12,20 +11,8 @@ public enum EModifierOperationType
     Percent,
     Override
 }
-
-public enum EEffectDurationType
-{
-    Instant,
-    Infinite,
-    Duration
-}
-
-public enum EEffectStackingType
-{
-    None,
-    Duration,
-    Intensity
-}
+public enum EEffectDurationType { Instant, Infinite, Duration }
+public enum EEffectStackingType { None, Duration, Intensity }
 
 [Serializable]
 [CreateAssetMenu(fileName = "New Gameplay Effect", menuName = "Gameplay/Effect")]
@@ -58,19 +45,6 @@ public class GameplayEffect : ScriptableObject, IDisposable
 
     public float _elapsedTime;
     public float _periodElapsedTime;
-    
-    public GameplayEffect(string inEffectName, EEffectDurationType inDurationType, float inDuration, float inPeriod = 0,
-        EModifierOperationType inModifierType = EModifierOperationType.Add,
-        GameplayAttribute inTargetAttribute = null, IAttributeValueStrategy inValueStrategy = null)
-    {
-        this.effectName = inEffectName;
-        this.durationType = inDurationType;
-        this.duration = inDuration;
-        this.period = inPeriod;
-        this.modifierType = inModifierType;
-        this.targetAttribute = inTargetAttribute;
-        this.valueStrategy = inValueStrategy;
-    }
     
     public void Initialize(
         string inEffectName,
@@ -186,47 +160,6 @@ public class GameplayEffect : ScriptableObject, IDisposable
     }
 }
 
-[CustomEditor(typeof(GameplayEffect))]
-public class GameplayEffectEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        GameplayEffect effect = (GameplayEffect) target;
-        serializedObject.Update();
-        
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("effectName"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("targetAttribute"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("modifierType"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("durationType"));
-        
-        if (effect.durationType != EEffectDurationType.Instant)
-        {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("period"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("duration"));
-        }
-        
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("valueStrategy"));
-
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("stackingType"));
-        
-        if (serializedObject.FindProperty("stackingType").enumValueIndex != (int)EEffectStackingType.None)
-        {
-//            EditorGUILayout.PropertyField(serializedObject.FindProperty("maxStacks"));
-        }
-        //EditorGUILayout.PropertyField(serializedObject.FindProperty("requiredTags"));
-        
-        serializedObject.ApplyModifiedProperties();
-    }
-}
-
 public static class GameplayEffectFactory
 {
     public static GameplayEffect CreateEffect(string inEffectName, EEffectDurationType inDurationType, 
@@ -284,7 +217,6 @@ public static class GameplayEffectFactory
             EEffectStackingType.None,
             null
         );
-        
         return effect;
     }
 
@@ -312,7 +244,6 @@ public static class GameplayEffectFactory
             EEffectStackingType.None,
             null
         );
-        
         return effect;
     }
 }
