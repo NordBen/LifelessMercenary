@@ -41,4 +41,9 @@ public class Player : MonoBehaviour
     {
         return combatManager;
     }
+
+    public void Heal()
+    {
+        GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>().ModifyHealth(GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>().GetFloatAttribute(TempPlayerStats.maxhealth));
+    }
 }

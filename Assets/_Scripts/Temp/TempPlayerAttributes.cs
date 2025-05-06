@@ -32,11 +32,11 @@ public class TempPlayerAttributes : MonoBehaviour
     public event Action<float> OnHealthChanged;
     public event Action<float> OnStaminaChanged;
 
-    public ThirdPersonController playerController;
+    public PlayerControllerV2 playerController;
 
     void Awake()
     {
-        SetPlayerController(GameObject.Find("Player").GetComponent<ThirdPersonController>());
+        SetPlayerController(GameObject.Find("Player").GetComponent<PlayerControllerV2>());
 
         if (instance == null)
         {
@@ -73,8 +73,8 @@ public class TempPlayerAttributes : MonoBehaviour
         ModifyStamina(GetFloatAttribute(TempPlayerStats.maxstamina));
         tempPlayerFloatAttributes[TempPlayerStats.attackspeed] = 1 + GetIntAttribute(TempPlayerStats.agility) * 0.045f;
         tempPlayerFloatAttributes[TempPlayerStats.movementspeed] = GetIntAttribute(TempPlayerStats.agility) * 1.067f;
-        playerController.MoveSpeed = GetFloatAttribute(TempPlayerStats.movementspeed) * 0.4f;
-        playerController.SprintSpeed = GetFloatAttribute(TempPlayerStats.movementspeed);
+        //playerController.MoveSpeed = GetFloatAttribute(TempPlayerStats.movementspeed) * 0.4f;
+        //playerController.SprintSpeed = GetFloatAttribute(TempPlayerStats.movementspeed);
         if (GameObject.Find("Player").GetComponent<CombatManager>().weaponItem != null)
         {
             tempPlayerFloatAttributes[TempPlayerStats.damage] = playerController.GetComponent<CombatManager>().weaponItem.damage + GetIntAttribute(TempPlayerStats.strength) * 2.5f;
@@ -126,9 +126,21 @@ public class TempPlayerAttributes : MonoBehaviour
         return (int)this.tempPlayerIntAttributes[attribute];
     }
 
-    public void SetPlayerController(ThirdPersonController plCntrl)
+    public void SetPlayerController(PlayerControllerV2 plCntrl)
     {
         if (this.playerController == null)
             this.playerController = plCntrl;
+    }
+
+    private void Update()
+    {
+        CombatManager combatManager = GameObject.Find("Player").GetComponent<CombatManager>();
+        if (!combatManager.IsAttacking())
+        {
+            if (GetFloatAttribute(TempPlayerStats.stamina) < GetFloatAttribute(TempPlayerStats.maxstamina))
+            {
+                ModifyStamina(0.05f);
+            }
+        }
     }
 }

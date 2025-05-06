@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     public event Action<int> OnDaySurvived;
     [SerializeField] private int daysSurvived = 1;
 
+    public Transform DayTwo;
+
     private void Awake()
     {
         if (instance == null)
@@ -40,7 +42,7 @@ public class GameManager : MonoBehaviour
     {
         if (player == null && GameObject.Find("Player"))
             player = GameObject.Find("Player").GetComponent<Player>();
-        TempPlayerAttributes.instance.SetPlayerController(GameObject.Find("Player").GetComponent<ThirdPersonController>());
+        TempPlayerAttributes.instance.SetPlayerController(GameObject.Find("Player").GetComponent<PlayerControllerV2>());
         TempPlayerAttributes.instance.UpdateStats();
     }
 
@@ -108,8 +110,22 @@ public class GameManager : MonoBehaviour
         Debug.Log($"dur to die: {(float)GameObject.Find("SceneDude").GetComponent<PlayableDirector>().playableAsset.duration}");
         Invoke("Death", (float)GameObject.Find("SceneDude").GetComponent<PlayableDirector>().playableAsset.duration);
     }
+    
+    public void KillPlayerRagdoll()
+    {
+        //player.GetPlayerController.ToggleRagdoll();
+        
+        ModifyDeathEnergy(-1);
+        
+        Invoke("Death", 1f);
+    }
 
     public void Death()
+    {
+        SceneManager.LoadScene("LoadingScreen");
+    }
+
+    public void DeathRealm()
     {
         SceneManager.LoadScene("DeathScene");
     }

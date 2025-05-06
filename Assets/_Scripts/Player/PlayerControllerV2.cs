@@ -140,9 +140,9 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         {
             StartCoroutine(DodgeTesti());
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Space))
-            _movementController.JumpSqrt();
+            Jump();
 
         if (Input.GetKeyDown(KeyCode.Y))
         {
@@ -324,8 +324,46 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         Vector3 moveDirection = (camForward * moveInput.y + camRight * moveInput.x).normalized;
         
         _currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
+        if (moveDirection.sqrMagnitude < _threshold)
+        {
+            _animationBlend = 0f;
+        }
+        else
+        {
+            _animationBlend = Input.GetKey(KeyCode.LeftShift) ? 6 : 2.5f;
+        }
+        
+        /*
+        _animationBlend = Mathf.Lerp(_animationBlend, _currentSpeed, Time.deltaTime * sprintTransitSpeed);
+        if (_animationBlend < 0.01f) _animationBlend = 0f;*/
         
         _movementController.SetMoveDirection(moveDirection, _currentSpeed);
+
+        if (_IsGrounded)
+        {
+            _fallTimeoutDelta = FallTimeout;
+
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDJump, false);
+                _animator.SetBool(_animIDFreeFall, false);
+            }
+        }
+        else
+        {
+            if (_fallTimeoutDelta >= 0.0f)
+            {
+                _fallTimeoutDelta -= Time.deltaTime;
+            }
+            else
+            {
+                if (_hasAnimator)
+                {
+                    _animator.SetBool(_animIDFreeFall, true);
+                }
+            }
+        }
         
         /*
         if (moveDirection.magnitude >= _threshold)
@@ -335,11 +373,9 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         
         if (_hasAnimator)
         {
-            float inputMagnitude = moveInput.magnitude;
-            _animator.SetFloat(_animIDSpeed, _currentSpeed * inputMagnitude);
+            float inputMagnitude = 1;
+            _animator.SetFloat(_animIDSpeed, _animationBlend);
             _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-            InputAnimMotionSpeed = inputMagnitude;
-            InputAnimSpeed = _currentSpeed * inputMagnitude;
         }
         
         //GroundMovement();
@@ -422,48 +458,20 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     #endregion
 
     #region Jump
-    private float VerticalForceCalculation()
+    private void Jump()
     {
         if (_IsGrounded)
         {
-            _fallTimeoutDelta = FallTimeout;
-
+            _movementController.JumpSqrt();
             if (_hasAnimator)
             {
-                _animator.SetBool(_animIDJump, false);
-                _animator.SetBool(_animIDFreeFall, false);
-            }
-
-            verticalVelocity = -1;
-
-            if (Input.GetButtonDown("Jump"))
-            {
-                verticalVelocity = Mathf.Sqrt(jumpHeight * gravity * 2);
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(_animIDJump, true);
-                }
+                _animator.SetBool(_animIDJump, true);
             }
         }
         else
         {
-            verticalVelocity -= gravity * Time.deltaTime;
-            
-            if (_fallTimeoutDelta >= 0.0f)
-            {
-                _fallTimeoutDelta -= Time.deltaTime;
-            }
-            else
-            {
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(_animIDFreeFall, true);
-                }
-            }
-
             _input.jump = false;
         }
-        return verticalVelocity;
     }
     #endregion
 

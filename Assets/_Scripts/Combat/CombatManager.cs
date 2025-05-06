@@ -13,7 +13,7 @@ public class CombatManager : MonoBehaviour//, ICombat
     [SerializeField] private float parryCooldown = 1f;
     private bool _Parriable = false;
     private bool _parried = false;
-    private float _lastParryTime = -Mathf.Infinity;
+    private float _lastParryTime = 0;
     [SerializeField] private LayerMask enemyLayer;
     
     [SerializeField] private Vector3 lastCheckPosition;
@@ -48,6 +48,10 @@ public class CombatManager : MonoBehaviour//, ICombat
     public Animator animator;
 
     public bool isBlocking = false;
+
+    [SerializeField] private bool attackTagged = false;
+    
+    public bool IsAttacking() => attackTagged;
 
     void Start()
     {
@@ -146,6 +150,7 @@ public class CombatManager : MonoBehaviour//, ICombat
         if (comboIndex <= _primaryAttacks.Count && !isAttacking)
         {
             animOverrideController["TestAnim1"] = _primaryAttacks[comboIndex];
+            attackTagged = true;
 
             animator.Play("Attack", 0, 0);
             isAttacking = true;
@@ -155,8 +160,14 @@ public class CombatManager : MonoBehaviour//, ICombat
                 TempPlayerAttributes.instance.ModifyStamina(-10);
 
             Invoke("ResetCombo", 1f);
+            Invoke("ResetAttacking", 6f);
         }
         comboTimer = 1.0f;
+    }
+    
+    private void ResetAttacking()
+    {
+        attackTagged = false;
     }
 
     private void PerformBlock()

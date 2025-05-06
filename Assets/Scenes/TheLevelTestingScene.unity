@@ -3591,7 +3591,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.045
   m_Height: 0.39031917
@@ -12311,12 +12311,12 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.06
   m_Height: 0.25
   m_Direction: 1
-  m_Center: {x: 0, y: -0.24512278, z: 0}
+  m_Center: {x: 0, y: -0.16, z: 0}
 --- !u!1 &735842019
 GameObject:
   m_ObjectHideFlags: 0
@@ -12984,51 +12984,6 @@ Transform:
   - {fileID: 1254890015}
   m_Father: {fileID: 1275732413}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &766433890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4416926082216661132}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 238becb25fdf146239b4644099ba656a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterController: {fileID: 0}
-  mainCamera: {fileID: 920853660}
-  dodgeSpeed: 10
-  dodgeDuration: 0.2
-  dodgeCooldown: 1
-  currentInteractable: {fileID: 0}
-  LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
-  FootstepAudioClips:
-  - {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
-  - {fileID: 8300000, guid: 85016e0f2b01da248b9663dd49a161b0, type: 3}
-  - {fileID: 8300000, guid: 186de84b3207156479abe98f4958fed0, type: 3}
-  - {fileID: 8300000, guid: 1a91fcd19acf1e54bba0945d9f390849, type: 3}
-  - {fileID: 8300000, guid: 14e8a8d2158bec840b56c54f5266e692, type: 3}
-  - {fileID: 8300000, guid: 29841e7d5bbfb5b419c9ad16ca8bc4c1, type: 3}
-  - {fileID: 8300000, guid: dd1af302b8902684d9381de1f2d3a5af, type: 3}
-  - {fileID: 8300000, guid: 67c8b33e424ccdc4486edf538ab91c5a, type: 3}
-  - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
-  - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
-  FootstepAudioVolume: 0.3
-  FallTimeout: 0.15
-  CinemachineCameraTarget: {fileID: 8338988566606211543}
-  TopClamp: 70
-  BottomClamp: -30
-  CameraAngleOverride: 0
-  LockCameraPosition: 0
-  walkSpeed: 5
-  sprintSpeed: 10
-  sprintTransitSpeed: 10
-  turningSpeed: 10
-  gravity: 9.81
-  jumpHeight: 2
-  GroundedOffset: -0.14
-  GroundedRadius: 0.28
 --- !u!114 &766433891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13111,6 +13066,7 @@ MonoBehaviour:
   animOverrideController: {fileID: 0}
   animator: {fileID: 6982812146918953036}
   isBlocking: 0
+  attackTagged: 0
 --- !u!114 &766433894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13155,7 +13111,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 129
   groundCheckDistance: 0.28
-  groundOffset: 0.14
+  groundOffset: 0
   maxSpeed: 50
   minMoveAmount: 0.1
   moveSpeed: 50
@@ -13164,13 +13120,13 @@ MonoBehaviour:
   speedTransitionSpeed: 5
   acceleration: 50
   deceleration: 50
-  jumpForce: 7
+  jumpForce: 3
   fallMultiplier: 2.5
   maxFallVelocity: 10
   lowJumpMultiplier: 2
   terminalVelocity: 50
   stepOffset: 0.5
-  isDebug: 1
+  isDebug: 0
   gravity: -9.81
 --- !u!54 &766433901
 Rigidbody:
@@ -13216,7 +13172,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.3
   m_Height: 1.8
@@ -21709,7 +21665,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.05
   m_Height: 0.28508067
@@ -27096,6 +27052,7 @@ MonoBehaviour:
   animOverrideController: {fileID: 0}
   animator: {fileID: 1314631814}
   isBlocking: 0
+  attackTagged: 0
 --- !u!114 &1314631820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27312,12 +27269,12 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.06
   m_Height: 0.25
   m_Direction: 1
-  m_Center: {x: 0, y: 0.24512325, z: 0}
+  m_Center: {x: 0, y: 0.16, z: 0}
 --- !u!1 &1340933229
 GameObject:
   m_ObjectHideFlags: 0
@@ -28521,7 +28478,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.05
   m_Height: 0.28508532
@@ -29867,7 +29824,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.11
   m_Center: {x: 0, y: 0.05, z: 0.03}
@@ -31845,7 +31802,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.32689857, y: 0.28032827, z: 0.24770999}
   m_Center: {x: -0.0000009536743, y: 0.140164, z: -0.023194894}
@@ -33770,7 +33727,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.045
   m_Height: 0.3903185
@@ -37469,7 +37426,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.08
   m_Height: 0.41334414
@@ -39190,7 +39147,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.08
   m_Height: 0.41334406
@@ -39465,7 +39422,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.27, y: 0.2150917, z: 0.19}
   m_Center: {x: -0.0000009536743, y: 0.0540877, z: 0.01}
@@ -42071,7 +42028,6 @@ GameObject:
   - component: {fileID: 766433892}
   - component: {fileID: 766433891}
   - component: {fileID: 766433901}
-  - component: {fileID: 766433890}
   - component: {fileID: 766433902}
   - component: {fileID: 6982812146918953038}
   m_Layer: 8
@@ -43777,7 +43733,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4416926082216661132}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 909d917d73a63f940ac158d02e936645, type: 3}
   m_Name: 
@@ -43969,8 +43925,8 @@ MonoBehaviour:
   - {fileID: 1810465334}
   InputAnimSpeed: 0
   InputAnimMotionSpeed: 0
-  walkSpeed: 5
-  runSpeed: 10
+  walkSpeed: 4
+  runSpeed: 8
   sprintTransitSpeed: 5
   turningSpeed: 10
   gravity: -9.81
@@ -44017,10 +43973,10 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 0.45, y: 0.1, z: 0.31}
-  m_Center: {x: 0, y: 0.06, z: 0}
+  m_Size: {x: 0.45, y: 0.2, z: 0.31}
+  m_Center: {x: 0, y: 0.12, z: 0}
 --- !u!144 &7053787404284897543
 CharacterJoint:
   m_ObjectHideFlags: 0

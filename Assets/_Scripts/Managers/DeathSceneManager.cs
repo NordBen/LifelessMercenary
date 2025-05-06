@@ -28,7 +28,7 @@ public class DeathSceneManager : MonoBehaviour
         if (elapsedTime >= targetTime)
         {
             elapsedTime = 0;
-            GameManager.instance.ResetLoop();
+            GameManager.instance.DeathRealm();
         }
         elapsedTime += Time.deltaTime;
     }
