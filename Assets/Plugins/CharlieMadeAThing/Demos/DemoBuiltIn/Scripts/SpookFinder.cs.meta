@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1d38f03e014814a4e85d750d21456aa5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229829
+  packageName: Neato Tags
+  packageVersion: 1.4.0
+  assetPath: Assets/CharlieMadeAThing/Demos/DemoBuiltIn/Scripts/SpookFinder.cs
+  uploadId: 743166

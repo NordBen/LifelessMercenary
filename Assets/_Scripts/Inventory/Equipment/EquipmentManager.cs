@@ -8,7 +8,10 @@ public class EquipmentManager : MonoBehaviour
 {
     private Dictionary<EEquipSlot, IEquipable> equipment;
     private Dictionary<IEquipable, List<GameplayEffect>> equippedEffects;
+    private Dictionary<Item, List<GameplayEffect>> _itemEffectsMap = new Dictionary<Item, List<GameplayEffect>>();
     [SerializeField] private List<GameplayEffect> equippedEffectsList;
+    [SerializeField] private List<GameplayEffectApplication> equippedEffectApplications;
+    
     public event Action<IEquipable> OnEquip;
     public Item[] itemsEquipped;
 
@@ -211,10 +214,26 @@ public class EquipmentManager : MonoBehaviour
         {
             OnUnequipItem(item);
         }*/
-        
-        var effects = itemsEquipped[SlotIndex(item.GetSlot())].CreateItemEffects();
+
+        var mappedItem = itemsEquipped[SlotIndex(item.GetSlot())];
+        var effects = mappedItem.CreateItemEffect();
+        if (effects != null)
+        {
+            GetComponent<GameplayAttributeComponent>().ApplyEffect(effects, true);
+            /*
+            foreach (var modification in effects.applications)
+            {
+                equippedEffectApplications.Add(modification);
+            }
+            equippedEffectsList.Add(effects);*/
+            if (!_itemEffectsMap.ContainsKey(mappedItem))
+            {
+                _itemEffectsMap[mappedItem] = new List<GameplayEffect>();
+            }
+            _itemEffectsMap[mappedItem].Add(effects);
+        }
         //equippedEffects[item] = effects;
-        foreach (var effect in effects)
+        /*foreach (var effect in effects)
         {
             Debug.Log("Before everyting - found effect with source " + effect.Source + "for item: " + item);
             //effect.Source = item;
@@ -224,7 +243,7 @@ public class EquipmentManager : MonoBehaviour
             GetComponent<GameplayAttributeComponent>().ApplyEffect(effect, true);
             Debug.Log($"After apply effect ID: {effect.GetHashCode()}, Source: {effect.Source}, Item: {item}");
             Debug.Log("After ApplyEffect - Added effect: " + effect.ToString() + "with source: " + effect.Source + "for item: " + item);
-        }
+        }*/
     }
 
     public void OnUnequipItem(IEquipable item)
@@ -234,7 +253,7 @@ public class EquipmentManager : MonoBehaviour
         }*/
         /*
         var item = itemsEquipped[slot];
-        if (item == null) return;*/
+        if (item == null) return;*
 
         // Remove effects associated with this item
         var effectsToRemove = equippedEffectsList.Where(effect => effect.Source == item).ToList();
@@ -244,7 +263,33 @@ public class EquipmentManager : MonoBehaviour
             Debug.Log("Removing effect: " + effect.ToString() + "with source: " + effect.Source + "for item: " + item);
             equippedEffectsList.Remove(effect);
             GetComponent<GameplayAttributeComponent>().RemoveEffect(effect);
-        }
+        }*/
         //equippedItems[slot] = null;
+
+        var mappedItem = itemsEquipped[SlotIndex(item.GetSlot())];
+        if (_itemEffectsMap.TryGetValue(mappedItem, out var effects))
+        {
+            foreach (var effect in effects)
+            {
+                GetComponent<GameplayAttributeComponent>().RemoveEffect(effect);
+            }
+            _itemEffectsMap.Remove(mappedItem);
+        }
+    }
+    
+    public List<GameplayEffect> GetAllItemEffects()
+    {
+        List<GameplayEffect> allEffects = new List<GameplayEffect>();
+        foreach (var effectsList in _itemEffectsMap.Values)
+        {
+            allEffects.AddRange(effectsList);
+        }
+        return allEffects;
+    }
+
+    public bool HasActiveEffects(IEquipable item)
+    {
+        var mappedItem = itemsEquipped[SlotIndex(item.GetSlot())];
+        return _itemEffectsMap.ContainsKey(mappedItem) && _itemEffectsMap[mappedItem].Count > 0;
     }
 }

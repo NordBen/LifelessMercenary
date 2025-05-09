@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 31afec404032d5a479d47c41aeab4953
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229829
+  packageName: Neato Tags
+  packageVersion: 1.4.0
+  assetPath: Assets/CharlieMadeAThing/Demos/DemoBuiltIn/Materials/Human.mat
+  uploadId: 743166

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 84d3be9e14e281d49a6c8c3b200fc47a
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229829
+  packageName: Neato Tags
+  packageVersion: 1.4.0
+  assetPath: Assets/CharlieMadeAThing/NeatoTags/Core/Editor/Editor.NeatoTags.CharlieMadeAThing.asmdef
+  uploadId: 743166

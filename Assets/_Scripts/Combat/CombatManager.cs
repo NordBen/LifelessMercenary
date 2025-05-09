@@ -316,11 +316,11 @@ public class CombatManager : MonoBehaviour//, ICombat
     {
         var healthAttribute = attributeComp.GetAttribute("Health");
         if (healthAttribute == null) return;
-        
+        /*
         var damageEffect = GameplayEffectFactory.CreateEffect(
             "damagable", EEffectDurationType.Instant, 0, 0,
             EModifierOperationType.Add, healthAttribute, new ConstantValueStrategy() { value = -incomingDamage });
-        attributeComp.ApplyEffect(damageEffect);
+        attributeComp.ApplyEffect(damageEffect);*/
 
         if (healthAttribute.CurrentValue() <= 0)
             owner.Die();

@@ -22,13 +22,19 @@ MonoBehaviour:
   quantity: 0
   maxQuantity: 0
   sellValue: 25
-  equipmentEffects:
-  - effectName: HealthOfOX
-    targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
-    value: 25
-  - effectName: HealthOfOXMORE
-    targetAttribute: {fileID: 11400000, guid: cf6ab014a89a66d46b3d1100091d9d5f, type: 2}
-    value: 117
+  equipmentEffect:
+  - targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
+    modifierOperation: 0
+    valueStrategy:
+      rid: 211682578938200231
+  - targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
+    modifierOperation: 0
+    valueStrategy:
+      rid: 211682578938200233
+  - targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
+    modifierOperation: 0
+    valueStrategy:
+      rid: 211682578938200235
   damage: 5
   attackSpeed: 1.5
   animations:
@@ -37,3 +43,18 @@ MonoBehaviour:
   - {fileID: -203655887218126122, guid: 2e111b2a5e29f4b7f8c97f6e55ab253a, type: 3}
   slot: 6
   weaponType: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 211682578938200231
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 5
+    - rid: 211682578938200233
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 20
+    - rid: 211682578938200235
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 50

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e3d34f590cd266f4ab31ebbce41f27ab
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229829
+  packageName: Neato Tags
+  packageVersion: 1.4.0
+  assetPath: Assets/CharlieMadeAThing/Demos/DemoSRP/Materials/DarkGray.mat
+  uploadId: 743166

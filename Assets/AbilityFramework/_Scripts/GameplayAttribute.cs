@@ -38,6 +38,7 @@ public class GameplayAttribute : ScriptableObject
     [SerializeField] private float _currentValue;
     //[SerializeField] private Dictionary<GameplayTag, float> _taggedValues = new();
     [SerializeField] private List<AttributeModification> _activeModifications = new();
+    [SerializeField] private List<GameplayEffectApplication> _activeEffectApplications = new();
     
     public event Action<AttributeChangedEvent> OnValueChanged;
     
@@ -48,6 +49,7 @@ public class GameplayAttribute : ScriptableObject
         _currentValue = baseValue;
         //_taggedValues = new Dictionary<GameplayTag, float>();
         _activeModifications = new List<AttributeModification>();
+        _activeEffectApplications = new List<GameplayEffectApplication>();
     }
     
     public void Initialize(string name, float baseValue)
@@ -56,6 +58,7 @@ public class GameplayAttribute : ScriptableObject
         _baseValue = baseValue;
         _currentValue = baseValue;
         _activeModifications = new List<AttributeModification>();
+        _activeEffectApplications = new List<GameplayEffectApplication>();
     }
     
     public string Name => _name;
@@ -76,7 +79,7 @@ public class GameplayAttribute : ScriptableObject
         
         OnValueChanged?.Invoke(new AttributeChangedEvent(this, oldValue, newValue));;
     }
-    
+    /*
     public void RecalculateCurrentValue()
     {
         float finalValue = _baseValue;
@@ -89,8 +92,23 @@ public class GameplayAttribute : ScriptableObject
             Debug.Log($"Applied modification: {before} -> {finalValue}");
         }
         SetValue(finalValue, false);
-    }
+    }*/
     
+    public void RecalculateCurrentValue()
+    {
+        Debug.Log($"ModsToApply {_activeEffectApplications.Count}");
+        float finalValue = _baseValue;
+        Debug.Log($"Recalculating {_name} from base value {_baseValue}");
+    
+        foreach (var modification in _activeEffectApplications)
+        {
+            float before = finalValue;
+            finalValue = CalculateModifiedValue(finalValue, modification.GetComputedValue(), modification.modifierOperation);
+            Debug.Log($"Applied modification: {before} -> {finalValue}");
+        }
+        SetValue(finalValue, false);
+    }
+    /*
     public void RecalculateCurrentValue(
         Dictionary<GameplayAttribute, List<(GameplayEffect effect, float modification)>> modifications,
         Func<float, float, EModifierOperationType, float> calculateModifiedValue)
@@ -106,9 +124,9 @@ public class GameplayAttribute : ScriptableObject
         }
         
         SetValue(finalValue, false);
-    }
+    }*/
     
-    private float CalculateModifiedValue(float currentValue, float modValue, EModifierOperationType modType)
+    public float CalculateModifiedValue(float currentValue, float modValue, EModifierOperationType modType)
     {
         return modType switch
         {
@@ -121,17 +139,34 @@ public class GameplayAttribute : ScriptableObject
         };
     }
 
-
     public void AddModification(GameplayEffect effect, float value)
     {
         Debug.Log($"Adding modification to {_name}: {value}");
         _activeModifications.Add(new AttributeModification(effect, value));
         RecalculateCurrentValue();
     }
+    
+    public void AddModification(GameplayEffectApplication inModification)
+    {
+        Debug.Log($"Adding modification to {_name}: {inModification.GetComputedValue()}");
+        _activeEffectApplications.Add(inModification);
+        RecalculateCurrentValue();
+    }
 
     public void RemoveModification(GameplayEffect effect)
     {
+        var modifiersToRemove = effect.GetModifiers();
+        foreach (var modifierToRemove in modifiersToRemove)
+        {
+            _activeEffectApplications.Remove(modifierToRemove);
+        }
         _activeModifications.RemoveAll(x => x.effect == effect);
+        RecalculateCurrentValue();
+    }
+
+    public void RemoveModification(GameplayEffectApplication effect)
+    {
+        _activeEffectApplications.Remove(effect);
         RecalculateCurrentValue();
     }
     /*

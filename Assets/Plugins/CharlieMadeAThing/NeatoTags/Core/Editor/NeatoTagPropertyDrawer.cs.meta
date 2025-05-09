@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: e05c1145468f44e6aae040e6a366fb78
+timeCreated: 1658886689
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229829
+  packageName: Neato Tags
+  packageVersion: 1.4.0
+  assetPath: Assets/CharlieMadeAThing/NeatoTags/Core/Editor/NeatoTagPropertyDrawer.cs
+  uploadId: 743166

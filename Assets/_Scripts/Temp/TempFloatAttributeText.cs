@@ -6,6 +6,7 @@ public class TempFloatAttributeText : MonoBehaviour
 {
     public TextMeshProUGUI statText;
     public TempPlayerStats attribute;
+    public GameplayAttribute attributeToListen;
 
     void Start()
     {
@@ -19,6 +20,11 @@ public class TempFloatAttributeText : MonoBehaviour
 
     protected virtual void UpdateStat()
     {
-        this.statText.text = TempPlayerAttributes.instance.GetFloatAttribute(attribute).ToString();
+        var GAC = GameManager.instance.player.GetComponent<GameplayAttributeComponent>();
+        if (GAC != null)
+        {
+            this.statText.text = GAC.GetRuntimeAttribute(attributeToListen).CurrentValue().ToString(); 
+            //TempPlayerAttributes.instance.GetFloatAttribute(attribute).ToString();
+        }
     }
 }

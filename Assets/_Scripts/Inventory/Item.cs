@@ -16,7 +16,7 @@ public abstract class Item : ScriptableObject, IInteractable
     public int quantity;
     public int maxQuantity;
     public float sellValue;
-    [SerializeField] protected List<EquipmentEffectData> equipmentEffects = new();
+    [SerializeField] protected List<GameplayEffectApplication> equipmentEffect;
 
     public virtual void Use()
     {
@@ -28,41 +28,59 @@ public abstract class Item : ScriptableObject, IInteractable
         Debug.Log($"Interacted with {this.name}");
         GameManager.instance.player.GetInventoryManager().AddItem(this);
     }
-    
+
+    public virtual GameplayEffect CreateItemEffect()
+    {
+        if (equipmentEffect == null)
+            return null;
+        
+        var effectApplications = new List<GameplayEffectApplication>();
+        foreach (var effectData in equipmentEffect)
+        {
+            effectApplications.Add(effectData.CloneApplication());
+        }
+        var effect = GameplayEffectFactory.CreateEffect(
+            itemName + "Effect",
+            EEffectDurationType.Infinite,
+            0f,
+            effectApplications,
+            0f
+        );
+        effect.Source = this;
+        
+        return effect;
+    }
+    /*
     public virtual List<GameplayEffect> CreateItemEffects()
     {
+        /*
         if (equipmentEffects == null || equipmentEffects.Count == 0)
-            return new List<GameplayEffect>();
-        
+            return new List<GameplayEffect>();*
+        var effectApplications = new List<GameplayEffectApplication>();
         var effects = new List<GameplayEffect>();
-        foreach (var effectData in equipmentEffects)
+        foreach (var effectData in equipmentEffect.equipmentApplications)
         {
-            var effectStrategy = new ConstantValueStrategy() { value = effectData.value};
-            var effect = GameplayEffectFactory.CreateEffect(
-                effectData.effectName,
-                EEffectDurationType.Infinite,
-                0,
-                0,
-                EModifierOperationType.Add,
-                effectData.targetAttribute,
-                effectStrategy
-            );/*
-            effects.Add(GameplayEffectFactory.CreateEffect(
-                effectData.effectName,
-                EEffectDurationType.Infinite,
-                0,
-                0,
-                EModifierOperationType.Add,
-                effectData.targetAttribute,
-                effectStrategy,
-                this
-            ));*/
-
-            effect.Source = this;
-            effects.Add(effect);
+            var effectApplication = new GameplayEffectApplication
+                (
+                    effectData.targetAttribute,
+                    effectData.operationType,
+                    effectData.ValueStrategy
+                );
+                
+            effectApplications.Add(effectApplication);
         }
+        var effect = GameplayEffectFactory.CreateEffect(
+            equipmentEffect.effectName,
+            EEffectDurationType.Infinite,
+            0f,
+            effectApplications,
+            0f
+        );
+        effect.Source = this;
+        effects.Add(effect);
+        
         return effects;
-    }
+    }*/
 
 
     public Color GetColorByItemGrade()
@@ -79,12 +97,4 @@ public abstract class Item : ScriptableObject, IInteractable
         };
         return gradedColor;
     }
-}
-
-[Serializable]
-public class EquipmentEffectData
-{
-    public string effectName;
-    public GameplayAttribute targetAttribute;
-    public float value;
 }

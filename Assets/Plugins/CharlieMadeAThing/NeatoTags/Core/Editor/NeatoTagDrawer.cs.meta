@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d69db49e0bae40c48a816447a6b68334
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229829
+  packageName: Neato Tags
+  packageVersion: 1.4.0
+  assetPath: Assets/CharlieMadeAThing/NeatoTags/Core/Editor/NeatoTagDrawer.cs
+  uploadId: 743166

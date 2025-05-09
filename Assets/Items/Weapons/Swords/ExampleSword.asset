@@ -22,6 +22,11 @@ MonoBehaviour:
   quantity: 0
   maxQuantity: 0
   sellValue: 25
+  equipmentEffect:
+  - targetAttribute: {fileID: 11400000, guid: cf6ab014a89a66d46b3d1100091d9d5f, type: 2}
+    modifierOperation: 0
+    valueStrategy:
+      rid: 211682578938200238
   damage: 5
   attackSpeed: 1.5
   animations:
@@ -30,3 +35,11 @@ MonoBehaviour:
   - {fileID: -203655887218126122, guid: 2e111b2a5e29f4b7f8c97f6e55ab253a, type: 3}
   slot: 6
   weaponType: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 211682578938200238
+      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        sourceAttribute: {fileID: 11400000, guid: 644ff5280a0d50f40ae6aebe8bc52a87, type: 2}
+        _coefficient: 10
