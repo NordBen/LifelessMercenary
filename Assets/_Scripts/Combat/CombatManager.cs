@@ -1,5 +1,4 @@
 using System;
-using StarterAssets;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -8,6 +7,10 @@ public class CombatManager : MonoBehaviour//, ICombat
 {
     private static readonly int bIsBlocking = Animator.StringToHash("bIsBlocking");
     private static readonly int ParryHash = Animator.StringToHash("tParry");
+    private static readonly int HeavyAttack = Animator.StringToHash("tHeavyAttack");
+    private static readonly int AttackSpeed = Animator.StringToHash("AttackSpeed");
+    
+    public float rootMotionMultiplier = 1;
     
     [SerializeField] private float parryWindowDuration = 0.2f;
     [SerializeField] private float parryCooldown = 1f;
@@ -37,6 +40,7 @@ public class CombatManager : MonoBehaviour//, ICombat
 
     public List<AnimationClip> _primaryAttacks;
     public List<AnimationClip> _optionalAttacks;
+    public List<CombatAnimation> testAttacks;
 
     private GameplayAttributeComponent attributeComp;
 
@@ -67,7 +71,7 @@ public class CombatManager : MonoBehaviour//, ICombat
         //SubscribeWeaponChange();
         //GameManager.instance.player.GetEquipmentManager().OnEquip += OnWeaponChanged;
     }
-
+    
     private void SubscribeWeaponChange()
     {
         Debug.Log("CombatManager OnEnable called");
@@ -95,7 +99,12 @@ public class CombatManager : MonoBehaviour//, ICombat
         if (Input.GetMouseButtonDown(0))
         {
             if (transform.tag == "Player")
-                PerformAttack();
+                PerformLightAttack();
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (transform.tag == "Player")
+                PerformHeavyAttack();
         }
         
         if (Input.GetKeyDown(KeyCode.X))
@@ -140,6 +149,95 @@ public class CombatManager : MonoBehaviour//, ICombat
         PerformAttack();
     }
 
+    private void PerformLightAttack()
+    {
+        PerformAttackV2(false);
+    }
+
+    private void PerformHeavyAttack()
+    {
+        PerformAttackV2(true);
+    }
+    
+    private void PerformAttack(bool isHeavy)
+    {
+        List<AnimationClip> _attackAnims = new();
+        var animSpeed = 1f;
+        
+        if (isHeavy)
+        {
+            _attackAnims = _optionalAttacks;
+            animSpeed = 0.86f;
+        }
+        else
+        {
+            _attackAnims = _primaryAttacks;
+            animSpeed = 1.33f;
+        }
+        
+        if (weaponItem == null ||  _attackAnims.Count == 0)
+            return;
+
+        if (TempPlayerAttributes.instance.GetFloatAttribute(TempPlayerStats.stamina) == 0) return;
+        
+        if (comboIndex <=  _attackAnims.Count && !isAttacking)
+        {
+            animOverrideController["TestAnim1"] = _attackAnims[comboIndex];
+            animator.SetFloat(AttackSpeed, animSpeed);
+            attackTagged = true;
+
+            if (isHeavy)
+            {
+                animator.Play("HeavyAttack", 0, 0);
+            }
+            else
+            {
+                animator.Play("LightAttack", 0, 0);
+            }
+            isAttacking = true;
+            comboIndex = (comboIndex + 1) % _attackAnims.Count;
+
+            if (transform.root.tag == "Player")
+                TempPlayerAttributes.instance.ModifyStamina(-10);
+
+            Invoke("ResetCombo", 1f);
+            Invoke("ResetAttacking", 6f);
+        }
+        comboTimer = 1.0f;
+    }
+
+    private void PerformAttackV2(bool isHeavy)
+    {
+        if (weaponItem == null || testAttacks.Count == 0)
+            return;
+
+        if (GetComponent<GameplayAttributeComponent>().GetAttribute("Stamina").CurrentValue() == 0) return;
+
+        if (comboIndex <= testAttacks.Count && !isAttacking)
+        {
+            var animSpeed = isHeavy ? 0.85f : 1.25f;
+            animSpeed *= testAttacks[comboIndex].speed * 1;
+            isAttacking = true;
+            animator.SetFloat(AttackSpeed, animSpeed);
+            animOverrideController["TestAnim1"] = testAttacks[comboIndex].clip;
+            attackTagged = true;
+            
+            if (isHeavy)
+            {
+                animator.Play("HeavyAttack", 1, 0);
+            }
+            else
+            {
+                animator.Play("LightAttack", 1, 0);
+            }
+            comboIndex = (comboIndex + 1) % testAttacks.Count;
+            //GetComponent<PlayerControllerV2>()._mc.ApplyForce(transform.forward, testAttacks[comboIndex].forwardMomentum * rootMotionMultiplier);
+            
+            if (transform.root.tag == "Player")
+                TempPlayerAttributes.instance.ModifyStamina(-10);
+        }
+    }
+
     private void PerformAttack()
     {
         if (weaponItem == null || weaponItem.animations.Count == 0)
@@ -158,11 +256,7 @@ public class CombatManager : MonoBehaviour//, ICombat
 
             if (transform.root.tag == "Player")
                 TempPlayerAttributes.instance.ModifyStamina(-10);
-
-            Invoke("ResetCombo", 1f);
-            Invoke("ResetAttacking", 6f);
         }
-        comboTimer = 1.0f;
     }
     
     private void ResetAttacking()
@@ -294,6 +388,7 @@ public class CombatManager : MonoBehaviour//, ICombat
     public bool SuccessfullParry() => this._parried;
     
     public void PerformAttackExt() => weapon.ToggleHitDetection();
+    public void EndComboWindow() => isAttacking = false;
 
     private void OnWeaponChanged(IEquipable newWeapon)
     {
@@ -304,6 +399,10 @@ public class CombatManager : MonoBehaviour//, ICombat
         {
             _primaryAttacks.Clear();
             _primaryAttacks = new(weaponItem.animations);
+            _optionalAttacks.Clear();
+            _optionalAttacks = new(weaponItem.optionalAnimations);
+            testAttacks.Clear();
+            testAttacks = new(weaponItem.combatAnimations);
         }
     }
 

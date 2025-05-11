@@ -41,6 +41,16 @@ MonoBehaviour:
   - {fileID: -203655887218126122, guid: f9944689985ed47b5b64b6015893d0bb, type: 3}
   - {fileID: -203655887218126122, guid: 83dfe8b412ae94227bbbd48badfde754, type: 3}
   - {fileID: -203655887218126122, guid: 2e111b2a5e29f4b7f8c97f6e55ab253a, type: 3}
+  optionalAnimations:
+  - {fileID: -203655887218126122, guid: 263e109c20de946d382194610c1c03d0, type: 3}
+  - {fileID: -203655887218126122, guid: f0ace1577bbdb4d1494176c721d6b15e, type: 3}
+  combatAnimations:
+  - clip: {fileID: -203655887218126122, guid: a8ee006a39171453db712e786947e7b0, type: 3}
+    speed: 1.1
+    forwardMomentum: 0
+  - clip: {fileID: -203655887218126122, guid: eaa6e2ef214d5472a82f467bce6dc995, type: 3}
+    speed: 1.2
+    forwardMomentum: 0
   slot: 6
   weaponType: 0
   references:

@@ -45,10 +45,8 @@ public class UIEquipSlot : MonoBehaviour
             if (newItem.GetSlot() != this._slot) return;
             else
             {
-                Debug.Log("Got past Slot");
                 if ((Item)newItem == this._slottedItem)
                 {
-                    Debug.Log("New item is same item");
                     this._slottedItem = null;
                     Color colorTransparancy = this._slotIcon.color;
                     colorTransparancy.a = 0;
@@ -57,7 +55,6 @@ public class UIEquipSlot : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("New item is new");
                     this._slottedItem = (Item)newItem;
                     Color colorTransparancy = this._slotIcon.color;
                     colorTransparancy.a = 1;

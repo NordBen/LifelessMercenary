@@ -14,7 +14,6 @@ public class TempDayUI : MonoBehaviour
     private void OnEnable()
     {
         GameManager.instance.OnDaySurvived += UpdateDayCounter;
-        Debug.Log("Subscribed to OnDaySurvived");
     }
 
     private void OnDisable()

@@ -1,4 +1,3 @@
-using StarterAssets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,27 +33,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if (player == null && GameObject.Find("Player"))
-            player = GameObject.Find("Player").GetComponent<Player>();
-    }
-
-    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
-    {
-        if (player == null && GameObject.Find("Player"))
-            player = GameObject.Find("Player").GetComponent<Player>();
-        TempPlayerAttributes.instance.SetPlayerController(GameObject.Find("Player").GetComponent<PlayerControllerV2>());
-        TempPlayerAttributes.instance.UpdateStats();
-    }
-
-    private void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
-    }
-
-    void Start()
-    {
-        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-        SceneManager_sceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+        //if (player == null && GameObject.Find("Player"))
+        //    player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     void Update()

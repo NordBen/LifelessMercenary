@@ -71,7 +71,7 @@ public class AITesting : MonoBehaviour
 
     public void Attack()
     {
-        if (attackTimer.IsRunning) return;
+        if (attackTimer.isRunning) return;
         
         attackTimer.Start();
         Debug.Log("Attack");

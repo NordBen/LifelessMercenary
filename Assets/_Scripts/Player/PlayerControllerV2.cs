@@ -3,7 +3,6 @@ using System.Collections;
 using StarterAssets;
 using UnityEngine.InputSystem;
 
-
 public class PlayerControllerV2 : MonoBehaviour, ICombat
 {
     private readonly int _animIDSpeed = Animator.StringToHash("Speed");
@@ -17,17 +16,14 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     private MovementController _movementController;
     [SerializeField] private Rigidbody[] ragdollRigidBodies;
     [SerializeField] private Collider[] ragdollColliders;
-
-    public float InputAnimSpeed;
-    public float InputAnimMotionSpeed;
-    
+    /*
     [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float runSpeed = 10f;
     private float _currentSpeed;
     [SerializeField] private float sprintTransitSpeed = 5f;
     [SerializeField] private float turningSpeed = 10f;
-    [SerializeField] private float gravity = 9.81f;
+    [SerializeField] private float gravity = 9.81f;*/
     [SerializeField] private float jumpHeight = 2f;
 
     [Header("Dodge settings")]
@@ -41,7 +37,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     public InteractableActor currentInteractable;
     bool isDead;
     int level = 1;
-    TempPlayerAttributes tempPlayerAttributes;
+    //TempPlayerAttributes tempPlayerAttributes;
 
     public AudioClip LandingAudioClip;
     public AudioClip[] FootstepAudioClips;
@@ -88,6 +84,12 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     private bool _IsGrounded = true;
 
     private bool isDeady = false;
+    
+    [Header("Rotation Settings")]
+    [SerializeField] private float cameraRotationInfluence = 0.5f;
+    [SerializeField] private float movementRotationInfluence = 0.5f;
+
+    public TempMovementController _mc;
 
     private bool IsCurrentDeviceMouse
     {
@@ -115,8 +117,8 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         _input = GetComponent<StarterAssetsInputs>();
         _playerInput = GetComponent<PlayerInput>();
 
-        _movementController = GetComponent<MovementController>();
-        tempPlayerAttributes = GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>();
+        //_movementController = GetComponent<MovementController>();
+        //tempPlayerAttributes = GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>();
 
         _fallTimeoutDelta = FallTimeout;
     }
@@ -126,16 +128,49 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     {
         _hasAnimator = TryGetComponent(out _animator);
 
-        _IsGrounded = _movementController.IsGrounded;
+        _IsGrounded = _mc.IsGrounded();// _movementController.IsGrounded;
         if (_hasAnimator)
         {
             _animator.SetBool(_animIDGrounded, _IsGrounded);
         }
-        /*
-        if (Input.GetKeyDown(KeyCode.C) && !isDodging && Time.time >= lastDodgeTime + dodgeCooldown)
+        
+        Vector3 rotationDirection = Vector3.zero;
+        
+        if (_input.move.magnitude > 0.1f)
         {
-            StartCoroutine(Dodge());
-        }*/
+            // Get camera forward (excluding vertical component)
+            Vector3 cameraForward = Vector3.ProjectOnPlane(mainCamera.forward, Vector3.up).normalized;
+            Vector3 cameraRight = Vector3.ProjectOnPlane(mainCamera.right, Vector3.up).normalized;
+        
+            // Calculate direction relative to camera view
+            rotationDirection = (cameraForward * _input.move.y + cameraRight * _input.move.x).normalized;
+        
+            // Pass this direction to the movement controller
+            _mc.SetRotationTarget(rotationDirection);
+        }
+        
+        if (_mc.GetVelocity().sqrMagnitude < _threshold)
+        { _animationBlend = 0f; }
+        else
+        { _animationBlend = Input.GetKey(KeyCode.LeftShift) ? 6 : 2.5f; }
+
+        if (_IsGrounded)
+        {
+            _fallTimeoutDelta = FallTimeout;
+            if (_hasAnimator) 
+            { _animator.SetBool(_animIDJump, false); 
+                _animator.SetBool(_animIDFreeFall, false); }
+        } 
+        else 
+        {
+            if (_fallTimeoutDelta >= 0.0f) { _fallTimeoutDelta -= Time.deltaTime; }
+            else { if (_hasAnimator) { _animator.SetBool(_animIDFreeFall, true); } } 
+        }
+        if (_hasAnimator)
+        { float inputMagnitude = 1;
+            _animator.SetFloat(_animIDSpeed, _animationBlend);
+            _animator.SetFloat(_animIDMotionSpeed, inputMagnitude); }
+        
         if (Input.GetKeyDown(KeyCode.C))
         {
             StartCoroutine(DodgeTesti());
@@ -157,7 +192,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
             _animator.SetBool("bIsDead", true);
         }
         
-        Movement();
+        //Movement();
 
         CheckForInteractable();
         if (currentInteractable != null)
@@ -215,47 +250,29 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         }*/
     }
 
-    private IEnumerator DodgeTest()
-    {
-        isDodging = true;
-        lastDodgeTime = Time.time;
-        
-        Vector2 dodgeDirection;
-        float dodgeForce;
-
-        if (moveInput.magnitude > _threshold)
-        {/*
-            Vector3 camForward = Camera.main.transform.forward;
-            Vector3 camRight = Camera.main.transform.right;
-            camForward.y = 0;
-            camRight.y = 0;*/
-
-            dodgeDirection = new Vector3(moveInput.x, 0, moveInput.y);//(camForward * moveIInput.y + camRight * moveIInput.x).normalized;
-            dodgeForce = dodgeSpeed * 3;
-        }
-        else
-        {
-            dodgeDirection = -transform.forward;
-            dodgeForce = dodgeSpeed * 6f;
-        }
-        
-        _movementController.ApplyForce(dodgeDirection, dodgeForce);
-        
-        yield return new WaitForSeconds(dodgeDuration);
-        isDodging = false;
-    }
-
     private IEnumerator DodgeTesti()
     {
         isDodging = true;
         lastDodgeTime = Time.time;
-        
+    
+        float startTime = Time.time;
+        Vector3 dodgeDirection;
+    
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        
+
+        if (moveInput != Vector2.zero)
+        {
+            dodgeDirection = transform.forward;
+        }
+        else
+        {
+            dodgeDirection = -transform.forward;
+        }
+    
         float dodgeForce = moveInput.magnitude > _threshold ? dodgeSpeed * 3 : dodgeSpeed * 6f;
-        
-        _movementController.ApplyForce(moveInput, dodgeForce);
-        
+    
+        _mc.ApplyForce(dodgeDirection, dodgeForce);
+    
         yield return new WaitForSeconds(dodgeDuration);
         isDodging = false;
     }
@@ -272,7 +289,8 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     #endregion
 
     #region Combat
-    public int GetLevel() => tempPlayerAttributes.level;
+
+    public int GetLevel() => 1;// tempPlayerAttributes.level;
 
     public void TakeDamage(float incomingDamage, float knockback, Vector3 knockbackDirection)
     {
@@ -287,12 +305,12 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         {
             incomingDamage *= 0.1f;
         }
-
+        /*
         tempPlayerAttributes.ModifyHealth(-incomingDamage);
         Debug.Log("Player takes damage" + tempPlayerAttributes.GetFloatAttribute(TempPlayerStats.health));
 
         if (tempPlayerAttributes.GetFloatAttribute(TempPlayerStats.health) == 0)
-            Die();
+            Die();*/
     }
 
     public void Die()
@@ -319,11 +337,11 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         camForward.y = 0;
         camRight.y = 0;
         
-        _movementController.SetTransforms(camForward, camRight);
+        //_movementController.SetTransforms(camForward, camRight);
         
         Vector3 moveDirection = (camForward * moveInput.y + camRight * moveInput.x).normalized;
         
-        _currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+        //_currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
 
         if (moveDirection.sqrMagnitude < _threshold)
         {
@@ -338,7 +356,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         _animationBlend = Mathf.Lerp(_animationBlend, _currentSpeed, Time.deltaTime * sprintTransitSpeed);
         if (_animationBlend < 0.01f) _animationBlend = 0f;*/
         
-        _movementController.SetMoveDirection(moveDirection, _currentSpeed);
+        //_movementController.SetMoveDirection(moveDirection, _currentSpeed);
 
         if (_IsGrounded)
         {
@@ -462,7 +480,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     {
         if (_IsGrounded)
         {
-            _movementController.JumpSqrt();
+            //_movementController.JumpSqrt();
             if (_hasAnimator)
             {
                 _animator.SetBool(_animIDJump, true);
@@ -526,7 +544,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
             if (FootstepAudioClips.Length > 0)
             {
                 var index = UnityEngine.Random.Range(0, FootstepAudioClips.Length);
-                AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_movementController.transform.position), FootstepAudioVolume);
+                AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_mc.transform.position), FootstepAudioVolume);
             }
         }
     }
@@ -535,7 +553,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
         {
-            AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_movementController.transform.position), FootstepAudioVolume);
+            AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_mc.transform.position), FootstepAudioVolume);
         }
     }
     #endregion

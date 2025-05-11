@@ -19,6 +19,8 @@ public class Weapon : Item, IEquipable
     public float attackSpeed = 1.5f;
 
     public List<AnimationClip> animations;
+    public List<AnimationClip> optionalAnimations;
+    public List<CombatAnimation> combatAnimations;
     public EEquipSlot slot = EEquipSlot.Weapon;
     public EWeaponType weaponType;
 

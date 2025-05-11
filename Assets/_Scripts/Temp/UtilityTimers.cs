@@ -1,6 +1,6 @@
 using System;
 
-public abstract class Timer {
+public abstract class TimerS2 {
     protected float initialTime;
     protected float Time { get; set; }
     public bool IsRunning { get; protected set; }
@@ -10,7 +10,7 @@ public abstract class Timer {
     public Action OnTimerStart = delegate { };
     public Action OnTimerStop = delegate { };
 
-    protected Timer(float value) {
+    protected TimerS2(float value) {
         initialTime = value;
         IsRunning = false;
     }
@@ -36,8 +36,8 @@ public abstract class Timer {
     public abstract void Tick(float deltaTime);
 }
     
-public class CountdownTimer : Timer {
-    public CountdownTimer(float value) : base(value) { }
+public class CountdownTimerS2 : TimerS2 {
+    public CountdownTimerS2(float value) : base(value) { }
 
     public override void Tick(float deltaTime) {
         if (IsRunning && Time > 0) {
@@ -59,8 +59,8 @@ public class CountdownTimer : Timer {
     }
 }
     
-public class StopwatchTimer : Timer {
-    public StopwatchTimer() : base(0) { }
+public class StopwatchTimerS2 : TimerS2 {
+    public StopwatchTimerS2() : base(0) { }
 
     public override void Tick(float deltaTime) {
         if (IsRunning) {

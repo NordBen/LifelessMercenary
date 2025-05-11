@@ -42,7 +42,7 @@ public class PlayerDetector : MonoBehaviour
 
     public bool CanDetectPlayer()
     {
-        return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
+        return detectionTimer.isRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
     }
 
     public void SetDetectionStrategy(IDetectionStrategy strategy) => this.detectionStrategy = strategy;
@@ -87,7 +87,7 @@ public class ConeDetectionStrategy : IDetectionStrategy
 
     public bool Execute(Transform player, Transform detector, CountdownTimer timer)
     {
-        if (timer.IsRunning) return false;
+        if (timer.isRunning) return false;
 
         var directionToTarget = player.position - detector.position;
         var angleToTarget = Vector3.Angle(directionToTarget, detector.forward);

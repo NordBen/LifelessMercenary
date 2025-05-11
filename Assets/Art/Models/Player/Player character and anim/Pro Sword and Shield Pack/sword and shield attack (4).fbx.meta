@@ -62,8 +62,15 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.60180604
+      - time: 0.56013936
         functionName: PerformAttackExt
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.63112
+        functionName: EndComboWindow
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
