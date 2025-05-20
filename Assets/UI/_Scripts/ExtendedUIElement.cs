@@ -9,7 +9,7 @@ public class ExtendedUIElement : MonoBehaviour
     [SerializeField] private bool dirtyFollow;
     [SerializeField] private Vector3 targetOffset;
 
-    private void Update()
+    private void LateUpdate()
     {
         // makes UI follow the camera
         if (this.followTarget)

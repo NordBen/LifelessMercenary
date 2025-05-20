@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
-public class CombatManager : MonoBehaviour//, ICombat
+public class CombatManager : MonoBehaviour, ICombat
 {
     private static readonly int bIsBlocking = Animator.StringToHash("bIsBlocking");
     private static readonly int ParryHash = Animator.StringToHash("tParry");
@@ -40,9 +40,10 @@ public class CombatManager : MonoBehaviour//, ICombat
 
     public List<AnimationClip> _primaryAttacks;
     public List<AnimationClip> _optionalAttacks;
-    public List<CombatAnimation> testAttacks;
+    public List<CombatAnimation> _LightAttacks;
+    public List<CombatAnimation> _HeavyAttacks;
 
-    private GameplayAttributeComponent attributeComp;
+    public GameplayAttributeComponent attributeComp;
 
     [SerializeField] int comboIndex;
     [SerializeField] private bool isAttacking;
@@ -208,18 +209,20 @@ public class CombatManager : MonoBehaviour//, ICombat
 
     private void PerformAttackV2(bool isHeavy)
     {
-        if (weaponItem == null || testAttacks.Count == 0)
-            return;
+        if (weaponItem == null || (_LightAttacks.Count == 0 || _HeavyAttacks.Count == 0)) return;
 
-        if (GetComponent<GameplayAttributeComponent>().GetAttribute("Stamina").CurrentValue() == 0) return;
+        if (transform.root.name == "Player") 
+            if (GetComponent<GameplayAttributeComponent>().GetAttribute("Stamina").CurrentValue == 0) return;
 
-        if (comboIndex <= testAttacks.Count && !isAttacking)
+        List<CombatAnimation> attackAnimations = isHeavy ? _HeavyAttacks : _LightAttacks;
+        
+        if (comboIndex < attackAnimations.Count && !isAttacking)
         {
             var animSpeed = isHeavy ? 0.85f : 1.25f;
-            animSpeed *= testAttacks[comboIndex].speed * 1;
+            animSpeed *= attackAnimations[comboIndex].speed * 1;
             isAttacking = true;
             animator.SetFloat(AttackSpeed, animSpeed);
-            animOverrideController["TestAnim1"] = testAttacks[comboIndex].clip;
+            animOverrideController["TestAnim1"] = attackAnimations[comboIndex].clip;
             attackTagged = true;
             
             if (isHeavy)
@@ -230,7 +233,7 @@ public class CombatManager : MonoBehaviour//, ICombat
             {
                 animator.Play("LightAttack", 1, 0);
             }
-            comboIndex = (comboIndex + 1) % testAttacks.Count;
+            comboIndex = (comboIndex + 1) % attackAnimations.Count;
             //GetComponent<PlayerControllerV2>()._mc.ApplyForce(transform.forward, testAttacks[comboIndex].forwardMomentum * rootMotionMultiplier);
             
             if (transform.root.tag == "Player")
@@ -240,7 +243,7 @@ public class CombatManager : MonoBehaviour//, ICombat
 
     private void PerformAttack()
     {
-        if (weaponItem == null || weaponItem.animations.Count == 0)
+        if (weaponItem == null)// || weaponItem.animations.Count == 0)
             return;
 
         if (TempPlayerAttributes.instance.GetFloatAttribute(TempPlayerStats.stamina) == 0) return;
@@ -398,11 +401,13 @@ public class CombatManager : MonoBehaviour//, ICombat
         if (weaponItem != null)
         {
             _primaryAttacks.Clear();
-            _primaryAttacks = new(weaponItem.animations);
+            //_primaryAttacks = new(weaponItem.animations);
             _optionalAttacks.Clear();
-            _optionalAttacks = new(weaponItem.optionalAnimations);
-            testAttacks.Clear();
-            testAttacks = new(weaponItem.combatAnimations);
+            //_optionalAttacks = new(weaponItem.optionalAnimations);
+            _LightAttacks.Clear();
+            _LightAttacks = new(weaponItem.lightAttackAnimations);
+            _HeavyAttacks.Clear();
+            _HeavyAttacks = new(weaponItem.heavyAttackAnimations);
         }
     }
 
@@ -413,15 +418,29 @@ public class CombatManager : MonoBehaviour//, ICombat
 
     public void TakeDamage(float incomingDamage, float knockbackForce, Vector3 knockbackDirection)
     {
+        Debug.Log($"Take Damaged from {this} of {transform.root} for {incomingDamage}");
         var healthAttribute = attributeComp.GetAttribute("Health");
         if (healthAttribute == null) return;
-        /*
-        var damageEffect = GameplayEffectFactory.CreateEffect(
-            "damagable", EEffectDurationType.Instant, 0, 0,
-            EModifierOperationType.Add, healthAttribute, new ConstantValueStrategy() { value = -incomingDamage });
-        attributeComp.ApplyEffect(damageEffect);*/
 
-        if (healthAttribute.CurrentValue() <= 0)
+        var damageApplication = new GameplayEffectApplication(
+            healthAttribute,
+            EModifierOperationType.Add,
+            new ConstantValueStrategy
+            {
+                value = -incomingDamage
+            });
+        List<GameplayEffectApplication> applications = new List<GameplayEffectApplication>();
+        applications.Add(damageApplication);
+        var damageEffect = GameplayEffectFactory.CreateEffect(
+        "Damage",
+        EEffectDurationType.Instant,
+        0f,
+        applications
+        );
+        
+        attributeComp.ApplyEffect(damageEffect);
+
+        if (healthAttribute.CurrentValue <= 0)
             owner.Die();
     }
 

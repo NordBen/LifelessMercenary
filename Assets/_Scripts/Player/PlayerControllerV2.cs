@@ -30,6 +30,9 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     [SerializeField] private float dodgeSpeed = 10f;
     [SerializeField] private float dodgeDuration = 0.2f;
     [SerializeField] private float dodgeCooldown = 1f;
+    
+    [Header("Jump settings")]
+    [SerializeField] private float jumpForce = 10f;
 
     private float lastDodgeTime = 0;
     private bool isDodging = false;
@@ -171,21 +174,25 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
             _animator.SetFloat(_animIDSpeed, _animationBlend);
             _animator.SetFloat(_animIDMotionSpeed, inputMagnitude); }
         
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && !isDodging)
         {
             StartCoroutine(DodgeTesti());
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _mc.ApplyForce(Vector3.up * jumpForce, jumpForce);
             Jump();
+        }
 
+        /*
         if (Input.GetKeyDown(KeyCode.Y))
         {
             isDeady = !isDeady;
             _animator.enabled = isDeady;
             ToggleRagdolls(isDeady);
             //_animator.SetBool("bIsDead", isDeady);
-        }
+        }*/
         
         if (Input.GetKeyDown(KeyCode.U))
         {
@@ -273,7 +280,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     
         _mc.ApplyForce(dodgeDirection, dodgeForce);
     
-        yield return new WaitForSeconds(dodgeDuration);
+        yield return new WaitForSeconds(dodgeCooldown);
         isDodging = false;
     }
 
@@ -480,6 +487,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
     {
         if (_IsGrounded)
         {
+            _mc.OnJumpStart();
             //_movementController.JumpSqrt();
             if (_hasAnimator)
             {

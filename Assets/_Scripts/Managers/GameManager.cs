@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
+using LM;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,11 +29,11 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject);
+            ///Destroy(gameObject);
         }
         //if (player == null && GameObject.Find("Player"))
         //    player = GameObject.Find("Player").GetComponent<Player>();
@@ -50,6 +52,16 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             SurviveDay(1);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            Debug.Log("new game");
+            DataPersistenceManager.instance.NewGame();
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            DataPersistenceManager.instance.SaveGame();
         }
     }
 
@@ -112,7 +124,52 @@ public class GameManager : MonoBehaviour
 
     public void ResetLoop()
     {
+        DataPersistenceManager.instance.SaveGame();
+        StartCoroutine("FullHeali", 1f);
         SceneManager.LoadScene("TheLevelScene");
+    }
+
+    private IEnumerator FullHeali()
+    {
+        DataPersistenceManager.instance.LoadGame();
+        yield return null;
+        FullHealPlayer();
+        yield return null;
+    }
+    
+    private void FullHealPlayer()
+    {
+        var gameplayAttributeComponent = player.GetComponent<GameplayAttributeComponent>();
+        GameplayEffectApplication healthApplication = new GameplayEffectApplication(
+            gameplayAttributeComponent.GetAttribute("Health"),
+            EModifierOperationType.Override,
+            new AttributeBasedValueStrategy
+            {
+                sourceAttribute = gameplayAttributeComponent.GetAttribute("MaxHealth"),
+                _coefficient = 1
+            });
+        GameplayEffectApplication StaminaApplication = new GameplayEffectApplication(
+            gameplayAttributeComponent.GetAttribute("Stamina"),
+            EModifierOperationType.Override,
+            new AttributeBasedValueStrategy
+            {
+                sourceAttribute = gameplayAttributeComponent.GetAttribute("MaxStamina"),
+                _coefficient = 1
+            });
+        List<GameplayEffectApplication> applications = new List<GameplayEffectApplication>();
+        applications.Add(healthApplication);
+        applications.Add(StaminaApplication);
+        GameplayEffect fixHealthNStaminaEffect = GameplayEffectFactory.CreateEffect(
+            "FullHeal",
+            EEffectDurationType.Duration,
+            1,
+            applications
+        );
+        gameplayAttributeComponent.ApplyEffect(fixHealthNStaminaEffect, true);
+        Debug.Log(
+            $"Health after reset: {gameplayAttributeComponent.GetAttribute("Health").CurrentValue} / {gameplayAttributeComponent.GetAttribute("MaxHealth").CurrentValue}");
+        Debug.Log(
+            $"Stamina after reset: {gameplayAttributeComponent.GetAttribute("Stamina").CurrentValue} / {gameplayAttributeComponent.GetAttribute("MaxStamina").CurrentValue}");
     }
 
     public void AddEnemy(NPCController enemy)

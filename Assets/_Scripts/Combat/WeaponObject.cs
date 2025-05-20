@@ -26,6 +26,7 @@ public class WeaponObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Hit other " + other.gameObject);
         if ((collisionLayer.value & (1 << other.gameObject.layer)) == 0)
         {
             Debug.Log($"collisionlayer val: {collisionLayer.value} and other layer {other.gameObject.layer}");
@@ -44,10 +45,15 @@ public class WeaponObject : MonoBehaviour
             Debug.Log("Helhit");
             float finalDamage = weaponData.damage;
             if (owner.tag == "Player")
-                finalDamage += TempPlayerAttributes.instance.GetFloatAttribute(TempPlayerStats.damage);
+                finalDamage += 5;
             else
-                finalDamage += 10;
+            {
+                Debug.Log(finalDamage);
+                // finalDamage += 10;
+            }
+               
 
+            Debug.Log("Target trying to take damage is: " + target);
             target.TakeDamage(finalDamage, 5, this.transform.root.transform.forward);
             //SpawnHitVFX(other, other.ClosestPoint(transform.position));
         }

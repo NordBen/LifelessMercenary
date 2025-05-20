@@ -6,12 +6,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Item", menuName = "Item/Item")]
 public abstract class Item : ScriptableObject, IInteractable
 {
+    public string itemId { get { return string.IsNullOrEmpty(itemId) ? GenerateItemId() : itemId; } private set { itemId = value; } }
     public string itemName;
     public Sprite icon;
     public Mesh mesh;
     public Material material;
-    public EItemType type;
-    public EItemGrade grade;
+    public EItemType itemType;
+    public EItemGrade itemGrade;
     public bool bIsStackable = false;
     public int quantity;
     public int maxQuantity;
@@ -31,7 +32,7 @@ public abstract class Item : ScriptableObject, IInteractable
 
     public virtual GameplayEffect CreateItemEffect()
     {
-        if (equipmentEffect == null)
+        if (equipmentEffect.Count <= 0)
             return null;
         
         var effectApplications = new List<GameplayEffectApplication>();
@@ -81,11 +82,10 @@ public abstract class Item : ScriptableObject, IInteractable
         
         return effects;
     }*/
-
-
+    
     public Color GetColorByItemGrade()
     {
-        Color gradedColor = this.grade switch
+        Color gradedColor = this.itemGrade switch
         {
             EItemGrade.Uncommon => Color.gray,
             EItemGrade.Common => Color.green,
@@ -96,5 +96,23 @@ public abstract class Item : ScriptableObject, IInteractable
             _ => Color.white,
         };
         return gradedColor;
+    }
+
+    private string GenerateItemId()
+    {
+        itemId = $"{itemType.ToString()}{Guid.NewGuid().ToString().Substring(0, 8)}";
+        return itemId;
+    }
+    
+    public void SetItemId(string id)
+    {
+        itemId = id;
+    }
+    
+    public virtual Item Clone()
+    {
+        Item newInstance = Instantiate(this);
+        newInstance.GenerateItemId();
+        return newInstance;
     }
 }

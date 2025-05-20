@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Agility
   m_EditorClassIdentifier: 
   _name: Agility
-  _baseValue: 5
-  _currentValue: 5
+  _baseValue: 4
+  _currentValue: 4
   _activeModifications: []
+  _activeEffectApplications: []
+  references:
+    version: 2
+    RefIds: []

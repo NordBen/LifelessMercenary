@@ -23,7 +23,7 @@ public class TempFloatAttributeText : MonoBehaviour
         var GAC = GameManager.instance.player.GetComponent<GameplayAttributeComponent>();
         if (GAC != null)
         {
-            this.statText.text = GAC.GetRuntimeAttribute(attributeToListen).CurrentValue().ToString(); 
+            this.statText.text = GAC.GetRuntimeAttribute(attributeToListen).CurrentValue.ToString(); 
             //TempPlayerAttributes.instance.GetFloatAttribute(attribute).ToString();
         }
     }

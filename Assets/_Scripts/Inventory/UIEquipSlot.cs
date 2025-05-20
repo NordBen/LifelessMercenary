@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,12 +11,14 @@ public class UIEquipSlot : MonoBehaviour
     private Image _slotIcon;
     private Image _equippedIcon;
     private Button _button;
+    private TMP_Text _stackAmount;
 
     private void Start()
     {
         _button = transform.GetChild(0).GetChild(0).GetComponent<Button>();
         _slotIcon = transform.GetChild(0).GetChild(1).GetComponent<Image>();
         _equippedIcon = transform.GetChild(0).GetChild(3).GetComponent<Image>();
+        _stackAmount = transform.GetChild(0).GetChild(2).GetComponent<TMP_Text>();
         _button.interactable = isInteractable;
         _button.onClick.AddListener(() => OnClick());
         _slotIcon.sprite = slotIcon;
@@ -61,6 +64,16 @@ public class UIEquipSlot : MonoBehaviour
                     this._equippedIcon.color = colorTransparancy;
                     this._equippedIcon.sprite = _slottedItem.icon;
                 }
+
+                if (_slottedItem.bIsStackable && _slottedItem.quantity > 1)
+                {
+                    _stackAmount.gameObject.SetActive(true);
+                    _stackAmount.text = _slottedItem.quantity.ToString();
+                }
+                else
+                {
+                    _stackAmount.gameObject.SetActive(false);
+                }
             }
         }
         else
@@ -71,6 +84,7 @@ public class UIEquipSlot : MonoBehaviour
             colorTransparancy.a = 0;
             this._equippedIcon.color = colorTransparancy;
             this._equippedIcon.sprite = null;
+            _stackAmount.gameObject.SetActive(false);
         }
     }
 

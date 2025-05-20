@@ -27,7 +27,7 @@ public struct FAttributeCaptureDef
         if (component == null) return 0f;
 
         var attribute = component.GetAttribute(this.attribute.Name);
-        float value = attribute?.CurrentValue() ?? 0f;
+        float value = attribute?.CurrentValue ?? 0f;
         
         if (bSnapshot && !SnapshotValue.HasValue)
             SnapshotValue = value;
@@ -71,7 +71,7 @@ public abstract class GameplayEffectExecutionCalculation : ScriptableObject
                 
                 if (attribute != null)
                 {
-                    result[captureDef.attribute] = attribute.CurrentValue();
+                    result[captureDef.attribute] = attribute.CurrentValue;
                 }
             }
         }
@@ -193,8 +193,8 @@ public class DamageExecutionTest : IGameplayEffectExecution
         var healthAttribute = target.GetAttribute("Health");
         if (healthAttribute != null)
         {
-            var damage = healthAttribute.CurrentValue() * (damagePercent * 0.01f);
-            target.ModifyAttribute(healthAttribute, healthAttribute.CurrentValue() - damage, EModifierOperationType.Override, false);
+            var damage = healthAttribute.CurrentValue * (damagePercent * 0.01f);
+            target.ModifyAttribute(healthAttribute, healthAttribute.CurrentValue - damage, EModifierOperationType.Override, false);
         }
     }
 }

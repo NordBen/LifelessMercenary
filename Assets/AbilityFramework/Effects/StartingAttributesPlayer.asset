@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cc8be3cf9d7df14e844646ed91ef3f8, type: 3}
+  m_Name: StartingAttributesPlayer
+  m_EditorClassIdentifier: 
+  effectName: DefaultPlayerStats
+  durationType: 0
+  duration: 0
+  period: 0
+  modifierType: 0
+  valueStrategy:
+    rid: -2
+  applications:
+  - targetAttribute: {fileID: 11400000, guid: 19d4e867137edc84fa91dd4da850901a, type: 2}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526701
+  - targetAttribute: {fileID: 11400000, guid: 68b2a7680973bb045a130b2ee2bf612f, type: 2}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526702
+  - targetAttribute: {fileID: 11400000, guid: 644ff5280a0d50f40ae6aebe8bc52a87, type: 2}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526703
+  - targetAttribute: {fileID: 11400000, guid: d4a02d3b07d9935499547eb303a2afab, type: 2}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526704
+  - targetAttribute: {fileID: 11400000, guid: 7e94e554a8e9d8342af3756c55c776e0, type: 2}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526705
+  executions: []
+  stackingType: 0
+  _disposed: 0
+  _elapsedTime: 0
+  _periodElapsedTime: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 211682837813526701
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 5
+    - rid: 211682837813526702
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 4
+    - rid: 211682837813526703
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 5
+    - rid: 211682837813526704
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 5
+    - rid: 211682837813526705
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 10

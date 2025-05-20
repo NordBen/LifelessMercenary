@@ -68,7 +68,7 @@ public class GameplayEffectEditor : Editor
                         }
                         
                         // Assign the clone back to the property
-                        effect.applications[i].valueStrategy = (IAttributeValueStrategy)clone;
+                        effect.applications[i].valueStrategy = (IAttributeMagnitudeStrategy)clone;
                     }
                 }
             }

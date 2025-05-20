@@ -16,3 +16,7 @@ MonoBehaviour:
   _baseValue: 5
   _currentValue: 5
   _activeModifications: []
+  _activeEffectApplications: []
+  references:
+    version: 2
+    RefIds: []

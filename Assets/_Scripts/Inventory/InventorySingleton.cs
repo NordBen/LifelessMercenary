@@ -1,5 +1,3 @@
-using UnityEngine;
-
 [System.Serializable]
 public enum EEquipSlot
 {
@@ -26,6 +24,7 @@ public enum EItemType
 [System.Serializable]
 public enum EItemGrade
 {
+    All,
     Uncommon,
     Common,
     Great,

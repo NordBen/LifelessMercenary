@@ -62,8 +62,8 @@ public class GameplayAttribute : ScriptableObject
     }
     
     public string Name => _name;
-    public float BaseValue() => _baseValue;
-    public float CurrentValue() => _currentValue;
+    public float BaseValue => _baseValue;
+    public float CurrentValue => _currentValue;
 
     public void SetValue(float incomingValue, bool modifyBase)
     {
@@ -104,7 +104,7 @@ public class GameplayAttribute : ScriptableObject
         {
             float before = finalValue;
             finalValue = CalculateModifiedValue(finalValue, modification.GetComputedValue(), modification.modifierOperation);
-            Debug.Log($"Applied modification: {before} -> {finalValue}");
+            Debug.Log($"Applied modification: {before} -> {finalValue} for {_name}");
         }
         SetValue(finalValue, false);
     }

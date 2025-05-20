@@ -3,8 +3,9 @@ using System;
 using System.Linq;
 using UnityEngine;
 using StarterAssets;
+using LM.Inventory;
 
-public class EquipmentManager : MonoBehaviour
+public class EquipmentManager : MonoBehaviour//, IDataPersistance
 {
     private Dictionary<EEquipSlot, IEquipable> equipment;
     private Dictionary<IEquipable, List<GameplayEffect>> equippedEffects;
@@ -66,6 +67,8 @@ public class EquipmentManager : MonoBehaviour
             ToggleEquipbar();
         }
     }
+    
+    public List<GameplayEffect> GetEquippedEffects() => equippedEffectsList;
 
     private void ToggleEquipbar()
     {
@@ -291,5 +294,83 @@ public class EquipmentManager : MonoBehaviour
     {
         var mappedItem = itemsEquipped[SlotIndex(item.GetSlot())];
         return _itemEffectsMap.ContainsKey(mappedItem) && _itemEffectsMap[mappedItem].Count > 0;
+    }
+    
+    public void UnequipAll()
+    {
+        List<Item> itemsToUnequip = new List<Item>(itemsEquipped.Length);
+        foreach (var item in itemsToUnequip)
+        {
+            if (item != null)
+            {
+                Unequip(item as IEquipable);
+            }
+        }
+    }
+
+    public void SaveData(SaveGameData data)
+    {
+        List<SerializableItem> equipmentData = new List<SerializableItem>();
+
+        foreach (var item in itemsEquipped)
+        {
+            if (item != null)
+            {
+                SerializableItem serializedItem = SerializableItem.CreateFrom(item);
+                
+                equipmentData.Add(serializedItem as SerializableItemEquipable);
+            }
+        }
+        //data.savedEquipment[gameObject.name] = itemsEquipped;
+        SerializableItemList equipmentToSave = new SerializableItemList();
+        equipmentToSave.items = equipmentData;
+        data.savedEquipment[gameObject.name] = equipmentToSave;
+    }
+
+    public void LoadData(SaveGameData data)
+    {
+        if (!data.savedEquipment.ContainsKey(gameObject.name)) return;
+        
+        var equipmentData = data.savedEquipment; //[gameObject.name]
+        
+        Dictionary<string, Item> itemsToEquip = new Dictionary<string, Item>();
+
+        if (TryGetComponent<InventoryManager>(out var inventory))
+        {
+            if (inventory == null)
+            {
+                Debug.LogError("EquipmentManager could not find InventoryManager for loading equipment");
+                return;
+            }
+            
+            foreach (var item in inventory.GetAllItems())
+            {
+                itemsToEquip[item.itemName] = item;
+            }
+
+            foreach (var listOfEquipment in data.savedEquipment.Values)
+            {
+                foreach (var itemToFind in listOfEquipment.items)
+                {
+                    Item itemToEquip = inventory.FindItemById(itemToFind.itemId);
+                    if (itemToEquip != null)
+                    {
+                        TryEquip(itemToEquip as IEquipable);
+                    }
+                }
+            }
+            /*
+            foreach (var slotData in equipmentData.Values)
+            {
+                if (itemsToEquip.TryGetValue(slotData.itemId, out Item itemToEquip))
+                {
+                    TryEquip(itemToEquip as IEquipable);
+                }
+                else
+                {
+                    Debug.LogWarning($"Could not find item with ID {slotData.itemId} in inventory for equipping");
+                }
+            }*/
+        }
     }
 }

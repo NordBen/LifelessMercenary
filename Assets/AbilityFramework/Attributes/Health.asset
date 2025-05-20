@@ -16,3 +16,95 @@ MonoBehaviour:
   _baseValue: 100
   _currentValue: 100
   _activeModifications: []
+  _activeEffectApplications:
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526802
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526803
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526804
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526805
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526806
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526807
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526808
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526809
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526810
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526811
+  - targetAttribute: {fileID: 11400000}
+    modifierOperation: 4
+    valueStrategy:
+      rid: 211682837813526812
+  references:
+    version: 2
+    RefIds:
+    - rid: 211682837813526802
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526803
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526804
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526805
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526806
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526807
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526808
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526809
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526810
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526811
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 211682837813526812
+      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120

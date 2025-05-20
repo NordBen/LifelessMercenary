@@ -1,49 +1,54 @@
+using LM.Inventory;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+namespace LM
 {
-    private EquipmentManager equipmentManager;
-    private InventoryManager inventoryManager;
-    private AttributeContainer attributeContainer;
-    private Animator animator;
-    private CombatManager combatManager;
-
-    void Awake()
+    public class Player : MonoBehaviour
     {
-        equipmentManager = GetComponent<EquipmentManager>();
-        inventoryManager = GetComponent<InventoryManager>();
-        attributeContainer = GetComponent<AttributeContainer>();
-        animator = GetComponent<Animator>();
-        combatManager = GetComponent<CombatManager>();
-    }
+        private EquipmentManager equipmentManager;
+        private InventoryManager inventoryManager;
+        private AttributeContainer attributeContainer;
+        private Animator animator;
+        private CombatManager combatManager;
 
-    public EquipmentManager GetEquipmentManager()
-    {
-        return equipmentManager;
-    }
+        void Awake()
+        {
+            equipmentManager = GetComponent<EquipmentManager>();
+            inventoryManager = GetComponent<InventoryManager>();
+            attributeContainer = GetComponent<AttributeContainer>();
+            animator = GetComponent<Animator>();
+            combatManager = GetComponent<CombatManager>();
+        }
 
-    public InventoryManager GetInventoryManager()
-    {
-        return inventoryManager;
-    }
+        public EquipmentManager GetEquipmentManager()
+        {
+            return equipmentManager;
+        }
 
-    public AttributeContainer GetAttributeContainer()
-    {
-        return attributeContainer;
-    }
+        public InventoryManager GetInventoryManager()
+        {
+            return inventoryManager;
+        }
 
-    public Animator GetAnimator()
-    {
-        return animator;
-    }
+        public AttributeContainer GetAttributeContainer()
+        {
+            return attributeContainer;
+        }
 
-    public CombatManager GetCombatManager()
-    {
-        return combatManager;
-    }
+        public Animator GetAnimator()
+        {
+            return animator;
+        }
 
-    public void Heal()
-    {
-        GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>().ModifyHealth(GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>().GetFloatAttribute(TempPlayerStats.maxhealth));
+        public CombatManager GetCombatManager()
+        {
+            return combatManager;
+        }
+
+        public void Heal()
+        {
+            GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>().ModifyHealth(GameObject
+                .Find("PlayerStats").GetComponent<TempPlayerAttributes>().GetFloatAttribute(TempPlayerStats.maxhealth));
+        }
     }
 }

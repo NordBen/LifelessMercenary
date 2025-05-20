@@ -34,7 +34,7 @@ public class UIAttributeValueProgressBar : MonoBehaviour
     private float _attributeValue = 100;
     private float _otherAttributeValue = 100;
     private string _labelString;
-
+    
     private void Start()
     {
         if (owner != null && referenceAttribute != null)

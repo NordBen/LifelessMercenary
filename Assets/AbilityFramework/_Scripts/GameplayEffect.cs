@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Object = System.Object;
 
@@ -14,13 +13,13 @@ public class GameplayEffectApplication
 {
     public GameplayAttribute targetAttribute;
     public EModifierOperationType modifierOperation;
-    [SerializeReference, SubclassSelector] public IAttributeValueStrategy valueStrategy;
+    [SerializeReference, SubclassSelector] public IAttributeMagnitudeStrategy valueStrategy;
     
     [NonSerialized] private float _computedValue;
 
     public float ComputeValue(GameplayEffect effect)
     {
-        _computedValue = valueStrategy.CalculateValue(targetAttribute, this);
+        _computedValue = valueStrategy.CalculateMagnitude(targetAttribute, this);
         return _computedValue;
     }
     
@@ -28,7 +27,7 @@ public class GameplayEffectApplication
     {
         if (valueStrategy != null)
         {
-            _computedValue = valueStrategy.CalculateValue(targetAttribute, this);
+            _computedValue = valueStrategy.CalculateMagnitude(targetAttribute, this);
         }
         else
         {
@@ -39,7 +38,7 @@ public class GameplayEffectApplication
     
     public float GetComputedValue() => _computedValue;
 
-    public GameplayEffectApplication(GameplayAttribute inTargetAttribute, EModifierOperationType inModifierOperation, IAttributeValueStrategy inValueStrategy)
+    public GameplayEffectApplication(GameplayAttribute inTargetAttribute, EModifierOperationType inModifierOperation, IAttributeMagnitudeStrategy inValueStrategy)
     {
         targetAttribute = inTargetAttribute;
         modifierOperation = inModifierOperation;
@@ -116,7 +115,7 @@ public class GameplayEffect : ScriptableObject, IDisposable
     public EModifierOperationType modifierType;
     //public List<GameplayTag> requiredTags = new List<GameplayTag>();
     
-    [SerializeReference, SubclassSelector] public IAttributeValueStrategy valueStrategy;
+    [SerializeReference, SubclassSelector] public IAttributeMagnitudeStrategy valueStrategy;
     [SerializeField] public List<GameplayEffectApplication> applications = new();
     [SerializeReference, SubclassSelector] public List<IGameplayEffectExecution> executions = new();
     
@@ -139,7 +138,7 @@ public class GameplayEffect : ScriptableObject, IDisposable
         float inDuration,
         float inPeriod,
         EModifierOperationType inModifierType,
-        IAttributeValueStrategy inValueStrategy,
+        IAttributeMagnitudeStrategy inValueStrategy,
         EEffectStackingType inStackingType,
         GameplayAttributeComponent inOwner,
         object inSource = null)

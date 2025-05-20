@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameplayAttributeComponent : MonoBehaviour
+public class GameplayAttributeComponent : MonoBehaviour, IDataPersistance
 {
     [SerializeField] public List<GameplayAttribute> attributesToAdd = new();
     private Dictionary<string, GameplayAttribute> _attributes = new();
@@ -13,6 +13,7 @@ public class GameplayAttributeComponent : MonoBehaviour
 
     public GameplayEffect _derivedAttributeEffect;
     private GameplayEffect _activeDerivedEffect;
+    public GameplayEffect _fullHealEffect;
     
     [SerializeField] public List<GameplayEffect> _activeEffects = new();
 
@@ -31,12 +32,23 @@ public class GameplayAttributeComponent : MonoBehaviour
         }
         //ApplyEffect(_derivedAttributeEffect);
     }
-    
+
+    private void OnEnable()
+    {
+        //StartCoroutine("FullHeal", 5);
+    }
+
     private IEnumerator InitializeDerivedAttributes()
     {
         yield return null;
         UpdateDerivedAttributes();
         //ApplyEffect(_derivedAttributeEffect.Clone(), true);
+    }
+
+    private IEnumerator FullHeal()
+    {
+        ApplyEffect(_fullHealEffect, false);
+        yield return null;
     }
     
     public void UpdateDerivedAttributes()
@@ -72,7 +84,6 @@ public class GameplayAttributeComponent : MonoBehaviour
         }*/
         if (_activeDerivedEffect != null)
         {
-            // Handle removal of the applications directly
             foreach (var application in _activeDerivedEffect.applications)
             {
                 if (application.targetAttribute != null)
@@ -80,8 +91,6 @@ public class GameplayAttributeComponent : MonoBehaviour
                     application.targetAttribute.RemoveModification(application);
                 }
             }
-            
-            // Remove from active effects list
             _activeEffects.Remove(_activeDerivedEffect);
             _activeDerivedEffect._disposed = true;
             
@@ -115,10 +124,8 @@ public class GameplayAttributeComponent : MonoBehaviour
                     }
                 }
             }
-            
             // Apply the new effect with fixed attribute references
             ApplyDerivedEffect(_activeDerivedEffect);
-            
             Debug.Log($"Applied new derived attributes effect: {_activeDerivedEffect.effectName}");
         }
     }
@@ -141,15 +148,13 @@ public class GameplayAttributeComponent : MonoBehaviour
             // Log the value being computed from the strategy
             if (modifier.valueStrategy is AttributeBasedValueStrategy attributeStrategy)
             {
-                float sourceValue = attributeStrategy.sourceAttribute.CurrentValue();
+                float sourceValue = attributeStrategy.sourceAttribute.CurrentValue;
                 float coefficient = attributeStrategy._coefficient;
                 float computedValue = sourceValue * coefficient;
                 
                 Debug.Log($"Derived attribute calculation: {modifier.targetAttribute.Name} = " +
                           $"{attributeStrategy.sourceAttribute.Name} ({sourceValue}) × {coefficient} = {computedValue}");
             }
-            
-            // Apply the modification
             modifier.ApplyModification(this, false);
         }
     }
@@ -165,7 +170,7 @@ public class GameplayAttributeComponent : MonoBehaviour
         foreach (var attribute in attributesToAdd)
         {
             var attributeInstance = ScriptableObject.CreateInstance<GameplayAttribute>();
-            attributeInstance.Initialize(attribute.Name, attribute.BaseValue());
+            attributeInstance.Initialize(attribute.Name, attribute.BaseValue);
             _attributes[attributeInstance.Name] = attributeInstance;
         }
     }
@@ -230,7 +235,7 @@ public class GameplayAttributeComponent : MonoBehaviour
                     OnPreAttributeModified(attribute, value) 
                     : value;
                 
-                float finalValue = runtimeAttribute.CalculateModifiedValue(runtimeAttribute.CurrentValue(), modifiedValue, modType);
+                float finalValue = runtimeAttribute.CalculateModifiedValue(runtimeAttribute.CurrentValue, modifiedValue, modType);
                 
                 finalValue = OnPostAttributeModified != null ? 
                     OnPostAttributeModified(attribute, finalValue) 
@@ -333,5 +338,235 @@ public class GameplayAttributeComponent : MonoBehaviour
         
         effect._disposed = true;
         Debug.Log($"effect set to dispose: {effect.effectName} {effect._disposed}");
+    }
+
+    public void SaveData(SaveGameData data)
+    {
+        if (transform.root.name != "Player") return;
+        
+        List<SerializableAttributeData> savedAttributes = new List<SerializableAttributeData>();
+        
+        HashSet<string> attributeNames = new HashSet<string>
+        {
+            "Vitality", "Strength", "Agility", "Intelligence", "Perception", "Luck", "Health", "Stamina"
+        };
+
+        foreach (var attribute in _attributes)
+        {
+            if (attributeNames.Contains(attribute.Key))
+            {
+                savedAttributes.Add(new SerializableAttributeData
+                {
+                    attributeName = attribute.Key,
+                    baseValue = attribute.Value.BaseValue
+                });
+            }
+        }
+
+        HashSet<string> effectsToExclude = new HashSet<string>();
+
+        if (TryGetComponent<EquipmentManager>(out var equipmentManager) && equipmentManager.GetEquippedEffects().Count > 0)
+        {
+            foreach (var equippedEffect in equipmentManager.GetEquippedEffects())
+            {
+                if (equippedEffect != null)
+                {
+                    effectsToExclude.Add(equippedEffect.effectName);
+                }
+            }
+        }
+
+        if (_derivedAttributeEffect != null)
+        {
+            effectsToExclude.Add(_derivedAttributeEffect.effectName);
+        }
+        
+        List<SerializableEffectData> savedEffects = new();
+        
+        foreach (var effect in _activeEffects)
+        {
+            if (effect._disposed || effect.durationType == EEffectDurationType.Instant) continue;
+            
+            if (effectsToExclude.Contains(effect.effectName)) continue;
+
+            SerializableEffectData savedEffectData = new SerializableEffectData
+            {
+                effectName = effect.effectName,
+                durationType = effect.durationType,
+                duration = effect.duration,
+                period = effect.period,
+                modifierType = effect.modifierType,
+                source = effect.Source != null ? new SerializableObjectData(effect.Source) : null//new SerializableObjectData(effect.Source)//effect.Source != null ? effect.Source : null
+            };
+
+            foreach (var modifier in effect.applications)
+            {
+                SerializableEffectApplicationData savedModifierData = new SerializableEffectApplicationData
+                {
+                    targetAttributeName = modifier.targetAttribute.Name,
+                    modifierType = modifier.modifierOperation
+                };
+
+                if (modifier.valueStrategy is ConstantValueStrategy constantStrategy)
+                {
+                    savedModifierData.valueStrategyType = "ConstantValueStrategy";
+                    savedModifierData.constantValue = constantStrategy.value;
+                }
+                else if (modifier.valueStrategy is AttributeBasedValueStrategy attributeStrategy)
+                {
+                    savedModifierData.valueStrategyType = "AttributeBasedValueStrategy";
+                    savedModifierData.sourceAttributeName = attributeStrategy.sourceAttribute.Name;
+                    savedModifierData.coefficient = attributeStrategy._coefficient;
+                }
+                savedEffectData.applications.Add(savedModifierData);
+            }
+            savedEffects.Add(savedEffectData);
+        }
+        
+        Debug.Log($"Saved attributes: {savedAttributes.Count}");
+        Debug.Log($"Saved effects: {savedEffects.Count}");
+
+        SerializableSaveAttribue listOfSavedAttributes = new SerializableSaveAttribue();
+        listOfSavedAttributes.attributes = savedAttributes;
+        data.savedAttributes[gameObject.name] = listOfSavedAttributes;
+        //data.savedAttributes[gameObject.name] = savedAttributes;
+        //data.savedEffects[gameObject.name] = savedEffects;
+        SerializableSaveEffect listOfSavedEffects = new SerializableSaveEffect();
+        listOfSavedEffects.effects = savedEffects;
+        data.savedEffects[gameObject.name] = listOfSavedEffects;
+    }
+    
+    public void LoadData(SaveGameData data)
+    {
+        if (transform.root.name != "Player") return;
+        
+        if (data.savedAttributes.TryGetValue(gameObject.name, out var savedAttributes))
+        {
+            foreach (var attributeToFind in savedAttributes.attributes)
+            {
+                if (_attributes.TryGetValue(attributeToFind.attributeName, out var attribute))
+                {
+                    attribute.SetValue(attributeToFind.baseValue, true);
+                }
+            }
+        }
+
+        if (data.savedEffects.TryGetValue(gameObject.name, out var savedEffects))
+        {
+            foreach (var activeEffect in new List<GameplayEffect>(_activeEffects))
+            {
+                RemoveEffect(activeEffect);
+            }
+
+            foreach (var savedEffect in savedEffects.effects)
+            {
+                GameplayEffect newEffect = ScriptableObject.CreateInstance<GameplayEffect>();
+                newEffect.effectName = savedEffect.effectName;
+                newEffect.durationType = savedEffect.durationType;
+                newEffect.duration = savedEffect.duration;
+                newEffect.period = savedEffect.period;
+                newEffect.modifierType = savedEffect.modifierType;
+                /*
+                if (!string.IsNullOrEmpty(savedEffect.source))
+                {
+                    GameObject sourceObj = GameObject.Find(savedEffect.source);
+                    if (sourceObj != null)
+                    {
+                        newEffect.Source = sourceObj;
+                    }
+                }*
+                if (savedEffect.source != null)
+                {
+                    object sourceObj = savedEffect.source.FindReferencedObject();
+                    newEffect.Source = sourceObj;
+                }*/
+                if (savedEffect.source != null && !string.IsNullOrEmpty(savedEffect.source.objectType))
+                {
+                    newEffect.Source = ReconstructSourceObject(savedEffect.source);
+                }
+
+                foreach (var modifierData in savedEffect.applications)
+                {
+                    GameplayAttribute targetAttribute = GetAttribute(modifierData.targetAttributeName);
+                    if (targetAttribute == null) continue;
+
+                    IAttributeMagnitudeStrategy valueStrategy = null;
+
+                    if (modifierData.valueStrategyType == "ConstantValueStrategy")
+                    {
+                        valueStrategy = new ConstantValueStrategy { value = modifierData.constantValue };
+                    }
+                    else if (modifierData.valueStrategyType == "AttributeBasedValueStrategy")
+                    {
+                        GameplayAttribute sourceAttribute = GetAttribute(modifierData.sourceAttributeName);
+                        if (sourceAttribute != null)
+                        {
+                            valueStrategy = new AttributeBasedValueStrategy
+                            {
+                                sourceAttribute = sourceAttribute,
+                                _coefficient = modifierData.coefficient
+                            };
+                        }
+                    }
+
+                    if (valueStrategy != null)
+                    {
+                        GameplayEffectApplication modifier = new GameplayEffectApplication(
+                            targetAttribute,
+                            modifierData.modifierType,
+                            valueStrategy
+                        );
+                        
+                        newEffect.applications.Add(modifier);
+                    }
+                }
+
+                if (newEffect.applications.Count > 0)
+                {
+                    ApplyEffect(newEffect, true);
+                }
+            }
+        }
+    }
+
+    private object ReconstructSourceObject(SerializableObjectData source)
+    {
+        if (source.objectType.Contains("PlayerController"))
+        {
+            return GameManager.instance.player.GetComponent<PlayerController>();
+        }
+        else if (source.objectType.Contains("GameManager"))
+        {
+            return GameManager.instance;
+        }
+
+        try
+        {
+            System.Type type = System.Type.GetType(source.objectType);
+            if (type != null)
+            {
+                object instance = System.Activator.CreateInstance(type);
+
+                foreach (var prop in source.properties)
+                {
+                    var property = type.GetProperty(prop.Key);
+                    if (property != null)
+                    {
+                        try
+                        {
+                            var convertedValue = System.Convert.ChangeType(prop.Value, property.PropertyType);
+                            property.SetValue(instance, convertedValue);
+                        }
+                        catch { }
+                    }
+                }
+                return instance;
+            }
+        }
+        catch
+        {
+            Debug.LogWarning($"Failed to reconstruct source object of tpye {source.objectType}");
+        }
+        return null;
     }
 }

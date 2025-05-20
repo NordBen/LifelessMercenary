@@ -2,48 +2,144 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IAttributeValueStrategy
+public interface IAttributeMagnitudeStrategy
 {
-    float CalculateValue(GameplayAttribute attribute, GameplayEffectApplication modification);
+    float CalculateMagnitude(GameplayAttribute attribute, GameplayEffectApplication modification);
 }
 
 [Serializable]
-public class ConstantValueStrategy : IAttributeValueStrategy
+public class ConstantValueStrategy : IAttributeMagnitudeStrategy
 {
     public float value;
     
-    public float CalculateValue(GameplayAttribute attribute, GameplayEffectApplication modification)
+    public float CalculateMagnitude(GameplayAttribute attribute, GameplayEffectApplication modification)
     {
         return value;
     }
 }
 
 [Serializable]
-public class CurveValueStrategy : IAttributeValueStrategy
+public class CurveValueStrategy : IAttributeMagnitudeStrategy
 {
     public AnimationCurve curve;
     public float timeScale = 1f;
     
-    public float CalculateValue(GameplayAttribute attribute, GameplayEffectApplication modification)
+    public float CalculateMagnitude(GameplayAttribute attribute, GameplayEffectApplication modification)
     {
         return curve.Evaluate(Time.time * timeScale);
     }
 }
 
 [Serializable]
-public class AttributeBasedValueStrategy : IAttributeValueStrategy
+public class AttributeBasedValueStrategy : IAttributeMagnitudeStrategy
 {
     public GameplayAttribute sourceAttribute;
     public float _coefficient;
     
-    public float CalculateValue(GameplayAttribute attribute, GameplayEffectApplication modification)
+    public float CalculateMagnitude(GameplayAttribute attribute, GameplayEffectApplication modification)
     {
-        return sourceAttribute.CurrentValue() * _coefficient;
+        return sourceAttribute.CurrentValue * _coefficient;
+    }
+}
+
+public class GameplayEffectContext
+{
+    GameObject Source { get; set; }
+    GameObject Target { get; set; }
+    public GameplayAttributeComponent SourceAttributeComponent { get; set; }
+    public GameplayAttributeComponent TargetAttributeComponent { get; set; }
+    public GameplayEffect Effect { get; set; }
+    
+    public Dictionary<string, object> ContextTags = new();
+    public GameplayEffectContext(GameObject source, GameObject target, GameplayEffect effect)
+    {
+        Source = source;
+        Target = target;
+        Effect = effect;
+        
+        if (source != null)
+            SourceAttributeComponent = source.GetComponent<GameplayAttributeComponent>();
+        
+        if (target != null) 
+            TargetAttributeComponent = target.GetComponent<GameplayAttributeComponent>();
+    }
+    
+    public T GetContextData<T>(string key) where T : class
+    {
+        if (ContextTags.TryGetValue(key, out var value) && value is T typedValue)
+            return typedValue;
+        return null;
+    }
+    
+    public void SetContextData(string key, object value)
+    {
+        ContextTags[key] = value;
+    }
+}
+
+public interface IModifierMagnitudeStrategy
+{
+    float ModifierMagnitude(GameplayEffectContext effectContext);
+}
+
+[Serializable]
+public class ModifierMagnitudeStrategy : IAttributeMagnitudeStrategy
+{
+    public IModifierMagnitudeStrategy modMagCalculation;
+    private GameplayEffectContext context;
+    
+    [SerializeField] private bool captureLevelForSource = false;
+    [SerializeField] private bool captureLevelForTarget = false;
+    
+    public virtual float CalculateMagnitude(GameplayAttribute attribute, GameplayEffectApplication modification)
+    {
+        return modMagCalculation.ModifierMagnitude(context);
+    }
+
+    protected float GetCapturedAttributeValue(GameplayEffectContext context, string attributeName,
+        bool fromSource = true)
+    {
+        var component = fromSource ? context.SourceAttributeComponent : context.TargetAttributeComponent;
+        if (component == null) return 0f;
+        
+        var attribute = component.GetAttribute(attributeName);
+        return attribute?.CurrentValue ?? 0f;
+    }
+    
+    public void SetContext(GameplayEffectContext context)
+    {
+        this.context = context;
+    }
+}
+
+[Serializable]
+public class DamageCalculationStrategy : IModifierMagnitudeStrategy
+{
+    public float ModifierMagnitude(GameplayEffectContext effectContext)
+    {
+        float baseDamage = 0f;
+        /*
+        var combatManager = effectContext.Source.GetComponent<CombatManager>();
+        if (combatManager != null && combatManager.weapon != null)
+        {
+            baseDamage = combatManager.weapon.weaponData.damage;
+        }
+
+        var sourceAttributes = effectContext.SourceAttributeComponent;
+        if (sourceAttributes != null)
+        {
+            var strength = sourceAttributes.GetAttribute("Strength");
+            if (strength != null)
+            {
+                baseDamage += strength.CurrentValue;
+            }
+        }*/
+        return baseDamage;
     }
 }
 /*
 [Serializable]
-public abstract class GameplayEffectModifierMagnitudeCalculation : IAttributeValueStrategy
+public abstract class GameplayEffectModifierMagnitudeCalculation : IAttributeMagnitudeStrategy
 {
     protected List<FAttributeCaptureDef> CapturedAttributes = new();
     protected Dictionary<GameplayAttribute, float> CapturedValues = new();

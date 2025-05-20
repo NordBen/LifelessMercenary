@@ -20,6 +20,7 @@ public class TemoIntAttributeText : MonoBehaviour
         {
             GAC = GameManager.instance.player.GetComponent<GameplayAttributeComponent>();
         }
+        UpdateStatText();
     }
 
     private void UpdateStat(int updAmount)
@@ -28,10 +29,11 @@ public class TemoIntAttributeText : MonoBehaviour
         {
             var UpgradeEffect = GameplayEffectFactory.CreateAttributeUpgradeEffect(attributeToUpgrade, updAmount);
             GAC.ApplyEffect(UpgradeEffect, true);
-            this.statText.text = GAC.GetRuntimeAttribute(attributeToUpgrade).CurrentValue().ToString();
+            UpdateStatText();
             //GAC.UpdateDerivedAttributes();
             
                 GAC.UpdateDerivedAttributes();
+                GAC.ApplyEffect(GAC._fullHealEffect, false);
         }/*
         if (TempPlayerAttributes.instance.HasPointsToUse())
         {
@@ -40,5 +42,10 @@ public class TemoIntAttributeText : MonoBehaviour
             TempPlayerAttributes.instance.UpdateStats();
             this.statText.text = TempPlayerAttributes.instance.GetIntAttribute(attribute).ToString();
         }*/
+    }
+
+    private void UpdateStatText()
+    {
+        this.statText.text = GAC.GetRuntimeAttribute(attributeToUpgrade).CurrentValue.ToString();
     }
 }
