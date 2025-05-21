@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DerivedPlayerEffects
   m_EditorClassIdentifier: 
   effectName: DerivedAttributes
-  durationType: 2
+  durationType: 0
   duration: 5
   period: 0
   modifierType: 0
@@ -23,55 +23,52 @@ MonoBehaviour:
   - targetAttribute: {fileID: 11400000, guid: cf6ab014a89a66d46b3d1100091d9d5f, type: 2}
     modifierOperation: 4
     valueStrategy:
-      rid: 211682578938200256
+      rid: 211682867137216870
   - targetAttribute: {fileID: 11400000, guid: 0ea57bbee7bbc69469192d5c00e573e7, type: 2}
     modifierOperation: 4
     valueStrategy:
-      rid: 211682578938200255
+      rid: 211682867137216871
   - targetAttribute: {fileID: 11400000, guid: a891a82836a7d024c870af6022fc10af, type: 2}
     modifierOperation: 4
     valueStrategy:
-      rid: 211682578938200254
+      rid: 211682867137216872
   - targetAttribute: {fileID: 11400000, guid: b55f064bd06e63541b63ab9cb4824e2f, type: 2}
     modifierOperation: 4
     valueStrategy:
-      rid: 211682578938200253
+      rid: 211682867137216874
   - targetAttribute: {fileID: 11400000, guid: 8c3554f7c0d43f14bb0b9b587b2e60ff, type: 2}
     modifierOperation: 4
     valueStrategy:
-      rid: 211682578938200252
+      rid: 211682867137216873
   executions: []
   stackingType: 0
-  _disposed: 1
-  _elapsedTime: 0
-  _periodElapsedTime: 0
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 211682578938200252
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        sourceAttribute: {fileID: 11400000, guid: 68b2a7680973bb045a130b2ee2bf612f, type: 2}
-        _coefficient: 10
-    - rid: 211682578938200253
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        sourceAttribute: {fileID: 11400000, guid: 68b2a7680973bb045a130b2ee2bf612f, type: 2}
-        _coefficient: 0.5
-    - rid: 211682578938200254
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        sourceAttribute: {fileID: 11400000, guid: 19d4e867137edc84fa91dd4da850901a, type: 2}
-        _coefficient: 2
-    - rid: 211682578938200255
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        sourceAttribute: {fileID: 11400000, guid: 644ff5280a0d50f40ae6aebe8bc52a87, type: 2}
-        _coefficient: 35
-    - rid: 211682578938200256
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
+    - rid: 211682867137216870
+      type: {class: AttributeBasedValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
       data:
         sourceAttribute: {fileID: 11400000, guid: 644ff5280a0d50f40ae6aebe8bc52a87, type: 2}
         _coefficient: 20
+    - rid: 211682867137216871
+      type: {class: AttributeBasedValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
+      data:
+        sourceAttribute: {fileID: 11400000, guid: 644ff5280a0d50f40ae6aebe8bc52a87, type: 2}
+        _coefficient: 35
+    - rid: 211682867137216872
+      type: {class: AttributeBasedValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
+      data:
+        sourceAttribute: {fileID: 11400000, guid: 19d4e867137edc84fa91dd4da850901a, type: 2}
+        _coefficient: 2
+    - rid: 211682867137216873
+      type: {class: AttributeBasedValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
+      data:
+        sourceAttribute: {fileID: 11400000, guid: 68b2a7680973bb045a130b2ee2bf612f, type: 2}
+        _coefficient: 100
+    - rid: 211682867137216874
+      type: {class: AttributeBasedValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
+      data:
+        sourceAttribute: {fileID: 11400000, guid: 68b2a7680973bb045a130b2ee2bf612f, type: 2}
+        _coefficient: 1.5

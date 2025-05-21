@@ -22,11 +22,7 @@ MonoBehaviour:
   quantity: 1
   maxQuantity: 1
   sellValue: 67
-  equipmentEffect:
-  - targetAttribute: {fileID: 11400000, guid: 0ea57bbee7bbc69469192d5c00e573e7, type: 2}
-    modifierOperation: 0
-    valueStrategy:
-      rid: 211682837813526691
+  equipmentEffect: []
   damage: 5
   attackSpeed: 1.5
   lightAttackAnimations:
@@ -44,8 +40,4 @@ MonoBehaviour:
   weaponType: 0
   references:
     version: 2
-    RefIds:
-    - rid: 211682837813526691
-      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        value: 50
+    RefIds: []

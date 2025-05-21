@@ -23,42 +23,40 @@ MonoBehaviour:
   - targetAttribute: {fileID: 11400000, guid: 644ff5280a0d50f40ae6aebe8bc52a87, type: 2}
     modifierOperation: 0
     valueStrategy:
-      rid: 211682679012720743
+      rid: 211682867137216864
   - targetAttribute: {fileID: 11400000, guid: 19d4e867137edc84fa91dd4da850901a, type: 2}
     modifierOperation: 0
     valueStrategy:
-      rid: 211682679012720742
+      rid: 211682867137216865
   - targetAttribute: {fileID: 11400000, guid: 68b2a7680973bb045a130b2ee2bf612f, type: 2}
     modifierOperation: 0
     valueStrategy:
-      rid: 211682679012720741
+      rid: 211682867137216866
   - targetAttribute: {fileID: 11400000, guid: 7e94e554a8e9d8342af3756c55c776e0, type: 2}
     modifierOperation: 0
     valueStrategy:
-      rid: 211682679012720740
+      rid: 211682867137216867
   executions: []
   stackingType: 0
-  _disposed: 0
   _elapsedTime: 0
-  _periodElapsedTime: 0
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 211682679012720740
-      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        value: 10
-    - rid: 211682679012720741
-      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        value: 3
-    - rid: 211682679012720742
-      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        value: 5
-    - rid: 211682679012720743
-      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+    - rid: 211682867137216864
+      type: {class: ConstantValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
       data:
         value: 2
+    - rid: 211682867137216865
+      type: {class: ConstantValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
+      data:
+        value: 5
+    - rid: 211682867137216866
+      type: {class: ConstantValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
+      data:
+        value: 6
+    - rid: 211682867137216867
+      type: {class: ConstantValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
+      data:
+        value: 10

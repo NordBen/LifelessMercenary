@@ -1790,7 +1790,9 @@ MonoBehaviour:
   hitFX: {fileID: 0}
   _primaryAttacks: []
   _optionalAttacks: []
-  testAttacks: []
+  _LightAttacks: []
+  _HeavyAttacks: []
+  attributeComp: {fileID: 0}
   comboIndex: 0
   isAttacking: 0
   comboTimer: 0
@@ -14155,6 +14157,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d6e752e297697b42b8fbef7300e54c8, type: 2}
   - {fileID: 11400000, guid: 0ea57bbee7bbc69469192d5c00e573e7, type: 2}
   _derivedAttributeEffect: {fileID: 0}
+  _fullHealEffect: {fileID: 0}
   _activeEffects: []
 --- !u!114 &766433893
 MonoBehaviour:
@@ -14185,7 +14188,9 @@ MonoBehaviour:
   hitFX: {fileID: 0}
   _primaryAttacks: []
   _optionalAttacks: []
-  testAttacks: []
+  _LightAttacks: []
+  _HeavyAttacks: []
+  attributeComp: {fileID: 0}
   comboIndex: 0
   isAttacking: 0
   comboTimer: 0
@@ -28628,6 +28633,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d6e752e297697b42b8fbef7300e54c8, type: 2}
   - {fileID: 11400000, guid: 0ea57bbee7bbc69469192d5c00e573e7, type: 2}
   _derivedAttributeEffect: {fileID: 0}
+  _fullHealEffect: {fileID: 0}
   _activeEffects: []
 --- !u!114 &1314631819
 MonoBehaviour:
@@ -28658,7 +28664,9 @@ MonoBehaviour:
   hitFX: {fileID: 0}
   _primaryAttacks: []
   _optionalAttacks: []
-  testAttacks: []
+  _LightAttacks: []
+  _HeavyAttacks: []
+  attributeComp: {fileID: 0}
   comboIndex: 0
   isAttacking: 0
   comboTimer: 0
@@ -29711,7 +29719,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 3fe7824ada6bbd448804ca7be1c8faeb, type: 2}
+  m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
 --- !u!154 &1396976654
 TerrainCollider:
@@ -45981,7 +45989,9 @@ MonoBehaviour:
   hitFX: {fileID: 0}
   _primaryAttacks: []
   _optionalAttacks: []
-  testAttacks: []
+  _LightAttacks: []
+  _HeavyAttacks: []
+  attributeComp: {fileID: 0}
   comboIndex: 0
   isAttacking: 0
   comboTimer: 0

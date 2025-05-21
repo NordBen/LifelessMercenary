@@ -24,6 +24,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 211682837813526827
       type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
       data:

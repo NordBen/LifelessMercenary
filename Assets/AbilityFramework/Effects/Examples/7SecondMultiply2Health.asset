@@ -17,25 +17,22 @@ MonoBehaviour:
   duration: 7.5
   period: 0
   modifierType: 0
-  targetAttribute: {fileID: 0}
   valueStrategy:
     rid: -2
   applications:
   - targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
     modifierOperation: 1
     valueStrategy:
-      rid: 211682577137533257
+      rid: 211682867137216862
   executions: []
   stackingType: 0
-  _disposed: 0
   _elapsedTime: 0
-  _periodElapsedTime: 0
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 211682577137533257
-      type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
+    - rid: 211682867137216862
+      type: {class: ConstantValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
       data:
         value: 2

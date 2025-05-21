@@ -68,6 +68,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 211682837813526813
       type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
       data:

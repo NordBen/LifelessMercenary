@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public class ApplyEffectActor : MonoBehaviour
+namespace LM.AbilitySystem
 {
-    [SerializeField] private GameplayEffect effect;
-    
-    private void OnTriggerEnter(Collider other)
+    public class ApplyEffectActor : MonoBehaviour
     {
-        var attributeComponent = other.GetComponent<GameplayAttributeComponent>();
-        if (attributeComponent != null)
+        [SerializeField] private GameplayEffect effect;
+
+        private void OnTriggerEnter(Collider other)
         {
-            attributeComponent.ApplyEffect(effect);
-            Destroy(this.gameObject);
+            var attributeComponent = other.GetComponent<GameplayAttributeComponent>();
+            if (attributeComponent != null)
+            {
+                attributeComponent.ApplyEffect(effect);
+                Destroy(this.gameObject);
+            }
         }
     }
 }

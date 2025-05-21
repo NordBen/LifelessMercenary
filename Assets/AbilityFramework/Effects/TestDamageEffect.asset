@@ -10,23 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc8be3cf9d7df14e844646ed91ef3f8, type: 3}
-  m_Name: Test
+  m_Name: TestDamageEffect
   m_EditorClassIdentifier: 
-  effectName: 
+  effectName: DamageTest
   durationType: 0
   duration: 0
   period: 0
   modifierType: 0
   valueStrategy:
     rid: -2
-  applications: []
+  applications:
+  - targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
+    modifierOperation: 0
+    valueStrategy:
+      rid: 211682867137216879
   executions: []
   stackingType: 0
-  _disposed: 0
   _elapsedTime: 0
-  _periodElapsedTime: 0
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 211682867137216879
+      type: {class: ConstantValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
+      data:
+        value: -10

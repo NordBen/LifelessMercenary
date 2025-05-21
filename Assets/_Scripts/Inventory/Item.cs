@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LM.AbilitySystem;
 using UnityEngine;
 
 [System.Serializable]
@@ -40,7 +41,7 @@ public abstract class Item : ScriptableObject, IInteractable
         {
             effectApplications.Add(effectData.CloneApplication());
         }
-        var effect = GameplayEffectFactory.CreateEffect(
+        var effect = EffectFactory.CreateEffect(
             itemName + "Effect",
             EEffectDurationType.Infinite,
             0f,

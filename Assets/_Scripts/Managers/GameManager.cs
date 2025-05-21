@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using LM;
+using LM.AbilitySystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -159,7 +160,7 @@ public class GameManager : MonoBehaviour
         List<GameplayEffectApplication> applications = new List<GameplayEffectApplication>();
         applications.Add(healthApplication);
         applications.Add(StaminaApplication);
-        GameplayEffect fixHealthNStaminaEffect = GameplayEffectFactory.CreateEffect(
+        GameplayEffect fixHealthNStaminaEffect = EffectFactory.CreateEffect(
             "FullHeal",
             EEffectDurationType.Duration,
             1,

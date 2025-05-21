@@ -1,3 +1,4 @@
+using LM.AbilitySystem;
 using UnityEngine;
 
 public class TempTwoValues : TempFloatAttributeText

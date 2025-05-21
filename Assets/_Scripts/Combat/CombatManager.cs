@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using LM.AbilitySystem;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour, ICombat
@@ -431,7 +432,7 @@ public class CombatManager : MonoBehaviour, ICombat
             });
         List<GameplayEffectApplication> applications = new List<GameplayEffectApplication>();
         applications.Add(damageApplication);
-        var damageEffect = GameplayEffectFactory.CreateEffect(
+        var damageEffect = EffectFactory.CreateEffect(
         "Damage",
         EEffectDurationType.Instant,
         0f,

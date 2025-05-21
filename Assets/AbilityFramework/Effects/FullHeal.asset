@@ -23,28 +23,26 @@ MonoBehaviour:
   - targetAttribute: {fileID: 11400000, guid: 87c26b693693bbc459adf58e269f201a, type: 2}
     modifierOperation: 4
     valueStrategy:
-      rid: 211682837813526766
+      rid: 211682867137216875
   - targetAttribute: {fileID: 11400000, guid: 6d6e752e297697b42b8fbef7300e54c8, type: 2}
     modifierOperation: 4
     valueStrategy:
-      rid: 211682837813526767
+      rid: 211682867137216876
   executions: []
   stackingType: 0
-  _disposed: 1
   _elapsedTime: 0
-  _periodElapsedTime: 0
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 211682837813526766
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
+    - rid: 211682867137216875
+      type: {class: AttributeBasedValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
       data:
         sourceAttribute: {fileID: 11400000, guid: cf6ab014a89a66d46b3d1100091d9d5f, type: 2}
         _coefficient: 1
-    - rid: 211682837813526767
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
+    - rid: 211682867137216876
+      type: {class: AttributeBasedValueStrategy, ns: LM.AbilitySystem, asm: Assembly-CSharp}
       data:
         sourceAttribute: {fileID: 11400000, guid: 0ea57bbee7bbc69469192d5c00e573e7, type: 2}
         _coefficient: 1

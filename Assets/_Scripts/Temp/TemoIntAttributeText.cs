@@ -1,3 +1,4 @@
+using LM.AbilitySystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +28,7 @@ public class TemoIntAttributeText : MonoBehaviour
     {
         if (GAC != null)
         {
-            var UpgradeEffect = GameplayEffectFactory.CreateAttributeUpgradeEffect(attributeToUpgrade, updAmount);
+            var UpgradeEffect = EffectFactory.CreateAttributeUpgradeEffect(attributeToUpgrade, updAmount);
             GAC.ApplyEffect(UpgradeEffect, true);
             UpdateStatText();
             //GAC.UpdateDerivedAttributes();

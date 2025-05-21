@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using LM.AbilitySystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -191,7 +192,7 @@ public class UIAttributeValueProgressBar : MonoBehaviour
         float oldValue = this._progressBar.value;
         while (Mathf.Abs(this._progressBar.value - targetValue) > 0.01f)
         {
-            this._progressBar.value = Mathf.MoveTowards(this._progressBar.value, targetValue, Time.deltaTime * 0.5f);
+            this._progressBar.value = Mathf.MoveTowards(this._progressBar.value, targetValue, Time.deltaTime * 0.05f);
             yield return null;
         }
         this._progressBar.value = targetValue;
