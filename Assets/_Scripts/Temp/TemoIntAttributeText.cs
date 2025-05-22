@@ -1,3 +1,4 @@
+using LM;
 using LM.AbilitySystem;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,6 @@ public class TemoIntAttributeText : MonoBehaviour
 {
     public Button incButton, decButton;
     public TextMeshProUGUI statText;
-    public TempPlayerStats attribute;
     public GameplayAttribute attributeToUpgrade;
 
     private GameplayAttributeComponent GAC;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using LM;
 using StarterAssets;
 using UnityEngine.InputSystem;
 
@@ -327,7 +328,7 @@ public class PlayerControllerV2 : MonoBehaviour, ICombat
         if (this.transform.root.name == "Player")
         {
             GameManager.instance.KillPlayer();
-            TempPlayerAttributes.instance.LevelUp(3);
+            // level up
         }
     }
 

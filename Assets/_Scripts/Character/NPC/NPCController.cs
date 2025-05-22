@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPCController : BaseCharacter
+public class NPCController : BaseCharacterOld
 {
     private static readonly int IsIdle = Animator.StringToHash("isIdle");
     private static readonly int IsWalking = Animator.StringToHash("isWalking");
@@ -56,8 +56,8 @@ public class NPCController : BaseCharacter
         SetupNPC();
         base.Start(); // Run the base logic from BaseCharacter
         // add the enemy to the gamemanagers list of enemies if they are not a commander
-        if (this._npcType != ENPCType.Commander)
-            GameManager.instance.AddEnemy(this);
+        /*if (this._npcType != ENPCType.Commander)
+            GameManager.instance.AddEnemy(this);*/
     }
 
     private void Update()
@@ -160,10 +160,10 @@ public class NPCController : BaseCharacter
 
         // calls for a random reinforcement if the NPC is a commander
         if (_npcType == ENPCType.Commander)
-        {
+        {/*
             NPCController reinforcement = GameManager.instance.GetRandomEnemy();
             reinforcement.chaseDistance = 999;
-            reinforcement.ChangeAnimState(EState.Chase);
+            reinforcement.ChangeAnimState(EState.Chase);*/
         }
     }
 
@@ -171,7 +171,7 @@ public class NPCController : BaseCharacter
     {
         base.Die();
         ChangeAnimState(EState.Dead);
-        GameManager.instance.RemoveEnemy(this);
+        //GameManager.instance.RemoveEnemy(this);
         Invoke("Destroy()", 8f);
     }
 

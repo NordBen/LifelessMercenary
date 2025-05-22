@@ -1,34 +1,37 @@
 using UnityEngine;
 
-public class Trap : InteractableActor
+namespace LM
 {
-    [SerializeField] private Mesh trapMesh;
-    [SerializeField] private bool useCutscene = true;
-    [SerializeField] private bool useRagdoll = false;
-    [SerializeField] private bool win = false;
-
-    void Start()
+    public class Trap : InteractableActor
     {
-        this.SetMesh(trapMesh);
-    }
+        [SerializeField] private Mesh trapMesh;
+        [SerializeField] private bool useCutscene = true;
+        [SerializeField] private bool useRagdoll = false;
+        [SerializeField] private bool win = false;
 
-    protected override void HandleInteract()
-    {
-        Debug.LogWarning($"interact was called from this object: {this.gameObject}");
-        if (win)
+        void Start()
         {
-            GameManager.instance.SurviveDay(1);
-            GameObject playerObj = GameManager.instance.player.gameObject;
-            playerObj.SetActive(false);
-            playerObj.transform.position = GameObject.Find("DayTwo").transform.position;
-            playerObj.SetActive(true);
-            GameManager.instance.player.Heal();
-            return;
+            this.SetMesh(trapMesh);
         }
 
-        if (useCutscene)
-            GameManager.instance.KillPlayer();
-        else if (useRagdoll && !useCutscene)
-            GameManager.instance.KillPlayerRagdoll();
+        protected override void HandleInteract()
+        {
+            Debug.LogWarning($"interact was called from this object: {this.gameObject}");
+            if (win)
+            {
+                GameManager.instance.SurviveDay(1);
+                GameObject playerObj = GameManager.instance.player.gameObject;
+                playerObj.SetActive(false);
+                playerObj.transform.position = GameObject.Find("DayTwo").transform.position;
+                playerObj.SetActive(true);
+                // fully heal again
+                return;
+            }
+
+            if (useCutscene)
+                GameManager.instance.KillPlayer();
+            else if (useRagdoll && !useCutscene)
+                GameManager.instance.KillPlayerRagdoll();
+        }
     }
 }

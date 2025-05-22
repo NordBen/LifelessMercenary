@@ -3,7 +3,7 @@ using UnityEngine.Audio;
 
 namespace LM
 {
-    public class AudioManager : MonoBehaviour
+    public class AudioManager : MonoBehaviour, IDataPersistance
     {
         public static string MusicGroup = "Music";
         public static string SfxGroup = "SFX";
@@ -174,5 +174,14 @@ namespace LM
             //SetVolume(MusicGroup + k_Parameter, gameData.MusicVolume / 100f);
            // SetVolume(SfxGroup + k_Parameter, gameData.SfxVolume / 100f);
         }*/
+        public void SaveData(SaveGameData data)
+        {
+            
+        }
+
+        public void LoadData(SaveGameData data)
+        {
+            
+        }
     }
 }

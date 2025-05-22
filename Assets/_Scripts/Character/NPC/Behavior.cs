@@ -1,3 +1,4 @@
+using LM.Inventory;
 using UnityEngine;
 using UnityEngine.AI;
 

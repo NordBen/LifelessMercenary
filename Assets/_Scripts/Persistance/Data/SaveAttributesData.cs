@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LM.AbilitySystem;
+using LM.Inventory;
 
 [System.Serializable]
 public class SaveAttributesData

@@ -29,6 +29,7 @@ namespace Unity.Behavior
         [SerializeReference] public BlackboardVariable<GameObject> Target;
         [SerializeReference] public BlackboardVariable<float> Speed = new BlackboardVariable<float>(1.0f);
         [SerializeReference] public BlackboardVariable<float> AnimationSpeed = new BlackboardVariable<float>(1.0f);
+        [SerializeReference] public BlackboardVariable<float> RotationSpeed = new BlackboardVariable<float>(5.0f);
         [SerializeReference] public BlackboardVariable<float> DistanceThreshold = new BlackboardVariable<float>(0.2f);
         [SerializeReference] public BlackboardVariable<string> AnimatorSpeedParam = new BlackboardVariable<string>("MotionSpeed");
         [SerializeReference] public BlackboardVariable<float> SlowDownDistance = new BlackboardVariable<float>(1.0f);
@@ -208,7 +209,7 @@ namespace Unity.Behavior
                 Agent.Value.transform.rotation = Quaternion.Slerp(
                     Agent.Value.transform.rotation,
                     targetRotation,
-                    Time.deltaTime * 5f); // Adjust the rotation speed as needed
+                    Time.deltaTime * RotationSpeed);
             }
         }
 

@@ -1,27 +1,30 @@
 using UnityEngine;
 
-public class InteractableEquipment : InteractableActor
+namespace LM.Inventory
 {
-    [SerializeField] private Item item;
-
-    private void Start()
+    public class InteractableEquipment : InteractableActor
     {
-        this.SetMesh(item.mesh, item.material);
-    }
+        [SerializeField] private Item item;
 
-    protected override void HandleInteract()
-    {
-        item.Interact();
-
-        if (item is IEquipable equipableItem)
+        private void Start()
         {
-            var slotType = equipableItem.GetSlot();
-            
-            var equipmentManager = GameManager.instance.player.GetEquipmentManager();
+            this.SetMesh(item.mesh, item.material);
+        }
 
-            if (equipmentManager.GetEquippedItem(slotType) == null)
+        protected override void HandleInteract()
+        {
+            item.Interact();
+
+            if (item is IEquipable equipableItem)
             {
-                equipmentManager.TryEquip(equipableItem);
+                var slotType = equipableItem.GetSlot();
+
+                var equipmentManager = GameManager.instance.player.GetEquipmentManager();
+
+                if (equipmentManager.GetEquippedItem(slotType) == null)
+                {
+                    equipmentManager.TryEquip(equipableItem);
+                }
             }
         }
     }

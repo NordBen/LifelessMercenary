@@ -1,4 +1,5 @@
 using System;
+using LM;
 using UnityEngine;
 
 public class LevelUpSystem : MonoBehaviour

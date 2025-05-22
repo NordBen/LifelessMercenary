@@ -16,12 +16,12 @@ public class TestingUpgradePart : MonoBehaviour
 
     private void Start()
     {
-        pointsText.text = TempPlayerAttributes.instance.pointsToUse.ToString();
+        //pointsText.text = TempPlayerAttributes.instance.pointsToUse.ToString();
     }
 
     public void DecreasePointsToUse(int decAmount)
     {
-        TempPlayerAttributes.instance.pointsToUse -= decAmount;
-        pointsText.text = TempPlayerAttributes.instance.pointsToUse.ToString();
+        //TempPlayerAttributes.instance.pointsToUse -= decAmount;
+        //pointsText.text = TempPlayerAttributes.instance.pointsToUse.ToString();
     }
 }

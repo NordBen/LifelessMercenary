@@ -1,9 +1,9 @@
+using LM;
 using LM.AbilitySystem;
 using UnityEngine;
 
 public class TempTwoValues : TempFloatAttributeText
 {
-    public TempPlayerStats otherAttribute;
     public GameplayAttribute otherAttributeToListen;
     protected override void UpdateStat()
     {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using LM.Inventory;
 using UnityEngine;
 
 public class ItemDatabase : MonoBehaviour

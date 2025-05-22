@@ -1,3 +1,4 @@
+using LM;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,6 @@ public class TempStartAgaion : MonoBehaviour
             GameManager.instance.ResetLoop();
         }
         elapsedTime += Time.deltaTime;
-        Debug.Log($"elapsed time: {elapsedTime}");
+        Debug.Log($"elapsed time: {Mathf.RoundToInt(elapsedTime)}");
     }
 }

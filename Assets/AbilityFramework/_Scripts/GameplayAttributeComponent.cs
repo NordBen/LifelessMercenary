@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using LM.Inventory;
 using UnityEngine;
 
 namespace LM.AbilitySystem
@@ -217,15 +218,7 @@ namespace LM.AbilitySystem
                     mod.targetAttribute = runtimeAttribute;
                     ModifyAttribute(runtimeAttribute, mod.ComputeValue(this), 
                         mod.modifierOperation, effect.durationType == EEffectDurationType.Instant, mod);
-                }/*
-                if (_attributes.TryGetValue(mod.targetAttribute.Name, out var runtimeAttribute))
-                {
-                    Debug.Log($"Found runtime attribute: {mod.targetAttribute.Name}");
-                    //mod.targetAttribute = runtimeAttribute;
-                    ModifyAttribute(
-                        runtimeAttribute, mod.ComputeValue(this), mod.modifierOperation,
-                        effect.durationType == EEffectDurationType.Instant, mod);
-                }*/
+                }
             }
         }
         

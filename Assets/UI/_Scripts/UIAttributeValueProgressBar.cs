@@ -171,12 +171,19 @@ public class UIAttributeValueProgressBar : MonoBehaviour
 
     private void UpdateVisuals(float value, float otherValue, float targetPercent)
     {
-        UpdateTextWithValue((int)value, (int)otherValue);
+        StartCoroutine(UpdateTextWithValueSlowed((int)value, (int)otherValue));//UpdateTextWithValue((int)value, (int)otherValue);
         StartCoroutine(SmoothTransitionSlider(targetPercent));
     }
 
     private void UpdateTextWithValue(float value, float otherValue)
     {
+        _labelString = $"{value} / {otherValue}";
+        _valueLabel.text = this._labelString;
+    }
+    
+    private IEnumerator UpdateTextWithValueSlowed(float value, float otherValue)
+    {
+        yield return null;
         _labelString = $"{value} / {otherValue}";
         _valueLabel.text = this._labelString;
     }
@@ -189,6 +196,7 @@ public class UIAttributeValueProgressBar : MonoBehaviour
 
     private IEnumerator SmoothTransitionSlider(float targetValue)
     {
+        yield return null;
         float oldValue = this._progressBar.value;
         while (Mathf.Abs(this._progressBar.value - targetValue) > 0.01f)
         {

@@ -40,7 +40,7 @@ namespace LM
 
         void Update() 
         {
-            RotateCamera(mouseLook.x, -mouseLook.y);
+            RotateCamera(mouseLook.x, mouseLook.y);
         }
 
         void RotateCamera(float horizontalInput, float verticalInput)

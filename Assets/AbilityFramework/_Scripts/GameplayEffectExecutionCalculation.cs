@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LM.Inventory;
 using UnityEngine;
 
 namespace LM.AbilitySystem

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LM.Inventory;
 using UnityEngine;
 
 [System.Serializable]
@@ -8,6 +9,14 @@ public class SaveGameData
     public int deathCount;
     public Vector3 playerPosition;
     public SerializableSaveDictionary<string, bool> coinsCollected;
+    public int daysSurvived;
+    public int deathEnergy;
+
+    public float volume;
+    public float musicVolume;
+    public float sfxVolume;
+    public float ambientVolume;
+    public Vector2 mouseSensitivity;
 
     public SerializableSaveDictionary<string, SerializableSaveEffect> savedEffects;
     public SerializableSaveDictionary<string, SerializableSaveAttribue> savedAttributes;//testCachedAttribute;

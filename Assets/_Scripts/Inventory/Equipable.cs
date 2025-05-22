@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class Equipable : Item
+namespace LM.Inventory
 {
-
-   
+    public class Equipable : Item {}
 }

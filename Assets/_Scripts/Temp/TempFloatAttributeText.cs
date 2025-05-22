@@ -1,3 +1,4 @@
+using LM;
 using LM.AbilitySystem;
 using TMPro;
 using UnityEngine;
@@ -6,7 +7,6 @@ using UnityEngine.UI;
 public class TempFloatAttributeText : MonoBehaviour
 {
     public TextMeshProUGUI statText;
-    public TempPlayerStats attribute;
     public GameplayAttribute attributeToListen;
 
     void Start()

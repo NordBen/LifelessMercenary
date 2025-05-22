@@ -1,8 +1,6 @@
-using System.Xml.Serialization;
-using Unity.Mathematics;
-using UnityEditor.Search;
 using UnityEngine;
 using System.Collections;
+using LM;
 using StarterAssets;
 using UnityEngine.InputSystem;
 
@@ -31,7 +29,6 @@ public class PlayerController : MonoBehaviour, ICombat
     public InteractableActor currentInteractable;
     bool isDead;
     int level = 1;
-    TempPlayerAttributes tempPlayerAttributes;
 
     public AudioClip LandingAudioClip;
     public AudioClip[] FootstepAudioClips;
@@ -126,7 +123,6 @@ public class PlayerController : MonoBehaviour, ICombat
         AssignAnimationIDs();
 
         characterController = GetComponent<CharacterController>();
-        tempPlayerAttributes = GameObject.Find("PlayerStats").GetComponent<TempPlayerAttributes>();
 
         _fallTimeoutDelta = FallTimeout;
     }
@@ -211,7 +207,8 @@ public class PlayerController : MonoBehaviour, ICombat
     #endregion
 
     #region Combat
-    public int GetLevel() => tempPlayerAttributes.level;
+
+    public int GetLevel() => 1;//tempPlayerAttributes.level;
 
     public void TakeDamage(float incomingDamage, float knockback, Vector3 knockbackDirection)
     {
@@ -227,10 +224,7 @@ public class PlayerController : MonoBehaviour, ICombat
             incomingDamage *= 0.1f;
         }
 
-        tempPlayerAttributes.ModifyHealth(-incomingDamage);
-        Debug.Log("Player takes damage" + tempPlayerAttributes.GetFloatAttribute(TempPlayerStats.health));
-
-        if (tempPlayerAttributes.GetFloatAttribute(TempPlayerStats.health) == 0)
+        //if (health) == 0)
             Die();
     }
 
@@ -241,7 +235,7 @@ public class PlayerController : MonoBehaviour, ICombat
         if (this.transform.root.name == "Player")
         {
             GameManager.instance.KillPlayer();
-            TempPlayerAttributes.instance.LevelUp(3);
+            // level up
         }
     }
 
