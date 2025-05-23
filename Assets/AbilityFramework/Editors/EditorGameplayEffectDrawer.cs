@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace LM.AbilitySystem
@@ -88,8 +89,8 @@ namespace LM.AbilitySystem
 
                 EditorGUI.indentLevel--;
             }
-
             serializedObject.ApplyModifiedProperties();
         }
     }
 }
+#endif

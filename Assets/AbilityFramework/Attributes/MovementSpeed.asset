@@ -16,18 +16,7 @@ MonoBehaviour:
   _baseValue: 500
   _currentValue: 500
   _activeModifications: []
-  _activeEffectApplications:
-  - targetAttribute: {fileID: 11400000}
-    modifierOperation: 4
-    valueStrategy:
-      rid: 211682837813526826
+  _activeEffectApplications: []
   references:
     version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 211682837813526826
-      type: {class: AttributeBasedValueStrategy, ns: , asm: Assembly-CSharp}
-      data:
-        sourceAttribute: {fileID: 11400000, guid: 68b2a7680973bb045a130b2ee2bf612f, type: 2}
-        _coefficient: 10
+    RefIds: []

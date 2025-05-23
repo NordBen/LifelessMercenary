@@ -118,12 +118,14 @@ namespace LM
             }
 
             if (Input.GetKeyDown(KeyCode.X))
-                this.TestPerformParryCheck();
+                if (transform.tag == "Player")
+                    this.TestPerformParryCheck();
 
             if (Input.GetKey(KeyCode.X))
             {
                 //Debug.Log("Blocking");
-                PerformBlock();
+                if (transform.tag == "Player")
+                    PerformBlock();
             }
             else
             {
@@ -459,7 +461,12 @@ namespace LM
             PlaySound(hitSound);
 
             if (healthAttribute.CurrentValue <= 0)
-                Die();
+            {
+                if (transform.root.tag == "Player")
+                    Die();
+                else
+                    owner.Die();
+            }
         }
 
         public bool IsDead() => owner.IsDead();

@@ -53,9 +53,10 @@ public class UIAttributeValueProgressBar : MonoBehaviour
                 Debug.Log("Failed to find attribute: " + referenceOtherAttribute + "");
         }
         FetchComponents();
+        AttributeInit(referenceAttribute);
     }
     
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (owner != null && referenceAttribute != null)
         {
@@ -74,7 +75,12 @@ public class UIAttributeValueProgressBar : MonoBehaviour
         if (Application.isPlaying) return;
         SetStyle();
     }
-    
+
+    void AttributeInit(GameplayAttribute a)
+    {
+        UpdateVisuals(a.CurrentValue, a.CurrentValue, 1.0f);
+    }
+
     private void FetchComponents()
     {
         if (_progressBar == null)

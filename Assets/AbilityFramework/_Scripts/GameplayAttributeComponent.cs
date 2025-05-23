@@ -346,17 +346,25 @@ namespace LM.AbilitySystem
         public void LoadData(SaveGameData data)
         {
             if (transform.root.name != "Player") return;
-
+            /*
+            var ReInitEffect = EffectFactory.CreateEffect("ReInitSavedStats", EEffectDurationType.Instant, 0, null, 0, this, this);
+            var initModifiers = new List<GameplayEffectApplication>();
             if (data.savedAttributes.TryGetValue(gameObject.name, out var savedAttributes))
             {
                 foreach (var attributeToFind in savedAttributes.attributes)
                 {
                     if (_attributes.TryGetValue(attributeToFind.attributeName, out var attribute))
                     {
-                        attribute.SetValue(attributeToFind.baseValue, true);
+                        var strategy = new ConstantValueStrategy { value = attributeToFind.baseValue };
+                        var mod = new GameplayEffectApplication(attribute, EModifierOperationType.Override, strategy);
+                        initModifiers.Add(mod);
+                        Debug.LogError($"Loading data and applying a new effect for {attributeToFind.attributeName} with value {attributeToFind.baseValue}");
+                        //attribute.SetValue(attributeToFind.baseValue, true);
                     }
                 }
             }
+            ReInitEffect.applications = initModifiers;
+            ApplyEffect(ReInitEffect, true);*/
 
             if (data.savedEffects.TryGetValue(gameObject.name, out var savedEffects))
             {
@@ -364,6 +372,8 @@ namespace LM.AbilitySystem
                 {
                     RemoveEffect(activeEffect);
                 }
+
+                StartCoroutine(InitSavedAttributes(data.savedAttributes));
 
                 foreach (var savedEffect in savedEffects.effects)
                 {
@@ -434,6 +444,28 @@ namespace LM.AbilitySystem
                     }
                 }
             }
+        }
+
+        private IEnumerator InitSavedAttributes(SerializableSaveDictionary<string, SerializableSaveAttribue> savedData)
+        {
+            yield return null;
+            var ReInitEffect = EffectFactory.CreateEffect("ReInitSavedStats", EEffectDurationType.Instant, 0, null, 0, this, this);
+            var initModifiers = new List<GameplayEffectApplication>();
+            if (savedData.TryGetValue(gameObject.name, out var savedAttributes))
+            {
+                foreach (var attributeToFind in savedAttributes.attributes)
+                {
+                    if (_attributes.TryGetValue(attributeToFind.attributeName, out var attribute))
+                    {
+                        var strategy = new ConstantValueStrategy { value = attributeToFind.baseValue };
+                        var mod = new GameplayEffectApplication(attribute, EModifierOperationType.Override, strategy);
+                        initModifiers.Add(mod);
+                        Debug.LogError($"Loading data and applying a new effect for {attributeToFind.attributeName} with value {attributeToFind.baseValue}");
+                    }
+                }
+            }
+            ReInitEffect.applications = initModifiers;
+            ApplyEffect(ReInitEffect, true);
         }
 
         private object ReconstructSourceObject(SerializableObjectData source)

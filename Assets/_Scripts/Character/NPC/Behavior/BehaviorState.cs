@@ -1,7 +1,19 @@
 using Unity.Behavior;
 
-[BlackboardEnum]
-public enum State
+[BlackboardEnum, System.Serializable]
+public enum EnemyState
 {
-    Idle, Patrol, Chase, Attack, Flee
+    Idle,
+	Patrol,
+	Chase,
+	Attack,
+	Flee,
+	Skill,
+	Heal,
+	Summon,
+	Dead,
+	Confused,
+	AttackHeavy,
+	SpecialAttack,
+	Special
 }

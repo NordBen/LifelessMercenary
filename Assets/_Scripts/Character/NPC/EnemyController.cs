@@ -23,7 +23,7 @@ namespace LM.NPC
         public override void Die()
         {
             base.Die();
-            _animator.SetBool(IsDeadHash, true);
+            behavior.BlackboardReference.SetVariableValue("CurrentState", EnemyState.Dead);
             GameManager.instance.RemoveEnemy(this);
             Invoke("Destroy()", 8f);
         }

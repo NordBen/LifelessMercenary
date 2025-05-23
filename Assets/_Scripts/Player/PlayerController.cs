@@ -1,12 +1,21 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GridBrushBase;
+
+public enum ETestEnum { Idle, Jumping };
 
 namespace LM
 {
     [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
     public class PlayerController : MonoBehaviour
     {
+        private readonly int _animIDSpeed = Animator.StringToHash("Speed");
+        private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
+        private readonly int _animIDJump = Animator.StringToHash("Jump");
+        private readonly int _animIDFreeFall = Animator.StringToHash("FreeFall");
+        private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+
         // movement
         public float movementSpeed = 7f;
         public float airControlRate = 2f;
@@ -26,9 +35,31 @@ namespace LM
         
         private CountdownTimer jumpTimer;
         Vector3 momentum, savedVelocity, savedMovementVelocity;
+
+        ETestEnum jumpState;
         
         public event Action<Vector3> OnJump = delegate { };
         public event Action<Vector3> OnLand = delegate { };
+
+        [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
+        public float FallTimeout = 0.15f;
+        [Tooltip("Useful for rough ground")]
+        public float GroundedOffset = -0.14f;
+        [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+        public float GroundedRadius = 0.28f;
+
+        private float _fallTimeoutDelta;
+
+        private float _animationBlend;
+        private bool _hasAnimator;
+        private const float _threshold = 0.01f;
+
+        [Header("Rotation Settings")]
+        public float rotationSmoothTime = 0.12f;
+        public bool enableRotation = true;
+        private float rotationVelocity;
+        private Vector3 targetRotationDirection;
+        private bool hasRotationTarget = false;
 
         bool IsGrounded2() => IsGrounded();//stateMachine.CurrentState is GroundedState or SlidingState;
         public Vector3 GetVelocity() => savedVelocity;
@@ -61,15 +92,16 @@ namespace LM
         private bool isUsingExtendedSensorRange = true;
         
         private Camera mainCamera;
+        private Animator _animator;
         private Vector2 moveInput;
         private PlayerInput playerInput;
-
-        private bool IsJumping = false;
 
         private void Awake()
         {
             Setup();
             RecalculateColliderDimensions();
+            _hasAnimator = TryGetComponent(out _animator);
+            _fallTimeoutDelta = FallTimeout;
         }
 
         private void OnValidate()
@@ -88,16 +120,34 @@ namespace LM
 
         private void Update()
         {
-            //if (Input.GetKey(KeyCode.Space))
-              //  Jump();
-              CheckForInteractable();
-              if (currentInteractable != null)
-              {
-                  if (Input.GetKeyDown(KeyCode.E))
-                  {
-                      CallInteract();
-                  }
-              }
+            CheckForInteractable();
+            if (currentInteractable != null)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    CallInteract();
+                }
+            }
+
+            Vector3 camForward = Camera.main.transform.forward.normalized;
+            Vector3 camRight = Camera.main.transform.right.normalized;
+            camForward.y = 0;
+            camRight.y = 0;
+
+            Vector3 moveDirection = (camForward * moveInput.y + camRight * moveInput.x).normalized;
+            if (moveDirection.sqrMagnitude < _threshold)
+            {
+                _animationBlend = 0f;
+            }
+            else
+            {
+                _animationBlend = Input.GetKey(KeyCode.LeftShift) ? 6 : 2.5f;
+            }
+
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDGrounded, IsGrounded());
+            }
         }
 
         private void FixedUpdate()
@@ -110,11 +160,45 @@ namespace LM
             SetExtendSensorRange(IsGrounded2());
             SetVelocity(velocity);
 
+            ApplyRotation();
+
             savedVelocity = velocity;
             savedMovementVelocity = CalculateMovementVelocity();
 
             ResetJumpKeys();
-            
+
+            if (IsGrounded())
+            {
+                _fallTimeoutDelta = FallTimeout;
+
+                if (_hasAnimator)
+                {
+                    _animator.SetBool(_animIDJump, false);
+                    _animator.SetBool(_animIDFreeFall, false);
+                }
+            }
+            else
+            {
+                if (_fallTimeoutDelta >= 0.0f)
+                {
+                    _fallTimeoutDelta -= Time.deltaTime;
+                }
+                else
+                {
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDFreeFall, true);
+                    }
+                }
+            }
+
+            if (_hasAnimator)
+            {
+                float inputMagnitude = 1;
+                _animator.SetFloat(_animIDSpeed, _animationBlend);
+                _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            }
+
             if (ceilingDetector != null) ceilingDetector.Reset();
         }
 
@@ -140,6 +224,33 @@ namespace LM
             }
         }
 
+        private void ApplyRotation()
+        {
+            if (!enableRotation || moveInput.sqrMagnitude < 0.01f) return;
+
+            Vector3 camForward = mainCamera.transform.forward;
+            Vector3 camRight = mainCamera.transform.right;
+            camForward.y = 0;
+            camRight.y = 0;
+            camForward.Normalize();
+            camRight.Normalize();
+
+            Vector3 moveDirection = camForward * moveInput.y + camRight * moveInput.x;
+
+            if (moveDirection.sqrMagnitude > 0.01f)
+            {
+                float targetRotation = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
+                float smoothedRotation = Mathf.SmoothDampAngle(
+                    tr.eulerAngles.y,
+                    targetRotation,
+                    ref rotationVelocity,
+                    rotationSmoothTime
+                );
+
+                tr.rotation = Quaternion.Euler(0f, smoothedRotation, 0f);
+            }
+        }
+
         public void OnMove(InputAction.CallbackContext context)
         {
             moveInput = context.ReadValue<Vector2>();
@@ -147,7 +258,6 @@ namespace LM
 
         public void Jump(InputAction.CallbackContext context)
         {
-            IsJumping = true;
             OnJumpStart();
         }
         
@@ -213,7 +323,7 @@ namespace LM
             
             momentum = horizontalMomentum + verticalMomentum;
 
-            if (IsJumping)//stateMachine.CurrentState is JumpingState)
+            if (jumpState == ETestEnum.Jumping)//stateMachine.CurrentState is JumpingState)
             {
                 HandleJumping();
             }
@@ -261,8 +371,28 @@ namespace LM
             jumpTimer.Start();
             jumpInputIsLocked = true;
             OnJump.Invoke(momentum);
-            
+            jumpState = ETestEnum.Jumping;
+
+            Invoke("ResetJumpState", 2f);
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDJump, true);
+            }
+            else
+            {
+                //_input.jump = false;
+            }
+
             if (useLocalMomentum) momentum = tr.worldToLocalMatrix * momentum;
+        }
+
+        private void ResetJumpState()
+        {
+            jumpState = ETestEnum.Idle;/*
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDJump, false);
+            }*/
         }
 
         public void OnGroundContactLost() {
