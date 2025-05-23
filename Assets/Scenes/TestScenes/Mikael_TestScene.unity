@@ -10902,6 +10902,10 @@ MonoBehaviour:
   weapon: {fileID: 0}
   owner: {fileID: 0}
   target: {fileID: 0}
+  hitSound: {fileID: 0}
+  parrySound: {fileID: 0}
+  blockSound: {fileID: 0}
+  combatAudio: {fileID: 0}
   hitFX: {fileID: 0}
   _primaryAttacks: []
   _optionalAttacks: []
@@ -21135,6 +21139,10 @@ MonoBehaviour:
   weapon: {fileID: 0}
   owner: {fileID: 0}
   target: {fileID: 0}
+  hitSound: {fileID: 0}
+  parrySound: {fileID: 0}
+  blockSound: {fileID: 0}
+  combatAudio: {fileID: 0}
   hitFX: {fileID: 0}
   _primaryAttacks: []
   _optionalAttacks: []
@@ -38615,7 +38623,7 @@ CapsuleCollider:
   m_Radius: 0.25
   m_Height: 1.332
   m_Direction: 1
-  m_Center: {x: 0, y: 1.2891599, z: 0}
+  m_Center: {x: 0, y: 1.1159999, z: 0}
 --- !u!54 &1412958282
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -38697,6 +38705,10 @@ MonoBehaviour:
   weapon: {fileID: 0}
   owner: {fileID: 0}
   target: {fileID: 0}
+  hitSound: {fileID: 0}
+  parrySound: {fileID: 0}
+  blockSound: {fileID: 0}
+  combatAudio: {fileID: 0}
   hitFX: {fileID: 0}
   _primaryAttacks: []
   _optionalAttacks: []
@@ -42327,6 +42339,10 @@ MonoBehaviour:
   weapon: {fileID: 0}
   owner: {fileID: 0}
   target: {fileID: 0}
+  hitSound: {fileID: 0}
+  parrySound: {fileID: 0}
+  blockSound: {fileID: 0}
+  combatAudio: {fileID: 0}
   hitFX: {fileID: 0}
   _primaryAttacks: []
   _optionalAttacks: []
