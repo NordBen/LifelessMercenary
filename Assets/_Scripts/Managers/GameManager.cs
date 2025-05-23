@@ -43,7 +43,7 @@ namespace LM
             {
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    ResetLoop();
+                    LoadButtonScene();
                 }
             }
 
@@ -62,6 +62,11 @@ namespace LM
             {
                 DataPersistenceManager.instance.SaveGame();
             }
+        }
+
+        private void LoadButtonScene()
+        {
+            SceneManager.LoadScene("ButtonScene");
         }
 
         public void SurviveDay(int days)
