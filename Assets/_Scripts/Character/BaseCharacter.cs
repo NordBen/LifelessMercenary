@@ -10,12 +10,12 @@ namespace LM
         
         [Header("Movement")] [Tooltip("Walk speed")] [Range(0.1f, 10f)] [SerializeField]
         protected float walkSpeed = 0.6f;
-
         [Tooltip("Run speed")] [Range((int)0.1f, 20f)] [SerializeField]
         protected float runSpeed = 1.5f;
-
         [Tooltip("Knockback, how much default knockback is dealt in attacks")] [Range(0.1f, 10f)] [SerializeField]
         private float knockbackImpulse = 6;
+        
+        [SerializeField] private AudioClip deathSound;
         
         public event Action<int> OnHealingUsed;
 
@@ -38,6 +38,7 @@ namespace LM
         public virtual void Die()
         {
             _isDead = true;
+            GetComponent<AudioSource>().PlayOneShot(deathSound);
         }
 
         public bool IsDead() => this._isDead;

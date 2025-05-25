@@ -460,7 +460,7 @@ namespace LM.AbilitySystem
                         var strategy = new ConstantValueStrategy { value = attributeToFind.baseValue };
                         var mod = new GameplayEffectApplication(attribute, EModifierOperationType.Override, strategy);
                         initModifiers.Add(mod);
-                        Debug.LogError($"Loading data and applying a new effect for {attributeToFind.attributeName} with value {attributeToFind.baseValue}");
+                        //Debug.LogError($"Loading data and applying a new effect for {attributeToFind.attributeName} with value {attributeToFind.baseValue}");
                     }
                 }
             }

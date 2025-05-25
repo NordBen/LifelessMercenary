@@ -8,7 +8,7 @@ public enum ETestEnum { Idle, Jumping };
 namespace LM
 {
     [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : BaseCharacter
     {
         private readonly int _animIDSpeed = Animator.StringToHash("Speed");
         private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
@@ -258,7 +258,8 @@ namespace LM
 
         public void Jump(InputAction.CallbackContext context)
         {
-            OnJumpStart();
+            if (context.performed)
+                OnJumpStart();
         }
         
         private void CheckForInteractable()
@@ -367,6 +368,8 @@ namespace LM
         public void OnJumpStart() {
             if (useLocalMomentum) momentum = tr.localToWorldMatrix * momentum;
             
+            if (!isGrounded) return;
+            
             momentum += tr.up * jumpSpeed;
             jumpTimer.Start();
             jumpInputIsLocked = true;
@@ -388,6 +391,7 @@ namespace LM
 
         private void ResetJumpState()
         {
+            ResetJumpKeys();
             jumpState = ETestEnum.Idle;/*
             if (_hasAnimator)
             {

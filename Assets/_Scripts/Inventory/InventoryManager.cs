@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,11 +13,16 @@ namespace LM.Inventory
         [SerializeField] protected List<Item> items;
         [SerializeField] private GameObject uiItem;
 
+        [SerializeField] private GameObject messagePivot;
+
         [SerializeField] public GameObject inventoryScreen;
         [SerializeField] public GameObject inventoryContainer;
+        [SerializeField] private GameObject popMessage;
 
         private List<Item> equippedItems;
         private List<Item> unequippedItems;
+
+        public event Action<Item, int> OnItemAdded;
 
         public void ToggleInventory()
         {
@@ -37,6 +44,8 @@ namespace LM.Inventory
             InventoryEvents.ScreenEnabled += OnInventoryScreenEnabled;
             InventoryEvents.ItemsFiltered += OnItemsFiltered;
             InventoryEvents.ItemSelected += OnItemEquipped;
+
+            OnItemAdded += PopMessage;
         }
 
         private void OnDisable()
@@ -44,6 +53,12 @@ namespace LM.Inventory
             InventoryEvents.ScreenEnabled -= OnInventoryScreenEnabled;
             InventoryEvents.ItemsFiltered -= OnItemsFiltered;
             InventoryEvents.ItemSelected -= OnItemEquipped;
+        }
+
+        private void PopMessage(Item item, int quantity)
+        {
+            var popmessage = Instantiate(popMessage);
+            StartCoroutine(popmessage.GetComponent<UIMessageElement>().Init(item, quantity, messagePivot.transform));
         }
 
         private void OnInventoryScreenEnabled()
@@ -154,6 +169,7 @@ namespace LM.Inventory
             if (!items.Contains(inItem))
             {
                 items.Add(inItem);
+                OnItemAdded?.Invoke(inItem, inItem.quantity);
             }
         }
 

@@ -641,6 +641,7 @@ MonoBehaviour:
   walkSpeed: 0.6
   runSpeed: 1.5
   knockbackImpulse: 6
+  deathSound: {fileID: 8300000, guid: 087bc50a7a71f3148b535396b94c1952, type: 3}
   patrolPoints: []
   behavior: {fileID: 3122140120739051439}
   UIElements: {fileID: 3447485744325720577}
@@ -670,11 +671,11 @@ MonoBehaviour:
   weapon: {fileID: 2007392370655144353}
   owner: {fileID: 1310061853122525623}
   target: {fileID: 0}
-  hitSound: {fileID: 8300000, guid: c5d16603cc502a84cbd5f96df63b79e4, type: 3}
+  hitSound: {fileID: 8300000, guid: 68de4339e23a81548940c67e8ad21b0b, type: 3}
   parrySound: {fileID: 0}
   blockSound: {fileID: 0}
   combatAudio: {fileID: 841564976126768475}
-  hitFX: {fileID: 3922679200385291646, guid: 88efb351926c77b47ba1838f19c5d01d, type: 3}
+  hitFX: {fileID: 8007369982305464528, guid: 4ae5d2ab9b8c5444498df728275352c8, type: 3}
   _primaryAttacks: []
   _optionalAttacks: []
   _LightAttacks: []
