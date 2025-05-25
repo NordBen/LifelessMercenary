@@ -437,13 +437,15 @@ namespace LM
 
         public void TakeDamage(float incomingDamage, float knockbackForce, Vector3 knockbackDirection)
         {
+            if (owner.IsDead()) return;
+                
             Debug.Log($"Take Damaged from {this} of {transform.root} for {incomingDamage}");
             var healthAttribute = attributeComp.GetAttribute("Health");
             if (healthAttribute == null) return;
 
             var damageApplication = new GameplayEffectApplication(
-                healthAttribute,
-                EModifierOperationType.Add,
+                healthAttribute, 
+                EModifierOperationType.Add, 
                 new ConstantValueStrategy
                 {
                     value = -incomingDamage

@@ -43,7 +43,8 @@ namespace LM
             {
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    LoadButtonScene();
+                    ResetLoop();
+                    //LoadButtonScene();
                 }
             }
 

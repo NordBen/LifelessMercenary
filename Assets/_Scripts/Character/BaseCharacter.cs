@@ -6,6 +6,7 @@ namespace LM
     public abstract class BaseCharacter : Entity
     {
         protected readonly int IsDeadHash = Animator.StringToHash("bIsDead");
+        protected readonly int DieHash = Animator.StringToHash("tDead");
         
         [Header("Movement")] [Tooltip("Walk speed")] [Range(0.1f, 10f)] [SerializeField]
         protected float walkSpeed = 0.6f;

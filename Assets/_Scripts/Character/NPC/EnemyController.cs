@@ -8,6 +8,7 @@ namespace LM.NPC
     {
         [SerializeField] public List<GameObject> patrolPoints;
         [SerializeField] public BehaviorGraphAgent behavior;
+        [SerializeField] private GameObject UIElements;
         
         void Start()
         {
@@ -23,7 +24,10 @@ namespace LM.NPC
         public override void Die()
         {
             base.Die();
-            behavior.BlackboardReference.SetVariableValue("CurrentState", EnemyState.Dead);
+            behavior.enabled = false; //.Graph.End();
+            _animator.SetTrigger(DieHash);
+            //behavior.BlackboardReference.SetVariableValue("CurrentState", EnemyState.Dead);
+            Invoke("DisableUIElements", 2f);
             GameManager.instance.RemoveEnemy(this);
             Invoke("Destroy()", 8f);
         }
@@ -33,6 +37,11 @@ namespace LM.NPC
             behavior.BlackboardReference.SetVariableValue("PatrolPoints", patrolPoints);
             behavior.BlackboardReference.SetVariableValue("WalkSpeed", this.walkSpeed);
             behavior.BlackboardReference.SetVariableValue("RunSpeed", this.runSpeed);
+        }
+        
+        private void DisableUIElements()
+        {
+            UIElements.SetActive(false);
         }
     }
 }

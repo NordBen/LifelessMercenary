@@ -20,6 +20,7 @@ namespace LM.Inventory
         public void ToggleInventory()
         {
             inventoryScreen.SetActive(!inventoryScreen.activeSelf);
+            ClearInventoryUI(inventoryScreen.transform.childCount);
             Debug.Log(inventoryScreen.activeSelf);
             //Cursor.lockState = inventoryScreen.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
             //Cursor.visible = inventoryScreen.activeSelf;
@@ -123,14 +124,7 @@ namespace LM.Inventory
 
         public void SortInventory(EItemType type)
         {
-            if (inventoryScreen.transform.childCount != 0)
-            {
-                for (int i = 0; i > inventoryScreen.transform.childCount; i++)
-                {
-                    Destroy(inventoryScreen.transform.GetChild(i));
-                }
-            }
-
+            ClearInventoryUI(inventoryScreen.transform.childCount);
             GameObject inventoryGrid = Instantiate(inventoryContainer);
             inventoryGrid.transform.SetParent(inventoryScreen.transform, false);
             foreach (Item item in items)
@@ -140,6 +134,17 @@ namespace LM.Inventory
                     GameObject itemInUI = Instantiate(uiItem);
                     itemInUI.GetComponent<UIItemSlot>().SetReferenceItem(item);
                     itemInUI.transform.SetParent(inventoryGrid.transform, false);
+                }
+            }
+        }
+
+        private void ClearInventoryUI(int items)
+        {
+            if (items > 0)
+            {
+                for (int i = 0; i > items; i++)
+                {
+                    Destroy(inventoryScreen.transform.GetChild(i));
                 }
             }
         }
