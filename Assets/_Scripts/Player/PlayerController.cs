@@ -102,6 +102,8 @@ namespace LM
             RecalculateColliderDimensions();
             _hasAnimator = TryGetComponent(out _animator);
             _fallTimeoutDelta = FallTimeout;
+
+            _currentSpeed = walkSpeed;
         }
 
         private void OnValidate()
@@ -128,6 +130,10 @@ namespace LM
                     CallInteract();
                 }
             }
+
+            _currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
+            movementSpeed = _currentSpeed;
 
             Vector3 camForward = Camera.main.transform.forward.normalized;
             Vector3 camRight = Camera.main.transform.right.normalized;
