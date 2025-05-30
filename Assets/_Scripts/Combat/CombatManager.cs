@@ -66,6 +66,8 @@ namespace LM
 
         public bool IsAttacking() => attackTagged;
 
+        bool wasParried;
+
         void Start()
         {
             animOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
@@ -131,6 +133,20 @@ namespace LM
             {
                 this.isBlocking = false;
                 animator.SetBool(bIsBlocking, this.isBlocking);
+            }
+        }
+        
+        private void TryParryEnemyAttack()
+        {
+            var player = GameManager.instance.player;
+            bool wasParried = player.GetComponent<ParrySystem>().TryParryAttack();
+            if (wasParried)
+            {
+                // Cancel the attack, stagger the enemy, etc.
+            }
+            else
+            {
+                // Apply damage or hit reaction
             }
         }
 
