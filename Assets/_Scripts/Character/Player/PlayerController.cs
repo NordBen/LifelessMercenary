@@ -213,11 +213,6 @@ public class PlayerController : MonoBehaviour, ICombat
     public void TakeDamage(float incomingDamage, float knockback, Vector3 knockbackDirection)
     {
         if (isDead) return;
-        if (GetComponent<CombatManager>().SuccessfullParry())
-        {
-            Debug.Log("Parried successful");
-            return;
-        }
 
         if (GameManager.instance.player.GetCombatManager().isBlocking)
         {

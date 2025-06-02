@@ -658,26 +658,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootMotionMultiplier: 1
-  parryWindowDuration: 0.2
-  parryCooldown: 1
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 320
-  lastCheckPosition: {x: 0, y: 0, z: 0}
-  wasLastCheckSuccessful: 0
-  lastHitColliders: []
-  parryRange: 2
-  weaponItem: {fileID: 0}
+  weaponItem: {fileID: 11400000, guid: 36984a7e9918e7c4299c9f7936caaf6d, type: 2}
   weapon: {fileID: 2007392370655144353}
   owner: {fileID: 1310061853122525623}
   target: {fileID: 0}
   hitSound: {fileID: 8300000, guid: 68de4339e23a81548940c67e8ad21b0b, type: 3}
-  parrySound: {fileID: 0}
   blockSound: {fileID: 0}
   combatAudio: {fileID: 841564976126768475}
   hitFX: {fileID: 8007369982305464528, guid: 4ae5d2ab9b8c5444498df728275352c8, type: 3}
-  _primaryAttacks: []
-  _optionalAttacks: []
+  groundFX: {fileID: 3922679200385291646, guid: 88efb351926c77b47ba1838f19c5d01d, type: 3}
+  hitFXs:
+  - {fileID: 8007369982305464528, guid: 4ae5d2ab9b8c5444498df728275352c8, type: 3}
+  - {fileID: 3922679200385291646, guid: 88efb351926c77b47ba1838f19c5d01d, type: 3}
+  - {fileID: 3922679200385291646, guid: 88efb351926c77b47ba1838f19c5d01d, type: 3}
   _LightAttacks: []
   _HeavyAttacks: []
   attributeComp: {fileID: 5536854710784896177}

@@ -59,7 +59,7 @@ public abstract class BaseCharacterOld : MonoBehaviour, ICombat
     public virtual void TakeDamage(float incomingDamage, float knockbackForce, Vector3 knockbackDirection)
     {
         if (this.isDead) return;
-        if (GetComponent<CombatManager>().SuccessfullParry()) return;
+        //if (GetComponent<CombatManager>().SuccessfullParry()) return;
         
         ChangeHP(-(int)UnityEngine.Random.Range(incomingDamage * 0.9f, incomingDamage * 1.1f));
 

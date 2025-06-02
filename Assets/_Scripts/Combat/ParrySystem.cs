@@ -1,46 +1,78 @@
 using UnityEngine;
 
-public class ParrySystem : MonoBehaviour
+namespace LM
 {
-    public Animator animator;
-    private bool parryWindowActive = false;
-    private bool canParry = true;
-
-    void Update()
+    public class ParrySystem : MonoBehaviour
     {
-        if (Input.GetKey(KeyCode.F) && canParry)
+        private static readonly int ParryHash = Animator.StringToHash("tParry");
+        private static readonly int ParriedHash = Animator.StringToHash("tParried");
+        
+        [SerializeField] private float parryRange = 2;
+        [SerializeField] private LayerMask enemyLayer;
+        [SerializeField] private AudioClip parrySound;
+
+        [SerializeField] private Collider[] lastHitColliders;
+        private Animator m_animator;
+        private bool m_canParry;
+
+        private void Start()
         {
-            animator.SetTrigger("tParry");
-            canParry = false; // This is to prevent spammig
+            m_animator = GetComponent<Animator>();
         }
-    }
-    // This is also called by an animation event
-    public void DisableParryWindow()
-    {
-        parryWindowActive = false;
-        canParry = true; // This resets so the player can parry again
-        Debug.Log("You should now no longer be able to parry :)");
-    }
 
-    // This is called by the animation event
-    public void EnableParryWindow()
-    {
-        parryWindowActive = true;
-        Debug.Log("The parry window should be active now :)");
-    }
-
-
-    public bool TryParryAttack()
-    {
-        if (parryWindowActive)
+        public void StartParry()
         {
-            Debug.Log("Parry is afoot");
+            m_canParry = true;
+        }
+
+        public void EndParry()
+        {
+            m_canParry = false;
+        }
+
+        public bool TryParry()
+        {
+            if (!m_canParry)
+            {
+                Debug.Log("cannot parry");
+                return false;
+            }
+            
+            lastHitColliders = Physics.OverlapSphere(transform.position, parryRange, enemyLayer);
+            foreach (var hitCollider in lastHitColliders)
+            {
+                if (hitCollider.gameObject == gameObject) continue;
+                
+                var enemyAnimator = hitCollider.GetComponent<Animator>();
+                if (enemyAnimator) enemyAnimator.SetTrigger(ParriedHash);
+            }
+            
+            EndParry();
             return true;
         }
-        else
+
+        public void PerformParry()
         {
-            Debug.Log("Parry not afoot");
-            return false;
+            m_animator.SetTrigger(ParryHash);
+        }
+        
+        private void OnValidate()
+        {
+            // Ensure we're not on the enemy layer ourselves
+            if (((1 << gameObject.layer) & enemyLayer.value) != 0)
+            {
+                Debug.LogWarning(
+                    $"CombatManager on {gameObject.name} is on a layer included in its enemyLayer mask. This might cause self-detection issues.");
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (m_canParry)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, parryRange);
+            }
         }
     }
 }

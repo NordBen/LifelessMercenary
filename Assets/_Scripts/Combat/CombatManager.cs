@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Collections;
 using LM.AbilitySystem;
 using UnityEngine;
 
@@ -9,26 +7,11 @@ namespace LM
     public class CombatManager : MonoBehaviour, ICombat
     {
         private static readonly int bIsBlocking = Animator.StringToHash("bIsBlocking");
-        private static readonly int ParryHash = Animator.StringToHash("tParry");
         private static readonly int HeavyAttack = Animator.StringToHash("tHeavyAttack");
         private static readonly int AttackSpeed = Animator.StringToHash("AttackSpeed");
 
         public float rootMotionMultiplier = 1;
-
-        [SerializeField] private float parryWindowDuration = 0.2f;
-        [SerializeField] private float parryCooldown = 1f;
-        private bool _Parriable = false;
-        private bool _parried = false;
-        private float _lastParryTime = 0;
-        [SerializeField] private LayerMask enemyLayer;
-
-        [SerializeField] private Vector3 lastCheckPosition;
-        [SerializeField] private bool wasLastCheckSuccessful;
-        [SerializeField] private Collider[] lastHitColliders;
-
-        public event Action<Transform> OnParry;
-        [SerializeField] private float parryRange = 2;
-
+        
         [SerializeField] public Weapon weaponItem;
         [SerializeField] public WeaponObject weapon;
 
@@ -36,18 +19,13 @@ namespace LM
         [SerializeField] private BaseCharacter target;
 
         [SerializeField] private AudioClip hitSound;
-        [SerializeField] private AudioClip parrySound;
         [SerializeField] private AudioClip blockSound;
         [SerializeField] private AudioSource combatAudio;
 
-        public event Action OnAttackStarted;
-        public event Action OnAttackLanded;
-        public event Action<Transform> OnParrySuccessful;
-
         public GameObject hitFX;
-
-        public List<AnimationClip> _primaryAttacks;
-        public List<AnimationClip> _optionalAttacks;
+        public GameObject groundFX;
+        public GameObject[] hitFXs;
+        
         public List<CombatAnimation> _LightAttacks;
         public List<CombatAnimation> _HeavyAttacks;
 
@@ -63,10 +41,7 @@ namespace LM
         public bool isBlocking = false;
 
         [SerializeField] private bool attackTagged = false;
-
         public bool IsAttacking() => attackTagged;
-
-        bool wasParried;
 
         void Start()
         {
@@ -102,142 +77,22 @@ namespace LM
             GameManager.instance.player.GetEquipmentManager().OnEquip -= OnWeaponChanged;
         }
 
-        public void TriggerAttackStarted() => OnAttackStarted?.Invoke();
-        public void TriggerAttackLanded() => OnAttackLanded?.Invoke();
-
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (transform.tag == "Player")
-                    PerformLightAttack();
-            }
-
-            if (Input.GetMouseButtonDown(1))
-            {
-                if (transform.tag == "Player")
-                    PerformHeavyAttack();
-            }
-
-            if (Input.GetKeyDown(KeyCode.X))
-                if (transform.tag == "Player")
-                    this.TestPerformParryCheck();
-
-            if (Input.GetKey(KeyCode.X))
-            {
-                //Debug.Log("Blocking");
-                if (transform.tag == "Player")
-                    PerformBlock();
-            }
-            else
-            {
-                this.isBlocking = false;
-                animator.SetBool(bIsBlocking, this.isBlocking);
-            }
-        }
-        
-        private void TryParryEnemyAttack()
-        {
-            var player = GameManager.instance.player;
-            bool wasParried = player.GetComponent<ParrySystem>().TryParryAttack();
-            if (wasParried)
-            {
-                // Cancel the attack, stagger the enemy, etc.
-            }
-            else
-            {
-                // Apply damage or hit reaction
-            }
-        }
-
-        public void ParryWindwow()
-        {
-            StartCoroutine(ParryWindowCoroutine());
-        }
-
-        private IEnumerator ParryWindowCoroutine()
-        {
-            /*
-                _Parriable = true;
-                _lastParryTime = Time.time;
-                yield return new WaitForSeconds(parryWindowDuration);
-                _Parriable = false;*/
-            this._Parriable = true;
-            yield return new WaitForSeconds(parryWindowDuration);
-            this._Parriable = false;
-        }
-
         private void PerformHitDetectionMelee(Collider other)
         {
             weapon.ToggleHitDetection();
         }
 
-        public void Attack()
+        public void PerformLightAttack()
         {
-            OnAttackStarted?.Invoke();
-            PerformAttack();
+            PerformAttack(false);
         }
 
-        private void PerformLightAttack()
+        public void PerformHeavyAttack()
         {
-            PerformAttackV2(false);
-        }
-
-        private void PerformHeavyAttack()
-        {
-            PerformAttackV2(true);
+            PerformAttack(true);
         }
 
         private void PerformAttack(bool isHeavy)
-        {
-            List<AnimationClip> _attackAnims = new();
-            var animSpeed = 1f;
-
-            if (isHeavy)
-            {
-                _attackAnims = _optionalAttacks;
-                animSpeed = 0.86f;
-            }
-            else
-            {
-                _attackAnims = _primaryAttacks;
-                animSpeed = 1.33f;
-            }
-
-            if (weaponItem == null || _attackAnims.Count == 0)
-                return;
-
-            // return if no stamina
-
-            if (comboIndex <= _attackAnims.Count && !isAttacking)
-            {
-                animOverrideController["TestAnim1"] = _attackAnims[comboIndex];
-                animator.SetFloat(AttackSpeed, animSpeed);
-                attackTagged = true;
-
-                if (isHeavy)
-                {
-                    animator.Play("HeavyAttack", 0, 0);
-                }
-                else
-                {
-                    animator.Play("LightAttack", 0, 0);
-                }
-
-                isAttacking = true;
-                comboIndex = (comboIndex + 1) % _attackAnims.Count;
-
-                if (transform.root.tag == "Player")
-                    // Reduce Stamina
-
-                Invoke("ResetCombo", 1f);
-                Invoke("ResetAttacking", 6f);
-            }
-
-            comboTimer = 1.0f;
-        }
-
-        private void PerformAttackV2(bool isHeavy)
         {
             if (weaponItem == null || (_LightAttacks.Count == 0 || _HeavyAttacks.Count == 0)) return;
 
@@ -273,157 +128,22 @@ namespace LM
             }
         }
 
-        private void PerformAttack()
-        {
-            if (weaponItem == null) // || weaponItem.animations.Count == 0)
-                return;
-
-            // return if no stamina
-
-            if (comboIndex <= _primaryAttacks.Count && !isAttacking)
-            {
-                animOverrideController["TestAnim1"] = _primaryAttacks[comboIndex];
-                attackTagged = true;
-
-                animator.Play("Attack", 0, 0);
-                isAttacking = true;
-                comboIndex = (comboIndex + 1) % _primaryAttacks.Count;
-
-                //if (transform.root.tag == "Player")
-                    // reduce stamina
-            }
-        }
-
         private void ResetAttacking()
         {
             attackTagged = false;
         }
 
-        private void PerformBlock()
+        public void PerformBlock()
         {
-
-            /*
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, parryRange);
-
-            foreach (var hitCollider in hitColliders)
-            {
-                var attacker = hitCollider.GetComponent<CombatManager>();
-                if (TryParry(attacker))
-                {
-                    _parried = true;
-                    attacker._Parriable = false;
-                    animator.SetTrigger(ParryHash);
-                    OnParry?.Invoke(hitCollider.transform);
-                    Debug.Log($"{gameObject.name} performed successful parry against {hitCollider.name}");
-                    return;
-                }
-            }*/
-
-
             this.isBlocking = true;
             animator.SetBool(bIsBlocking, this.isBlocking);
         }
 
-        private void PerformParry(CombatManager enemyCombat, Collider hitCollider)
+        public void ResetBlocking()
         {
-            wasLastCheckSuccessful = true;
-            this._parried = true;
-            enemyCombat._Parriable = false;
-            animator.SetTrigger(ParryHash);
-            OnParrySuccessful?.Invoke(hitCollider.transform);
-            Debug.Log($"{this.gameObject.name} _parried: {_parried}");
-            Debug.Log($"{gameObject.name} performed successful parry against {hitCollider.name}");
-            Invoke("ResetParry", 0.86f);
+            this.isBlocking = false;
+            animator.SetBool(bIsBlocking, this.isBlocking);
         }
-
-        private void ResetParry()
-        {
-            this._parried = false;
-        }
-
-        private void TestPerformParryCheck()
-        {
-            lastCheckPosition = transform.position;
-            lastHitColliders = Physics.OverlapSphere(transform.position, parryRange, enemyLayer);
-            wasLastCheckSuccessful = false;
-
-            foreach (var hitCollider in lastHitColliders)
-            {
-                // Skip if we're checking ourselves
-                if (hitCollider.gameObject == gameObject) continue;
-
-                var enemyCombat = hitCollider.GetComponent<CombatManager>();
-                if (enemyCombat != null && enemyCombat._Parriable)
-                    PerformParry(enemyCombat, hitCollider);
-            }
-        }
-
-        private void OnValidate()
-        {
-            // Ensure we're not on the enemy layer ourselves
-            if (((1 << gameObject.layer) & enemyLayer.value) != 0)
-            {
-                Debug.LogWarning(
-                    $"CombatManager on {gameObject.name} is on a layer included in its enemyLayer mask. This might cause self-detection issues.");
-            }
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (_Parriable)
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, parryRange);
-            }
-/*
-        // Draw the last OverlapSphere check
-        if (Application.isPlaying)
-        {
-            // Draw the sphere where we last checked
-            Gizmos.color = wasLastCheckSuccessful ? Color.green : Color.red;
-            Gizmos.DrawWireSphere(lastCheckPosition, parryRange);
-
-            // Draw lines to all detected colliders
-            if (lastHitColliders != null)
-            {
-                foreach (var hitCollider in lastHitColliders)
-                {
-                    if (hitCollider != null && hitCollider.gameObject != gameObject)
-                    {
-                        // Draw yellow line to parriable enemies
-                        if (hitCollider.GetComponent<CombatManager>()._Parriable)
-                        {
-                            Gizmos.color = Color.yellow;
-                            Gizmos.DrawLine(lastCheckPosition, hitCollider.transform.position);
-                        }
-                        // Draw white line to non-parriable enemies
-                        else
-                        {
-                            Gizmos.color = Color.white;
-                            Gizmos.DrawLine(lastCheckPosition, hitCollider.transform.position);
-                        }
-                    }
-                }
-            }
-        }*/
-        }
-
-        private bool TryParry(CombatManager attacker)
-        {
-            /*
-                if (Time.time >= _lastParryTime + parryCooldown)
-                {
-                    _lastParryTime = Time.time;
-                    return true;
-                }
-                return false;*/
-            if (attacker)
-                Debug.Log(
-                    $"Trying to Parry with result: {attacker._Parriable} * {attacker != null && attacker._Parriable} against {attacker.gameObject}");
-            return attacker != null && attacker._Parriable;
-        }
-
-        public bool SuccessfullParry() => this._parried;
 
         public void PerformAttackExt() => weapon.ToggleHitDetection();
         public void EndComboWindow() => isAttacking = false;
@@ -435,10 +155,6 @@ namespace LM
             weaponItem = newWeapon as Weapon;
             if (weaponItem != null)
             {
-                _primaryAttacks.Clear();
-                //_primaryAttacks = new(weaponItem.animations);
-                _optionalAttacks.Clear();
-                //_optionalAttacks = new(weaponItem.optionalAnimations);
                 _LightAttacks.Clear();
                 _LightAttacks = new(weaponItem.lightAttackAnimations);
                 _HeavyAttacks.Clear();
@@ -456,27 +172,33 @@ namespace LM
             if (owner.IsDead()) return;
                 
             Debug.Log($"Take Damaged from {this} of {transform.root} for {incomingDamage}");
+            if (TryGetComponent(out ParrySystem parryComponent))
+            {
+                if (parryComponent.TryParry())
+                {
+                    SpawnVFX(transform.position, hitFXs[2]);
+                    return;
+                }
+            }
+            float finalDamage = -incomingDamage;
+            finalDamage = isBlocking ? finalDamage *= 0.1f : finalDamage;
+            
+            if (isBlocking)
+                SpawnVFX(transform.position, hitFXs[1]);
+            
             var healthAttribute = attributeComp.GetAttribute("Health");
             if (healthAttribute == null) return;
 
             var damageApplication = new GameplayEffectApplication(
-                healthAttribute, 
-                EModifierOperationType.Add, 
-                new ConstantValueStrategy
-                {
-                    value = -incomingDamage
-                });
+                healthAttribute, EModifierOperationType.Add, new ConstantValueStrategy { value = finalDamage });
+            
             List<GameplayEffectApplication> applications = new List<GameplayEffectApplication>();
             applications.Add(damageApplication);
             var damageEffect = EffectFactory.CreateEffect(
-                "Damage",
-                EEffectDurationType.Instant,
-                0f,
-                applications
-            );
+                "Damage", EEffectDurationType.Instant, 0f, applications);
 
-            attributeComp.ApplyEffect(damageEffect);
             PlaySound(hitSound);
+            attributeComp.ApplyEffect(damageEffect);
 
             if (healthAttribute.CurrentValue <= 0)
             {
@@ -484,6 +206,91 @@ namespace LM
                     Die();
                 else
                     owner.Die();
+            }
+        }
+
+        public void HitObject(Collider other)
+        {
+            other.TryGetComponent(out CombatManager combatM);
+            Debug.Log($"HitObject called. isBlocking={combatM.isBlocking}");
+            
+            if (combatM.isBlocking) {
+                Debug.Log("Blocking so no vfx from HitObject");
+                return; // || GetComponent<ParrySystem>().TryParry()) return;
+}
+
+            if (combatM.TryGetComponent(out ParrySystem parryComponent))
+            {
+                bool isParried = parryComponent.TryParry();
+                Debug.Log($"TryParry returned {isParried}");
+                if (parryComponent.TryParry())
+                {
+                    Debug.Log("Parried so no vfx from HitObject");
+                    return;
+                }
+            }
+            
+            if (other.gameObject.layer == LayerMask.NameToLayer("Combat") || other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                Debug.Log("Spawning hit VFX!");
+                SpawnVFX(other, hitFXs[0]);
+                return;
+            }
+        }
+
+        private void SpawnVFX(Collider collision, GameObject visualEffect)
+        {
+            Debug.Log("Spawning VFX");
+            Vector3 hitPosition = collision.ClosestPoint(transform.position);
+            Vector3 hitNormal = (hitPosition - collision.transform.position).normalized;
+
+            if (hitNormal == Vector3.zero)
+                hitNormal = -transform.forward;
+
+            Quaternion rotation = Quaternion.LookRotation(hitNormal);
+
+            if (hitFX != null)
+            {
+                GameObject vfx = Instantiate(visualEffect, hitPosition, rotation);
+
+                var particle = vfx.GetComponent<ParticleSystem>();
+                if (particle != null)
+                {
+                    particle.Play();
+                    Destroy(vfx, particle.main.duration);
+                }
+                else
+                {
+                    Destroy(vfx, 2f);
+                }
+            }
+        }
+        
+        private void SpawnVFX(Vector3 location, GameObject visualEffect)
+        {
+            Debug.Log("Spawning VFX");
+            Vector3 hitPosition = location;
+            Vector3 hitNormal = (hitPosition - transform.position).normalized;
+
+            if (hitNormal == Vector3.zero)
+                hitNormal = -transform.forward;
+
+            Quaternion rotation = Quaternion.LookRotation(hitNormal);
+
+            if (hitFX != null)
+            {
+                GameObject vfx = Instantiate(visualEffect, hitPosition, rotation);
+
+                var particle = vfx.GetComponent<ParticleSystem>();
+                if (particle != null)
+                {
+                    particle.Play();
+                    Destroy(vfx, particle.main.duration);
+                }
+                else
+                {
+                    Destroy(vfx, 2f);
+                }
             }
         }
 

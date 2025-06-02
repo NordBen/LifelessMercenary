@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.GridBrushBase;
 
 public enum ETestEnum { Idle, Jumping };
 
@@ -27,6 +26,8 @@ namespace LM
         public float slideGravity = 5f;
         public float slopeLimit = 30f;
         public bool useLocalMomentum;
+
+        [SerializeField] private CombatManager combatComponent;
         
         bool jumpKeyIsPressed;    // Tracks whether the jump key is currently being held down by the player
         bool jumpKeyWasPressed;   // Indicates if the jump key was pressed since the last reset, used to detect jump initiation
@@ -130,6 +131,21 @@ namespace LM
                     CallInteract();
                 }
             }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                combatComponent.PerformLightAttack();
+            }
+            
+            if (Input.GetMouseButtonDown(0))
+            {
+                combatComponent.PerformHeavyAttack();
+            }
+
+            if (Input.GetKeyDown(KeyCode.X)) GetComponent<ParrySystem>().PerformParry();
+
+            if (Input.GetKey(KeyCode.X)) combatComponent.PerformBlock();
+            else if (Input.GetKeyUp(KeyCode.X)) combatComponent.ResetBlocking();
 
             _currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
 

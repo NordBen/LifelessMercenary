@@ -1,17 +1,22 @@
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 using Image = UnityEngine.UI.Image;
 
 namespace LM.Inventory
 {
-    public class UIItemSlot : MonoBehaviour
+    public class UIItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] protected Item referenceItem;
         protected Button _button;
         protected Image _icon;
         private TMP_Text _stackAmount;
+        public Item RefItem => referenceItem;
+        
+        public static event Action<UIItemSlot> OnItemHovered;
 
         public void SetReferenceItem(Item inItem)
         {
@@ -49,6 +54,16 @@ namespace LM.Inventory
         {
             GameManager.instance.player.GetEquipmentManager().TryEquip((IEquipable)referenceItem);
             GameManager.instance.player.GetInventoryManager().ToggleInventory();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            OnItemHovered?.Invoke(this);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            OnItemHovered?.Invoke(null);
         }
     }
 

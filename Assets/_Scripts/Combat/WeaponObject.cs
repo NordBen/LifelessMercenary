@@ -6,17 +6,17 @@ namespace LM
     {
         public Weapon weaponData;
         public BoxCollider weaponBox;
-        public Transform hitPoint;
         [SerializeField] private Transform owner;
         [SerializeField] private LayerMask collisionLayer = 999;
-        public GameObject vfx;
+        private CombatManager m_OwingCombatManager;
 
         private void Start()
         {
             owner = this.transform.root;
             weaponBox = GetComponent<BoxCollider>();
+            m_OwingCombatManager = owner.GetComponent<CombatManager>();
             if (weaponData == null)
-                weaponData = owner.GetComponent<CombatManager>().weaponItem;
+                weaponData = m_OwingCombatManager.weaponItem;
         }
 
         public void SetWeaponData(Weapon newData)
@@ -24,7 +24,7 @@ namespace LM
             this.weaponData = newData;
             this.GetComponent<MeshFilter>().mesh = newData.mesh;
         }
-        
+
         public void ToggleHitDetection()
         {
             weaponBox.enabled = !weaponBox.enabled;
@@ -41,8 +41,7 @@ namespace LM
 
             if (other.gameObject.transform == owner || other.CompareTag(owner.gameObject.tag))
             {
-                Debug.Log(
-                    $"hit trans: {other.gameObject.transform} own = {owner}. comparing tags - other: {other.tag} : {owner.gameObject.tag}");
+                Debug.Log($"hit trans: {other.gameObject.transform} own = {owner}. comparing tags - other: {other.tag} : {owner.gameObject.tag}");
                 return;
             }
 
@@ -59,40 +58,10 @@ namespace LM
                     Debug.Log(finalDamage);
                     // finalDamage += 10;
                 }
-
-
+                
                 Debug.Log("Target trying to take damage is: " + target);
                 target.TakeDamage(finalDamage, 5, this.transform.root.transform.forward);
-                SpawnVFX(other);
-            }
-        }
-
-        private void SpawnVFX(Collider collision)
-        {
-            Debug.Log("SpawnVFX");
-            Vector3 hitPosition = collision.ClosestPoint(transform.position);
-            Vector3 hitNormal = (hitPosition - collision.transform.position).normalized;
-
-            if (hitNormal == Vector3.zero)
-                hitNormal = -transform.forward;
-
-            Quaternion rotation = Quaternion.LookRotation(hitNormal);
-
-            if (vfx != null) //owner.GetComponent<CombatManager>().hitFX != null)
-            {
-                Debug.Log("found hitVFX");
-                GameObject hitVfx = Instantiate(owner.GetComponent<CombatManager>().hitFX, hitPosition, rotation); // GameManager.instance.player.GetCombatManager().hitFX
-
-                var particle = hitVfx.GetComponent<ParticleSystem>();
-                if (particle != null)
-                {
-                    particle.Play();
-                    Destroy(hitVfx, particle.main.duration);
-                }
-                else
-                {
-                    Destroy(hitVfx, 2f);
-                }
+                m_OwingCombatManager.HitObject(other);
             }
         }
     }

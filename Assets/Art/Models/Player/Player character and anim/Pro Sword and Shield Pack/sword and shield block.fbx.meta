@@ -17,7 +17,7 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     animationImportErrors: 
-    animationImportWarnings: Event DisableParryWindow() has a time (0.564683) outside
+    animationImportWarnings: Event DisableParryWindow() has a time (0.566667) outside
       the clip's valid range (0.000000..0.466667). It will never be fired
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
@@ -56,15 +56,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.36
-        functionName: EnableParryWindow()
+      - time: 0.4211111
+        functionName: StartParry
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 1
-        functionName: DisableParryWindow()
+      - time: 0.79444444
+        functionName: EndParry
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

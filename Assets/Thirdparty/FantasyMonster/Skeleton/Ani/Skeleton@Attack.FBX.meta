@@ -320,13 +320,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.35905856
-        functionName: ParryWindwow
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.4027407
         functionName: PerformHitDetectionMelee
         data: 
