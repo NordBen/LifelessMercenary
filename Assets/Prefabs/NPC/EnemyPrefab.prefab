@@ -638,8 +638,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff75efa0412a50d4f958a8024c69d683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 0.6
-  runSpeed: 1.5
+  walkSpeed: 2.5
+  runSpeed: 5
   knockbackImpulse: 6
   deathSound: {fileID: 8300000, guid: 087bc50a7a71f3148b535396b94c1952, type: 3}
   patrolPoints: []

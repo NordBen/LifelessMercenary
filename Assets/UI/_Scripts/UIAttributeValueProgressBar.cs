@@ -18,15 +18,20 @@ public struct FBarStyle
 
 public class UIAttributeValueProgressBar : MonoBehaviour
 {
+    [Header("===Attribute===")]
     [SerializeField] private GameplayAttributeComponent owner;
     [SerializeField] private GameplayAttribute referenceAttribute;
     [SerializeField] private GameplayAttribute referenceOtherAttribute;
+    
+    [Header("===Bar Settings===")]
     [SerializeField] private float maxBarLength = 1000f;
     [SerializeField] private float minBarLength = 200f;
     [SerializeField] private float barLength = 700f;
     [SerializeField] private bool bFlexibleLength = false;
     [SerializeField] private bool bExpandRight = true;
     [SerializeField] private FBarStyle style;
+    
+    [Header("===References===")]
     [SerializeField] private TMP_Text _valueLabel;
     [SerializeField] private Slider _progressBar;
     [SerializeField] private Image _barFill;
@@ -53,7 +58,7 @@ public class UIAttributeValueProgressBar : MonoBehaviour
                 Debug.Log("Failed to find attribute: " + referenceOtherAttribute + "");
         }
         FetchComponents();
-        AttributeInit(referenceAttribute);
+        StartCoroutine("AttributeInit", .8f);
     }
     
     private void OnDisable()
@@ -76,9 +81,9 @@ public class UIAttributeValueProgressBar : MonoBehaviour
         SetStyle();
     }
 
-    void AttributeInit(GameplayAttribute a)
+    void AttributeInit()
     {
-        UpdateVisuals(a.CurrentValue, a.CurrentValue, 1.0f);
+        owner.ApplyEffect(owner._fullHealEffect, false);
     }
 
     private void FetchComponents()
@@ -129,35 +134,6 @@ public class UIAttributeValueProgressBar : MonoBehaviour
             _rectTransform.anchoredPosition -= new Vector2(widthDifference, 0);
         //_rectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 5, barLength);
         //_rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, barLength);
-    }
-    
-    public void Setup(GameplayAttributeComponent inGameplayAttributeComponent, GameplayAttribute inAttributeToReference, GameplayAttribute inOtherAttributeToReference)
-    {
-        if (owner != null && referenceAttribute != null)
-        {
-            GameplayAttribute attributeToFind = owner.GetRuntimeAttribute(referenceAttribute);
-            if (attributeToFind != null)
-                attributeToFind.OnValueChanged -= OnAttributeChanged;
-            
-            GameplayAttribute otherAttributeToFind = owner.GetRuntimeAttribute(referenceOtherAttribute);
-            if (otherAttributeToFind != null)
-                otherAttributeToFind.OnValueChanged -= OnOtherAttributeChanged;
-        }
-
-        owner = inGameplayAttributeComponent;
-        referenceAttribute = inAttributeToReference;
-        referenceOtherAttribute = inOtherAttributeToReference;
-
-        if (owner != null && referenceAttribute != null)
-        {
-            GameplayAttribute attributeToFind = owner.GetRuntimeAttribute(referenceAttribute);
-            if (attributeToFind != null)
-                attributeToFind.OnValueChanged += OnAttributeChanged;
-
-            GameplayAttribute otherAttributeToFind = owner.GetRuntimeAttribute(referenceOtherAttribute);
-            if (otherAttributeToFind != null)
-                otherAttributeToFind.OnValueChanged += OnOtherAttributeChanged;
-        }
     }
 
     private void OnAttributeChanged(AttributeChangedEvent attribute)

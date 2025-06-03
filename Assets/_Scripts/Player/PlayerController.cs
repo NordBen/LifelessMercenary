@@ -7,7 +7,7 @@ public enum ETestEnum { Idle, Jumping };
 namespace LM
 {
     [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-    public class PlayerController : BaseCharacter
+    public class PlayerController : BaseCharacter, IDataPersistance
     {
         private readonly int _animIDSpeed = Animator.StringToHash("Speed");
         private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
@@ -28,6 +28,8 @@ namespace LM
         public bool useLocalMomentum;
 
         [SerializeField] private CombatManager combatComponent;
+
+        [SerializeField] private int statPoints;
         
         bool jumpKeyIsPressed;    // Tracks whether the jump key is currently being held down by the player
         bool jumpKeyWasPressed;   // Indicates if the jump key was pressed since the last reset, used to detect jump initiation
@@ -54,6 +56,8 @@ namespace LM
         private float _animationBlend;
         private bool _hasAnimator;
         private const float _threshold = 0.01f;
+        
+        public float maxVelocityChange = 10;
 
         [Header("Rotation Settings")]
         public float rotationSmoothTime = 0.12f;
@@ -186,7 +190,7 @@ namespace LM
 
             savedVelocity = velocity;
             savedMovementVelocity = CalculateMovementVelocity();
-
+            
             ResetJumpKeys();
 
             if (IsGrounded())
@@ -245,6 +249,9 @@ namespace LM
                     break;
             }
         }
+        
+        public int StatPoints => statPoints;
+        public void ModifyStatPoints(int amount) => statPoints += amount;
 
         private void ApplyRotation()
         {
@@ -282,6 +289,15 @@ namespace LM
         {
             if (context.performed)
                 OnJumpStart();
+        }
+        
+        void NewTestJump()
+        {
+            if (IsGrounded())
+            {
+                rb.AddForce(0, jumpSpeed, 0, ForceMode.Impulse);
+                isGrounded = false;
+            }
         }
         
         private void CheckForInteractable()
@@ -557,5 +573,15 @@ namespace LM
             currentLayer = objectLayer;
         }
         #endregion
+
+        public void SaveData(SaveGameData data)
+        {
+            data.statPoints = statPoints;
+        }
+
+        public void LoadData(SaveGameData data)
+        {
+            statPoints = data.statPoints;
+        }
     }
 }

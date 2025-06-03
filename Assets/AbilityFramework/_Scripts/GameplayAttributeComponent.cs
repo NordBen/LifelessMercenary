@@ -11,7 +11,7 @@ namespace LM.AbilitySystem
         private Dictionary<string, GameplayAttribute> _attributes = new();
 
         public delegate float AttributeModifierDelegate(GameplayAttribute attribute, float value);
-        private event AttributeModifierDelegate OnPreAttributeModified; //Action<GameplayAttribute>
+        private event AttributeModifierDelegate OnPreAttributeModified;
         private event AttributeModifierDelegate OnPostAttributeModified;
 
         public GameplayEffect _derivedAttributeEffect;
@@ -26,11 +26,11 @@ namespace LM.AbilitySystem
 
             if (_derivedAttributeEffect != null)
             {
-               Invoke("IntSt", 1f);
+               Invoke("InitStats", 1f);
             }
         }
 
-        private void IntSt()
+        private void InitStats()
         {
             Debug.Log("DerivedEffect initializing");
             StartCoroutine(InitializeDerivedAttributes());
@@ -46,12 +46,6 @@ namespace LM.AbilitySystem
         {
             OnPreAttributeModified -= PreAttributeModificaton;
             OnPostAttributeModified -= PostAttributeModificaton;
-        }
-        
-        private IEnumerator FullHeal()
-        {
-            yield return null;
-            ApplyEffect(_fullHealEffect, false);
         }
 
         private IEnumerator InitializeDerivedAttributes()
@@ -132,15 +126,15 @@ namespace LM.AbilitySystem
 
         protected virtual float PostAttributeModificaton(GameplayAttribute attribute, float value)
         {
-            Debug.Log("PostModification"); /*
+            Debug.Log("PostModification");
             if (attribute.Name == "Health")
             {
                 var maxHealth = GetAttribute("MaxHealth");
                 if (maxHealth != null)
                 {
-                    value = Mathf.Clamp(value, 0, maxHealth.CurrentValue());
+                    value = Mathf.Clamp(value, 0, maxHealth.CurrentValue);
                 }
-            }*/
+            }
             return value;
         }
 
@@ -203,17 +197,7 @@ namespace LM.AbilitySystem
             {
                 Debug.Log($"attributes : {_attributes.Count}");
                 if (_attributes.TryGetValue(mod.targetAttribute.Name, out var runtimeAttribute))
-                {/*
-                    if (mod.valueStrategy is AttributeBasedValueStrategy attributeStrategy)
-                    {
-                        float sourceValue = attributeStrategy.sourceAttribute.CurrentValue;
-                        float coefficient = attributeStrategy._coefficient;
-                        float computedValue = sourceValue * coefficient;
-
-                        Debug.Log($"Derived attribute calculation: {mod.targetAttribute.Name} = " +
-                                  $"{attributeStrategy.sourceAttribute.Name} ({sourceValue}) × {coefficient} = {computedValue}");
-                    }*/
-                    
+                {
                     Debug.Log($"Found runtime attribute: {runtimeAttribute}");
                     mod.targetAttribute = runtimeAttribute;
                     ModifyAttribute(runtimeAttribute, mod.ComputeValue(this), 
@@ -336,8 +320,6 @@ namespace LM.AbilitySystem
             SerializableSaveAttribue listOfSavedAttributes = new SerializableSaveAttribue();
             listOfSavedAttributes.attributes = savedAttributes;
             data.savedAttributes[gameObject.name] = listOfSavedAttributes;
-            //data.savedAttributes[gameObject.name] = savedAttributes;
-            //data.savedEffects[gameObject.name] = savedEffects;
             SerializableSaveEffect listOfSavedEffects = new SerializableSaveEffect();
             listOfSavedEffects.effects = savedEffects;
             data.savedEffects[gameObject.name] = listOfSavedEffects;

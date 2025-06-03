@@ -1,3 +1,4 @@
+using LM;
 using TMPro;
 using UnityEngine;
 
@@ -5,6 +6,8 @@ public class TestingUpgradePart : MonoBehaviour
 {
     public static TestingUpgradePart instance;
     public TextMeshProUGUI pointsText;
+
+    private LM.PlayerController player;
 
     private void Awake()
     {
@@ -16,12 +19,13 @@ public class TestingUpgradePart : MonoBehaviour
 
     private void Start()
     {
-        //pointsText.text = TempPlayerAttributes.instance.pointsToUse.ToString();
+        player = GameManager.instance.player.GetComponent<LM.PlayerController>();
+        pointsText.text = player.StatPoints.ToString();
     }
 
     public void DecreasePointsToUse(int decAmount)
     {
-        //TempPlayerAttributes.instance.pointsToUse -= decAmount;
-        //pointsText.text = TempPlayerAttributes.instance.pointsToUse.ToString();
+        player.ModifyStatPoints(decAmount);
+        pointsText.text = player.StatPoints.ToString();
     }
 }

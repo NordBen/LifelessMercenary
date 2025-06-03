@@ -6,17 +6,18 @@ using UnityEngine;
 public class SaveGameData
 {
     public long lastUpdated;
-    public int deathCount;
+    public int deathCount = 0;
     public Vector3 playerPosition;
     public SerializableSaveDictionary<string, bool> coinsCollected;
-    public int daysSurvived;
-    public int deathEnergy;
+    public int daysSurvived = 0;
+    public int deathEnergy = 5;
+    public int statPoints = 5;
 
-    public float volume;
-    public float musicVolume;
-    public float sfxVolume;
-    public float ambientVolume;
-    public Vector2 mouseSensitivity;
+    public float volume = 1;
+    public float musicVolume = 1;
+    public float sfxVolume = 1;
+    public float ambientVolume = 1;
+    public Vector2 mouseSensitivity = new Vector2(1, 1);
 
     public SerializableSaveDictionary<string, SerializableSaveEffect> savedEffects;
     public SerializableSaveDictionary<string, SerializableSaveAttribue> savedAttributes;//testCachedAttribute;

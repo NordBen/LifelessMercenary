@@ -203,7 +203,10 @@ namespace LM
             if (healthAttribute.CurrentValue <= 0)
             {
                 if (transform.root.tag == "Player")
+                {
+                    owner.Die();
                     Die();
+                }
                 else
                     owner.Die();
             }

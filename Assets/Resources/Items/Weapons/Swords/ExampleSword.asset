@@ -23,7 +23,7 @@ MonoBehaviour:
   maxQuantity: 1
   sellValue: 50
   equipmentEffect: []
-  damage: 5
+  damage: 10
   attackSpeed: 1.5
   lightAttackAnimations:
   - clip: {fileID: -203655887218126122, guid: f9944689985ed47b5b64b6015893d0bb, type: 3}

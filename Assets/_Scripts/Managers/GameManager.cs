@@ -100,6 +100,7 @@ namespace LM
         {
             GameObject.Find("SceneDude").GetComponent<TempCutscenePosition>().PlayDirector();
 
+            player.GetComponent<PlayerController>().ModifyStatPoints(9);
             ModifyDeathEnergy(-1);
 
             Debug.Log(
@@ -149,7 +150,6 @@ namespace LM
                 Debug.Log("full heal");
                 GAC.ApplyEffect(GAC._fullHealEffect, false);
             }
-
             yield break;
         }
 

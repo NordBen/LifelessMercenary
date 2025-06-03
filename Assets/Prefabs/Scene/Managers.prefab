@@ -47,8 +47,8 @@ MonoBehaviour:
   disableDataPersistence: 0
   initializeDataIfNull: 1
   overrideSelectedProfileId: 1
-  testSelectedProfileId: bob
-  fileName: testing
+  testSelectedProfileId: player
+  fileName: SaveData
   useEncryption: 0
   autoSaveTimeSeconds: 60
 --- !u!1 &6467485684891153633

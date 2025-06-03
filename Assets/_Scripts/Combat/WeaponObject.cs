@@ -1,3 +1,4 @@
+using LM.AbilitySystem;
 using UnityEngine;
 
 namespace LM
@@ -51,13 +52,21 @@ namespace LM
             {
                 Debug.Log("Helhit");
                 float finalDamage = weaponData.damage;
+                if (owner.TryGetComponent(out GameplayAttributeComponent owningChararacterAttributes))
+                {
+                    if (owningChararacterAttributes != null)
+                    {
+                        finalDamage += owningChararacterAttributes.GetAttribute("Damage").CurrentValue;
+                    }
+                }
                 if (owner.tag == "Player")
                     finalDamage += 5;
                 else
                 {
-                    Debug.Log(finalDamage);
+                    
                     // finalDamage += 10;
                 }
+                Debug.Log($"final damage: {finalDamage} from {this.gameObject.name} owned by {owner.gameObject.name}");
                 
                 Debug.Log("Target trying to take damage is: " + target);
                 target.TakeDamage(finalDamage, 5, this.transform.root.transform.forward);

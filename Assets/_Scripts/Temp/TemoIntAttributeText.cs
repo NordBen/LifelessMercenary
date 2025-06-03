@@ -26,13 +26,12 @@ public class TemoIntAttributeText : MonoBehaviour
 
     private void UpdateStat(int updAmount)
     {
-        if (GAC != null)
+        if (GAC != null && GameManager.instance.player.GetComponent<LM.PlayerController>().StatPoints > 0)
         {
             var UpgradeEffect = EffectFactory.CreateAttributeUpgradeEffect(attributeToUpgrade, updAmount);
             GAC.ApplyEffect(UpgradeEffect, true);
+            TestingUpgradePart.instance.DecreasePointsToUse(-updAmount);
             UpdateStatText();
-            //GAC.UpdateDerivedAttributes();
-            
                 GAC.UpdateDerivedAttributes();
                 GAC.ApplyEffect(GAC._fullHealEffect, false);
         }/*
