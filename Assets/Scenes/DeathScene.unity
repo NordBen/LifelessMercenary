@@ -6998,7 +6998,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3705273532144896648, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.2588191
       objectReference: {fileID: 0}
     - target: {fileID: 3705273532144896648, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
       propertyPath: m_LocalRotation.x
@@ -7006,7 +7006,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3705273532144896648, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.9659258
       objectReference: {fileID: 0}
     - target: {fileID: 3705273532144896648, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
       propertyPath: m_LocalRotation.z
@@ -7018,7 +7018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3705273532144896648, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 3705273532144896648, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -8121,6 +8121,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2530026124307226699, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 738215108}
+    - targetCorrespondingSourceObject: {fileID: 2530026124307226699, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 738215111}
   m_SourcePrefab: {fileID: 100100000, guid: ebe6265e243674918a2f6cc57d9a3af3, type: 3}
 --- !u!1 &646841013 stripped
 GameObject:
@@ -9277,6 +9280,7 @@ MonoBehaviour:
   FallTimeout: 0.15
   GroundedOffset: -0.14
   GroundedRadius: 0.28
+  maxVelocityChange: 10
   rotationSmoothTime: 0.12
   enableRotation: 1
   stepHeightRatio: 0.1
@@ -9335,6 +9339,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &738215111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646841013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29d73e4c885432c4ebcbc6e0e66ebf43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorLocked: 0
 --- !u!1 &749722602
 GameObject:
   m_ObjectHideFlags: 0

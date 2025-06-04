@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Example Helmet
   icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   mesh: {fileID: 6041377522765385347, guid: 084eec089e3461c459cd95f2a3281fc6, type: 3}
-  material: {fileID: 0}
+  material: {fileID: 1106563633393636324, guid: c4c7a77c16e9042e4b606f55a871f372, type: 3}
   itemType: 3
   itemGrade: 1
   bIsStackable: 0
@@ -36,6 +36,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 211682837813526688
       type: {class: ConstantValueStrategy, ns: , asm: Assembly-CSharp}
       data:

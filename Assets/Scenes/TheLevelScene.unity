@@ -27333,8 +27333,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allItems:
   - {fileID: 11400000, guid: 36984a7e9918e7c4299c9f7936caaf6d, type: 2}
-  - {fileID: 11400000, guid: bdf83fd9bc948d941942a254d2de7b7b, type: 2}
-  - {fileID: 11400000, guid: b88ea97a47fd9fc4b8389947dc9ff949, type: 2}
+  - {fileID: 11400000, guid: 6c75b494896b1e0438d8774e39226f55, type: 2}
+  - {fileID: 11400000, guid: cc212f75dd4778842a84f039d389942f, type: 2}
   - {fileID: 11400000, guid: 6757c8d162eeda545aad88e276f4b8f5, type: 2}
   - {fileID: 11400000, guid: f403b85afac93bd44b2d2885a82f1405, type: 2}
   - {fileID: 11400000, guid: ae03f24abbe0b2542a64c3c3921693ae, type: 2}
@@ -35216,7 +35216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5388866048872831587, guid: 14c6b7fee09e3454a9ef4ce2fa9c6baf, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7112244783084902488, guid: 14c6b7fee09e3454a9ef4ce2fa9c6baf, type: 3}
       propertyPath: m_LocalScale.x
@@ -41738,7 +41738,6 @@ GameObject:
   - component: {fileID: 1619799738}
   - component: {fileID: 1619799754}
   - component: {fileID: 1619799752}
-  - component: {fileID: 1619799751}
   - component: {fileID: 1619799748}
   - component: {fileID: 1619799747}
   - component: {fileID: 1619799746}
@@ -41750,6 +41749,7 @@ GameObject:
   - component: {fileID: 1619799755}
   - component: {fileID: 1619799756}
   - component: {fileID: 1619799757}
+  - component: {fileID: 1619799758}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -41863,7 +41863,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
@@ -41963,25 +41963,6 @@ MonoBehaviour:
   inventoryScreen: {fileID: 946727519}
   inventoryContainer: {fileID: 8021477343003591561, guid: a8b8989a1035b634cb44bf206e1df2fa, type: 3}
   popMessage: {fileID: 7772792827094738202, guid: 79252f49b9895634db5c506e671f4d33, type: 3}
---- !u!114 &1619799751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1619799737}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e087ecce43ebbff45a1b360637807d93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  move: {x: 0, y: 0}
-  look: {x: 0, y: 0}
-  jump: 0
-  sprint: 0
-  analogMovement: 0
-  cursorLocked: 1
-  cursorInputForLook: 1
 --- !u!114 &1619799752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42253,6 +42234,19 @@ MonoBehaviour:
     m_Bits: 64
   parrySound: {fileID: 8300000, guid: 6f55f5dca03006d449839e1e968c7c0a, type: 3}
   lastHitColliders: []
+--- !u!114 &1619799758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619799737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29d73e4c885432c4ebcbc6e0e66ebf43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorLocked: 1
 --- !u!1 &1626411129
 GameObject:
   m_ObjectHideFlags: 0
@@ -47891,7 +47885,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1789179978}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.02051045, y: 0.01772924, z: -0.00036376846, w: 0.99963236}
+  m_LocalRotation: {x: 0.020510672, y: 0.01772927, z: -0.0003637724, w: 0.99963236}
   m_LocalPosition: {x: -0.090991974, y: -0.19465649, z: -2.5644054}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -52151,7 +52145,7 @@ MonoBehaviour:
   - {fileID: 832883802}
   PlayerTransform: {fileID: 1619799737}
   spawnTime: 5
-  maxSpawns: 1
+  maxSpawns: 0
 --- !u!4 &1919746240
 Transform:
   m_ObjectHideFlags: 0
@@ -53211,7 +53205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLine: {fileID: 1992708495}
-  dynamicTarget: {fileID: 0}
+  dynamicTarget: {fileID: 1619799738}
 --- !u!320 &1992708495
 PlayableDirector:
   m_ObjectHideFlags: 0

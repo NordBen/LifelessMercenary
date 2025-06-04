@@ -29,12 +29,6 @@ namespace LM.Inventory
             inventoryScreen.SetActive(!inventoryScreen.activeSelf);
             ClearInventoryUI(inventoryScreen.transform.childCount);
             Debug.Log(inventoryScreen.activeSelf);
-            //Cursor.lockState = inventoryScreen.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
-            //Cursor.visible = inventoryScreen.activeSelf;
-            //GetComponent<StarterAssetsInputs>().cursorLocked = !inventoryScreen.activeSelf;
-            //GetComponent<StarterAssetsInputs>().cursorInputForLook = !inventoryScreen.activeSelf;
-            /*if (inventoryScreen.activeSelf == false)
-                Destroy(inventoryScreen.transform.GetChild(0));*/
         }
 
         public List<Item> HeldItems => this.items;

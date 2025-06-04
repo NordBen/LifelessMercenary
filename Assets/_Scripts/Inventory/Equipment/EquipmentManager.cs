@@ -88,10 +88,11 @@ namespace LM.Inventory
             //GameManager.instance.ToggleQuickbar();
             equipmentScreen.SetActive(!equipmentScreen.activeSelf);
             Debug.Log(equipmentScreen.activeSelf);
-            Cursor.lockState = equipmentScreen.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = equipmentScreen.activeSelf;
-            GetComponent<StarterAssetsInputs>().cursorLocked = !equipmentScreen.activeSelf;
-            GetComponent<StarterAssetsInputs>().cursorInputForLook = !equipmentScreen.activeSelf;
+            //Cursor.lockState = equipmentScreen.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
+            //Cursor.visible = equipmentScreen.activeSelf;
+            //GetComponent<StarterAssetsInputs>().cursorLocked = !equipmentScreen.activeSelf;
+            //GetComponent<StarterAssetsInputs>().cursorInputForLook = !equipmentScreen.activeSelf;
+            GetComponent<LockCursor>().SetCursorState(!equipmentScreen.activeSelf);
         }
 
         public void TryEquip(IEquipable inItem)
